@@ -1,15 +1,5 @@
-Meta Async Programming Approach
+'use strict';
 
-## Installation
-
-```bash
-$ npm install metasync
-```
-
-## Examples
-
-An event-driven asyncronous data collector
-```JavaScript
 var metasync = require('./metasync');
 var fs = require('fs');
 
@@ -30,8 +20,3 @@ fs.readFile('README.md', function(err, data) {
 setTimeout(function() {
   dataCollector.collect('timer', { date: new Date() });
 }, 1000);
-```
-
-## Contributors
-
-  - Timur Shemsedinov (marcusaurelius)
