@@ -33,20 +33,20 @@ metasync.parallel = function(funcs, done) {
       len = funcs.length,
       finished = false;
 
-  if (len > 0) {
+  if (len < 1) done();
+  else {
     funcs.forEach(function(func) {
       if (Array.isArray(func)) metasync.composition(func, finish);
       else func(finish);
     });
-  } else done();
+  }
 
   function finish(result) {
     if (result instanceof Error) {
       if (!finished) done(result);
       finished = true;
     } else {
-      counter++;
-      if (counter >= len) done();
+      if (++counter >= len) done();
     }
   }
 };
@@ -56,8 +56,7 @@ metasync.sequential = function(funcs, done) {
       len = funcs.length;
 
   function next() {
-    i++;
-    if (i >= len) done();
+    if (++i >= len) done();
     else {
       var func = funcs[i];
       if (Array.isArray(func)) metasync.composition(func, finish);
