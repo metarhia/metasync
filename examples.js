@@ -3,6 +3,8 @@
 var metasync = require('./metasync');
 var fs = require('fs');
 
+// Data Collector
+
 var dataCollector = new metasync.DataCollector(4, function(data) {
   console.dir(Object.keys(data));
 });
@@ -20,3 +22,75 @@ fs.readFile('README.md', function(err, data) {
 setTimeout(function() {
   dataCollector.collect('timer', { date: new Date() });
 }, 1000);
+
+// Functional Asyncronous Composition
+
+metasync.composition(
+  [f1,f2,f3,[[f4,f5,[f6,f7],f8]],f9],
+  function done(data) {
+    console.log('done');
+  }
+);
+
+function f1(callback) {
+  console.log('f1');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f2(callback) {
+  console.log('f2');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f3(callback) {
+  console.log('f3');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f4(callback) {
+  console.log('f4');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f5(callback) {
+  console.log('f5');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f6(callback) {
+  console.log('f6');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f7(callback) {
+  console.log('f7');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f8(callback) {
+  console.log('f8');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
+
+function f9(callback) {
+  console.log('f9');
+  setTimeout(function() {
+    callback();
+  }, 1000);
+}
