@@ -72,3 +72,28 @@ metasync.sequential = function(funcs, done) {
   if (len > 0) next();
   else done();
 };
+
+
+// Asynchrous filter
+// filter :: (a -> Boolean) -> [a] -> ([a] -> Void)
+metasync.filter = function(predicate, array, done) {
+  var result = [];
+  var index = 0;
+  
+  function doFilter() {
+    if (index === array.length) {
+      done(result);
+    } else {
+      if (predicate(array[index])) {
+        result.push(array[index])
+      }
+
+      // Use setTimeout to yield
+      index++;
+      setTimeout(doFilter, 0);
+    }
+  }
+
+  // Use setTimeout to yield
+  setTimeout(doFilter, 0);
+};
