@@ -94,3 +94,24 @@ function f9(callback) {
     callback();
   }, 1000);
 }
+
+// Asynchrous filter
+metasync.filter(
+  function(item) {
+    // filter words which consists of unique letters only
+    var letters = [];
+    for (var i = 0; i < item.length; ++i) {
+      if (letters.indexOf(item[i].toLowerCase()) > -1) {
+        return false;
+      }
+      letters.push(item[i].toLowerCase());
+    }
+    return true;
+  },
+  ['Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 
+   'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
+   'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
+  ],
+  function(result) { console.log(result); }
+);
+
