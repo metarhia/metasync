@@ -75,25 +75,30 @@ metasync.sequential = function(funcs, done) {
 
 
 // Asynchrous filter
-// filter :: (a -> Boolean) -> [a] -> ([a] -> Void)
-metasync.filter = function(predicate, array, done) {
+// filter :: [a] -> (a -> (Boolean -> Void) -> Void) -> ([a] -> Void)
+metasync.filter = function(coll, predicate, done) {
   var result = [];
-  var index = 0;
-  
-  function doFilter() {
-    if (index === array.length) {
-      done(result);
-    } else {
-      if (predicate(array[index])) {
-        result.push(array[index])
-      }
+  var counter = 0;
 
-      // Use setTimeout to yield
-      index++;
-      setTimeout(doFilter, 0);
-    }
+  function finish() {
+    // Callbacks might be called in any possible order, 
+    // hence sort the filtered array
+    // by element's index in the original collection
+    result.sort(function(x, y) { return x.index - y.index; });
+
+    // Only value is needed in resulting array
+    result = result.map(function(x) { return x.value; });
+
+    // Return a result using callback;
+    done(result);
   }
 
-  // Use setTimeout to yield
-  setTimeout(doFilter, 0);
+  coll.forEach(function(value, index) {
+    predicate(value, function(isTrue) {
+      if (isTrue) { result.push({index: index, value: value}); }
+
+      // if counter equals to coll.length then whole collection has been processed
+      if (++counter === coll.length) { finish(); }
+    });
+  });
 };
