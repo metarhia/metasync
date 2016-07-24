@@ -95,23 +95,34 @@ function f9(callback) {
   }, 1000);
 }
 
+
 // Asynchrous filter
-metasync.filter(
-  function(item) {
-    // filter words which consists of unique letters only
-    var letters = [];
-    for (var i = 0; i < item.length; ++i) {
-      if (letters.indexOf(item[i].toLowerCase()) > -1) {
-        return false;
-      }
-      letters.push(item[i].toLowerCase());
+var dataToFilter = [
+ 'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 
+ 'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
+ 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
+];
+
+
+function filterPredicate(item, callback) {
+  // filter words which consists of unique letters only
+  var letters = [];
+  var isUniqueLetters = false;
+  console.log('checking value: ' + item);
+  for (var i = 0; i < item.length; ++i) {
+    if (letters.indexOf(item[i].toLowerCase()) > -1) {
+      break;
     }
-    return true;
-  },
-  ['Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 
-   'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
-   'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
-  ],
-  function(result) { console.log(result); }
-);
+    letters.push(item[i].toLowerCase());
+  }
+
+  setTimeout(function() {
+    callback(letters.length === item.length);
+  }, 1000);
+}
+
+
+metasync.filter(dataToFilter, filterPredicate, function(result) { 
+  console.log('filtered array: ' + result); 
+});
 
