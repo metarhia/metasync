@@ -103,24 +103,23 @@ metasync.filter = function(coll, predicate, done) {
 
 // Asynchronous find function
 // find :: (a -> Boolean) -> [a] -> (a -> Void)
-metasync.find = function(predicate, array, done) {
-  var index = 0;
+metasync.find = function(array, predicate, done) {
+  var i = 0,
+      len = array.length;
 
-  function doFind() {
-    if (index === array.length) {
-      done()
-    } else {
-      if (predicate(array[index])) {
-        done(array[index]);
-      } else {
-        index++;
-
-        // Use setTimeout to yield
-        setTimeout(doFind, 0);
-      }
+  function next() {
+    if (i === len) done();
+    else {
+      predicate(array[i], function(accepted) {
+        if (accepted) done(array[i]);
+        else {
+          i++;
+          next();
+        }
+      });
     }
   }
 
-  // Use setTimeout to yield
-  setTimeout(doFind, 0);
+  if (len > 0) next();
+  else done();
 }
