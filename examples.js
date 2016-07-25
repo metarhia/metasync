@@ -94,3 +94,35 @@ function f9(callback) {
     callback();
   }, 1000);
 }
+
+
+// Asynchrous filter
+var dataToFilter = [
+ 'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 
+ 'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
+ 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
+];
+
+
+function filterPredicate(item, callback) {
+  // filter words which consists of unique letters only
+  var letters = [];
+  var isUniqueLetters = false;
+  console.log('checking value: ' + item);
+  for (var i = 0; i < item.length; ++i) {
+    if (letters.indexOf(item[i].toLowerCase()) > -1) {
+      break;
+    }
+    letters.push(item[i].toLowerCase());
+  }
+
+  setTimeout(function() {
+    callback(letters.length === item.length);
+  }, 1000);
+}
+
+
+metasync.filter(dataToFilter, filterPredicate, function(result) { 
+  console.log('filtered array: ' + result); 
+});
+
