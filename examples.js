@@ -97,12 +97,12 @@ function f9(callback) {
 
 
 // Asynchrous filter
+
 var dataToFilter = [
- 'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 
+ 'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
  'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
  'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
 ];
-
 
 function filterPredicate(item, callback) {
   // filter words which consists of unique letters only
@@ -121,8 +121,16 @@ function filterPredicate(item, callback) {
   }, 1000);
 }
 
-
-metasync.filter(dataToFilter, filterPredicate, function(result) { 
-  console.log('filtered array: ' + result); 
+metasync.filter(dataToFilter, filterPredicate, function(result) {
+  console.log('filtered array: ' + result);
 });
 
+metasync.find(
+  function(item) {
+    return item % 3 === 0 && item % 5 === 0;
+  },
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  function(result) {
+    console.log('found value is: ' + result);
+  }
+);

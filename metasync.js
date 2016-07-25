@@ -100,3 +100,27 @@ metasync.filter = function(coll, predicate, done) {
     });
   });
 };
+
+// Asynchronous find function
+// find :: (a -> Boolean) -> [a] -> (a -> Void)
+metasync.find = function(predicate, array, done) {
+  var index = 0;
+
+  function doFind() {
+    if (index === array.length) {
+      done()
+    } else {
+      if (predicate(array[index])) {
+        done(array[index]);
+      } else {
+        index++;
+
+        // Use setTimeout to yield
+        setTimeout(doFind, 0);
+      }
+    }
+  }
+
+  // Use setTimeout to yield
+  setTimeout(doFind, 0);
+}
