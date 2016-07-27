@@ -1,4 +1,7 @@
-Meta Async Programming Approach
+# Meta Async Programming Approach
+
+[![build status][travis-image]][travis-url]
+[![NPM version][npm-image]][npm-url]
 
 ## Installation
 
@@ -42,6 +45,29 @@ metasync.composition(
 );
 ```
 
+Asynchrous filter
+```JavaScript
+metasync.filter(['data', 'to', 'filter'], function(item, callback) {
+  callback(item.length > 2);
+}, function(result) {
+  console.dir(result);
+});
+```
+
+Asynchrous find
+```JavaScript
+metasync.find(
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  function(item, callback) {
+    callback(item % 3 === 0 && item % 5 === 0);
+  },
+  function(result) {
+    console.dir(result);
+  }
+);
+```
+
 ## Contributors
 
   - Timur Shemsedinov (marcusaurelius)
+  - See github for full [contributors list](https://github.com/metarhia/MetaSync/graphs/contributors)
