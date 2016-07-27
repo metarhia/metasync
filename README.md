@@ -1,7 +1,7 @@
 # Meta Async Programming Approach
 
-[![build status][travis-image]][travis-url]
-[![NPM version][npm-image]][npm-url]
+[![Build Status](https://travis-ci.org/metarhia/MetaSync.svg?branch=master)](https://travis-ci.org/metarhia/MetaSync)
+[![Dependency Status](https://david-dm.org/metarhia/MetaSync.svg)](https://david-dm.org/metarhia/MetaSync)
 
 ## Installation
 
