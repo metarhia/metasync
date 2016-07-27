@@ -101,8 +101,9 @@ metasync.filter = function(coll, predicate, done) {
   });
 };
 
-// Asynchronous find function
-// find :: (a -> Boolean) -> [a] -> (a -> Void)
+// Asynchronous find
+
+// find :: [a] -> (a -> (Boolean -> Void) -> Void) -> (a -> Void)
 metasync.find = function(array, predicate, done) {
   var i = 0,
       len = array.length;
@@ -122,4 +123,4 @@ metasync.find = function(array, predicate, done) {
 
   if (len > 0) next();
   else done();
-}
+};
