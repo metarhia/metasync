@@ -136,3 +136,27 @@ metasync.find(
     console.log('found value: ' + result);
   }
 );
+
+// Asyncronous each in parallel
+
+metasync.each(
+  ['a', 'b', 'c'],
+  function iterator(item, callback) {
+    console.dir({each:item});
+    callback();
+  },
+  function done(data) {
+  }
+);
+
+// Asyncronous series (sequential)
+
+metasync.series(
+  ['a', 'b', 'c'],
+  function iterator(item, callback) {
+    console.dir({series:item});
+    callback();
+  },
+  function done(data) {
+  }
+);

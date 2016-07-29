@@ -14,7 +14,7 @@ metasync.DataCollector = function(expected, done) {
 
 metasync.DataCollector.prototype.collect = function(key, data) {
   this.count++;
-  this.data[key] = data;;
+  this.data[key] = data;
   if (this.expected === this.count) this.done(this.data);
 };
 
@@ -76,14 +76,14 @@ metasync.sequential = function(funcs, done) {
 // Asynchrous filter
 
 // filter :: [a] -> (a -> (Boolean -> Void) -> Void) -> ([a] -> Void)
-metasync.filter = function(coll, predicate, done) {
+metasync.filter = function(items, fn, done) {
   var result = [],
       counter = 0;
 
   function finish() {
     // Callbacks might be called in any possible order,
     // hence sort the filtered array
-    // by element's index in the original collection
+    // by element's index in the original itemsection
     result.sort(function(x, y) { return x.index - y.index; });
 
     // Only value is needed in resulting array
@@ -93,10 +93,10 @@ metasync.filter = function(coll, predicate, done) {
     done(result);
   }
 
-  coll.forEach(function(value, index) {
-    predicate(value, function(accepted) {
+  items.forEach(function(value, index) {
+    fn(value, function(accepted) {
       if (accepted) result.push({ index: index, value: value });
-      if (++counter === coll.length) finish();
+      if (++counter === items.length) finish();
     });
   });
 };
@@ -104,15 +104,15 @@ metasync.filter = function(coll, predicate, done) {
 // Asynchronous find
 
 // find :: [a] -> (a -> (Boolean -> Void) -> Void) -> (a -> Void)
-metasync.find = function(array, predicate, done) {
+metasync.find = function(items, fn, done) {
   var i = 0,
-      len = array.length;
+      len = items.length;
 
   function next() {
     if (i === len) done();
     else {
-      predicate(array[i], function(accepted) {
-        if (accepted) done(array[i]);
+      fn(items[i], function(accepted) {
+        if (accepted) done(items[i]);
         else {
           i++;
           next();
@@ -123,4 +123,45 @@ metasync.find = function(array, predicate, done) {
 
   if (len > 0) next();
   else done();
+};
+
+// Asynchronous series
+
+metasync.series = function(items, fn, done) {
+  var i = -1,
+      len = items.length;
+
+  function next() {
+    i++;
+    if (i >= len) done();
+    else fn(items[i], function(result) {
+      if (result instanceof Error) done(result);
+      else next();
+    });
+  }
+
+  next();
+};
+
+// Asynchronous each
+
+metasync.each = function(items, fn, done) {
+  var counter = 0,
+      len = items.length,
+      finished = false;
+
+  if (len < 1) done();
+  else {
+    items.forEach(function(item) {
+      fn(item, function(result) {
+        if (result instanceof Error) {
+          if (!finished) done(result);
+          finished = true;
+        } else {
+          counter++;
+          if (counter >= len) done();
+        }
+      });
+    });
+  }
 };

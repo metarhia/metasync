@@ -1,3 +1,10 @@
+0.0.4 / 2016-07-30
+==================
+
+  * Implemented metasync.each
+  * Implemented metasync.series
+  * Code style fixes and optimizations
+
 0.0.3 / 2016-07-27
 ==================
 
