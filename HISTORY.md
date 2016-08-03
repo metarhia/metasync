@@ -1,3 +1,8 @@
+0.0.5 / 2016-08-03
+==================
+
+  * Fixed critical bug, done function is optional now
+
 0.0.4 / 2016-07-30
 ==================
 

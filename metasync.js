@@ -33,7 +33,7 @@ metasync.parallel = function(funcs, done) {
       len = funcs.length,
       finished = false;
 
-  if (len < 1) done();
+  if ((len < 1) && done) done();
   else {
     funcs.forEach(function(func) {
       if (Array.isArray(func)) metasync.composition(func, finish);
@@ -43,10 +43,10 @@ metasync.parallel = function(funcs, done) {
 
   function finish(result) {
     if (result instanceof Error) {
-      if (!finished) done(result);
+      if (!finished && done) done(result);
       finished = true;
     } else {
-      if (++counter >= len) done();
+      if ((++counter >= len) && done) done();
     }
   }
 };
@@ -56,7 +56,7 @@ metasync.sequential = function(funcs, done) {
       len = funcs.length;
 
   function next() {
-    if (++i >= len) done();
+    if ((++i >= len) && done) done();
     else {
       var func = funcs[i];
       if (Array.isArray(func)) metasync.composition(func, finish);
@@ -65,12 +65,12 @@ metasync.sequential = function(funcs, done) {
   }
 
   function finish(result) {
-    if (result instanceof Error) done(result);
+    if ((result instanceof Error) && done) done(result);
     else next();
   }
 
   if (len > 0) next();
-  else done();
+  else if (done) done();
 };
 
 // Asynchrous filter
@@ -90,7 +90,7 @@ metasync.filter = function(items, fn, done) {
     result = result.map(function(x) { return x.value; });
 
     // Return a result using callback;
-    done(result);
+    if (done) done(result);
   }
 
   items.forEach(function(value, index) {
@@ -109,10 +109,10 @@ metasync.find = function(items, fn, done) {
       len = items.length;
 
   function next() {
-    if (i === len) done();
+    if ((i === len) && done) done();
     else {
       fn(items[i], function(accepted) {
-        if (accepted) done(items[i]);
+        if (accepted && done) done(items[i]);
         else {
           i++;
           next();
@@ -122,7 +122,7 @@ metasync.find = function(items, fn, done) {
   }
 
   if (len > 0) next();
-  else done();
+  else if (done) done();
 };
 
 // Asynchronous series
@@ -133,9 +133,9 @@ metasync.series = function(items, fn, done) {
 
   function next() {
     i++;
-    if (i >= len) done();
+    if ((i >= len) && done) done();
     else fn(items[i], function(result) {
-      if (result instanceof Error) done(result);
+      if ((result instanceof Error) && done) done(result);
       else next();
     });
   }
@@ -159,7 +159,7 @@ metasync.each = function(items, fn, done) {
           finished = true;
         } else {
           counter++;
-          if (counter >= len) done();
+          if ((counter >= len) && done) done();
         }
       });
     });
