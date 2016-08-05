@@ -155,7 +155,7 @@ metasync.each = function(items, fn, done) {
     items.forEach(function(item) {
       fn(item, function(result) {
         if (result instanceof Error) {
-          if (!finished) done(result);
+          if (!finished && done) done(result);
           finished = true;
         } else {
           counter++;
