@@ -3,6 +3,68 @@
 var metasync = {};
 module.exports = metasync;
 
+// Functional Asyncronous Composition
+
+metasync.composition = function(funcs) {
+  if (funcs.length === 1) {
+    metasync.parallel(funcs[0]);
+  } else {
+    metasync.sequential(funcs);
+  }
+};
+
+metasync.parallel = function(funcs, done) {
+  var counter = 0,
+      len = funcs.length,
+      finished = false;
+
+  if (len < 1) {
+    if (done) done();
+  } else {
+    funcs.forEach(function(func) {
+      if (Array.isArray(func)) metasync.composition(func, finish);
+      else func(finish);
+    });
+  }
+
+  function finish(result) {
+    if (result instanceof Error) {
+      if (!finished) {
+        if (done) done(result);
+      }
+      finished = true;
+    } else {
+      if (++counter >= len) {
+        if (done) done();
+      }
+    }
+  }
+};
+
+metasync.sequential = function(funcs, done) {
+  var i = -1,
+      len = funcs.length;
+
+  function next() {
+    if (++i >= len) {
+      if (done) done();
+    } else {
+      var func = funcs[i];
+      if (Array.isArray(func)) metasync.composition(func, finish);
+      else func(finish);
+    }
+  }
+
+  function finish(result) {
+    if (result instanceof Error) {
+      if (done) done(result);
+    } else next();
+  }
+
+  if (len > 0) next();
+  else if (done) done();
+};
+
 // Data Collector
 
 metasync.DataCollector = function(expected, done) {
@@ -16,61 +78,6 @@ metasync.DataCollector.prototype.collect = function(key, data) {
   this.count++;
   this.data[key] = data;
   if (this.expected === this.count) this.done(this.data);
-};
-
-// Functional Asyncronous Composition
-
-metasync.composition = function(funcs, done) {
-  if (funcs.length === 1) {
-    metasync.parallel(funcs[0], done);
-  } else {
-    metasync.sequential(funcs, done);
-  }
-};
-
-metasync.parallel = function(funcs, done) {
-  var counter = 0,
-      len = funcs.length,
-      finished = false;
-
-  if ((len < 1) && done) done();
-  else {
-    funcs.forEach(function(func) {
-      if (Array.isArray(func)) metasync.composition(func, finish);
-      else func(finish);
-    });
-  }
-
-  function finish(result) {
-    if (result instanceof Error) {
-      if (!finished && done) done(result);
-      finished = true;
-    } else {
-      if ((++counter >= len) && done) done();
-    }
-  }
-};
-
-metasync.sequential = function(funcs, done) {
-  var i = -1,
-      len = funcs.length;
-
-  function next() {
-    if ((++i >= len) && done) done();
-    else {
-      var func = funcs[i];
-      if (Array.isArray(func)) metasync.composition(func, finish);
-      else func(finish);
-    }
-  }
-
-  function finish(result) {
-    if ((result instanceof Error) && done) done(result);
-    else next();
-  }
-
-  if (len > 0) next();
-  else if (done) done();
 };
 
 // Asynchrous filter
@@ -109,11 +116,13 @@ metasync.find = function(items, fn, done) {
       len = items.length;
 
   function next() {
-    if ((i === len) && done) done();
-    else {
+    if (i === len) {
+      if (done) done();
+    } else {
       fn(items[i], function(accepted) {
-        if (accepted && done) done(items[i]);
-        else {
+        if (accepted) {
+          if (done) done(items[i]);
+        } else {
           i++;
           next();
         }
@@ -133,10 +142,12 @@ metasync.series = function(items, fn, done) {
 
   function next() {
     i++;
-    if ((i >= len) && done) done();
-    else fn(items[i], function(result) {
-      if ((result instanceof Error) && done) done(result);
-      else next();
+    if (i >= len) {
+      if (done) done();
+    } else fn(items[i], function(result) {
+      if (result instanceof Error) {
+        if (done) done(result);
+      } else next();
     });
   }
 
@@ -150,16 +161,21 @@ metasync.each = function(items, fn, done) {
       len = items.length,
       finished = false;
 
-  if (len < 1) done();
-  else {
+  if (len < 1) {
+    if (done) done();
+  } else {
     items.forEach(function(item) {
       fn(item, function(result) {
         if (result instanceof Error) {
-          if (!finished && done) done(result);
+          if (!finished) {
+            if (done) done(result);
+          }
           finished = true;
         } else {
           counter++;
-          if ((counter >= len) && done) done();
+          if (counter >= len) {
+            if (done) done();
+          }
         }
       });
     });

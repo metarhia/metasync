@@ -9,9 +9,21 @@
 $ npm install metasync
 ```
 
-## Examples
+# Examples
 
-An Event-driven Asyncronous Data Collector
+## Functional Asyncronous Composition
+
+```JavaScript
+metasync.composition(
+  [f1, f2, f3, [[f4, f5, [f6, f7], f8]], f9]
+);
+```
+
+- Array of functions gives sequential execution: `[f1, f2, f3]`
+- Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
+
+## An Event-driven Asyncronous Data Collector
+
 ```JavaScript
 var metasync = require('metasync');
 var fs = require('fs');
@@ -35,17 +47,20 @@ setTimeout(function() {
 }, 1000);
 ```
 
-Functional Asyncronous Composition
+## Parallel execution
+
 ```JavaScript
-metasync.composition(
-  [f1,f2,f3,[[f4,f5,[f6,f7],f8]],f9],
-  function done(data) {
-    console.log('done');
-  }
-);
+metasync.parallel([f1, f2, f3], function done() {});
 ```
 
-Asynchrous filter
+## Sequential execution
+
+```JavaScript
+metasync.sequential([f1, f2, f3], function done() {});
+```
+
+## Asynchrous filter
+
 ```JavaScript
 metasync.filter(['data', 'to', 'filter'], function(item, callback) {
   callback(item.length > 2);
@@ -54,7 +69,8 @@ metasync.filter(['data', 'to', 'filter'], function(item, callback) {
 });
 ```
 
-Asynchrous find
+## Asynchrous find
+
 ```JavaScript
 metasync.find(
   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
@@ -63,6 +79,36 @@ metasync.find(
   },
   function(result) {
     console.dir(result);
+  }
+);
+```
+
+## Asyncronous series (sequential)
+
+```JavaScript
+metasync.series(
+  ['a', 'b', 'c'],
+  function iterator(item, callback) {
+    console.dir({ series: item });
+    callback();
+  },
+  function done(data) {
+    console.dir('series done');
+  }
+);
+```
+
+## Asyncronous each (parallel)
+
+```JavaScript
+metasync.each(
+  ['a', 'b', 'c'],
+  function iterator(item, callback) {
+    console.dir({ each: item });
+    callback();
+  },
+  function done(data) {
+    console.dir('each done');
   }
 );
 ```

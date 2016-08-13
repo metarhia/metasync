@@ -1,3 +1,10 @@
+0.0.6 / 2016-08-13
+==================
+
+  * Added optional done in metasync.each
+  * Fixed another critical bug with done
+  * Removed done for metasync.composition()
+
 0.0.5 / 2016-08-03
 ==================
 
