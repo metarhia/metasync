@@ -5,11 +5,11 @@ module.exports = metasync;
 
 // Functional Asyncronous Composition
 
-metasync.composition = function(funcs) {
+metasync.composition = function(funcs, done) {
   if (funcs.length === 1) {
-    metasync.parallel(funcs[0]);
+    metasync.parallel(funcs[0], done);
   } else {
-    metasync.sequential(funcs);
+    metasync.sequential(funcs, done);
   }
 };
 
