@@ -1,3 +1,10 @@
+0.0.7 / 2016-08-14
+==================
+
+  * Added data hash for metasync.composition()
+  * Added tests and examples
+  * Restored done for metasync.composition()
+
 0.0.6 / 2016-08-13
 ==================
 

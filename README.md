@@ -13,6 +13,17 @@ $ npm install metasync
 
 ## Functional Asyncronous Composition
 
+Syntax: `metasync.composition(functions, [done, [data]]);`
+
+Parameters:
+- functions - array of `function([data,] callback)` where:
+  - data - optional incoming data
+  - callback - `function([data])` where:
+    - data - outgoing data
+- done - `callback(data)` where:
+  - data - hash with of functions results
+- data - incoming data
+
 ```JavaScript
 metasync.composition(
   [f1, f2, f3, [[f4, f5, [f6, f7], f8]], f9]
@@ -21,6 +32,28 @@ metasync.composition(
 
 - Array of functions gives sequential execution: `[f1, f2, f3]`
 - Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
+
+Examples of functions:
+
+```JavaScript
+// with one argiment and no result
+function f1(callback) {
+  callback();
+}
+
+// with one argiment and returning result
+function f2(callback) {
+  callback('value');
+}
+
+// with two argiments and result
+function f3(data, callback) {
+  // assign result to data random key
+  data.keyName = 'value';
+  // returning no result
+  callback();
+}
+```
 
 ## An Event-driven Asyncronous Data Collector
 
