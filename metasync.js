@@ -4,65 +4,99 @@ var metasync = {};
 module.exports = metasync;
 
 // Functional Asyncronous Composition
-
-metasync.composition = function(funcs, done) {
-  if (funcs.length === 1) {
-    metasync.parallel(funcs[0], done);
+//   fns - array of function([data,] callback)
+//     data - incoming data
+//     callback - function(data)
+//       data - outgoing data
+//   done - callback(data)
+//     data - hash with of functions results
+//   data - incoming data
+//
+metasync.composition = function(fns, done, data) {
+  if (fns.length === 1) {
+    metasync.parallel(fns[0], done, data);
   } else {
-    metasync.sequential(funcs, done);
+    metasync.sequential(fns, done, data);
   }
 };
 
-metasync.parallel = function(funcs, done) {
+// Parallel execution
+//   fns - array of function([data,] callback)
+//     data - incoming data
+//     callback - function(data)
+//       data - outgoing data
+//   done - callback(data)
+//     data - hash with of functions results
+//   data - incoming data
+//
+metasync.parallel = function(fns, done, data) {
   var counter = 0,
-      len = funcs.length,
-      finished = false;
+      len = fns.length,
+      finished = false,
+      data = data || {};
 
   if (len < 1) {
-    if (done) done();
+    if (done) done(data);
   } else {
-    funcs.forEach(function(func) {
-      if (Array.isArray(func)) metasync.composition(func, finish);
-      else func(finish);
+    fns.forEach(function(fn) {
+      var finish = function(result) {
+        if (fn.name && result) data[fn.name] = result;
+        if (result instanceof Error) {
+          if (!finished) {
+            if (done) done(data);
+          }
+          finished = true;
+        } else {
+          if (++counter >= len) {
+            if (done) done(data);
+          }
+        }
+      };
+      if (Array.isArray(fn)) metasync.composition(fn, finish, data);
+      else {
+        if (fn.length === 2) fn(data, finish);
+        else fn(finish);
+      }
     });
-  }
-
-  function finish(result) {
-    if (result instanceof Error) {
-      if (!finished) {
-        if (done) done(result);
-      }
-      finished = true;
-    } else {
-      if (++counter >= len) {
-        if (done) done();
-      }
-    }
   }
 };
 
-metasync.sequential = function(funcs, done) {
+// Sequential execution
+//   fns - array of function([data,] callback)
+//     data - incoming data
+//     callback - function(data)
+//       data - outgoing data
+//   done - callback(data)
+//     data - hash with of functions results
+//   data - incoming data
+//
+metasync.sequential = function(fns, done, data) {
   var i = -1,
-      len = funcs.length;
+      len = fns.length,
+      data = data || {};
 
   function next() {
-    if (++i >= len) {
-      if (done) done();
-    } else {
-      var func = funcs[i];
-      if (Array.isArray(func)) metasync.composition(func, finish);
-      else func(finish);
+    var fn;
+    var finish = function finish(result) {
+      if (fn.name && result) data[fn.name] = result;
+      if (result instanceof Error) {
+        if (done) done(data);
+      } else next();
     }
-  }
-
-  function finish(result) {
-    if (result instanceof Error) {
-      if (done) done(result);
-    } else next();
+    if (++i >= len) {
+      if (done) done(data);
+    } else {
+      fn = fns[i];
+      if (Array.isArray(fn)) metasync.composition(fn, finish, data);
+      else {
+        if (fn.length === 2) fn(data, finish);
+        else fn(finish);
+      }
+    }
   }
 
   if (len > 0) next();
-  else if (done) done();
+  else if (done) done(data);
 };
 
 // Data Collector
