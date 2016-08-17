@@ -32,8 +32,8 @@ metasync.composition = function(fns, done, data) {
 metasync.parallel = function(fns, done, data) {
   var counter = 0,
       len = fns.length,
-      finished = false,
-      data = data || {};
+      finished = false;
+  data = data || {};
 
   if (len < 1) {
     if (done) done(data);
@@ -43,7 +43,7 @@ metasync.parallel = function(fns, done, data) {
         if (fn.name && result) data[fn.name] = result;
         if (result instanceof Error) {
           if (!finished) {
-            if (done) done(data);
+            if (done) done(result);
           }
           finished = true;
         } else {
@@ -72,17 +72,17 @@ metasync.parallel = function(fns, done, data) {
 //
 metasync.sequential = function(fns, done, data) {
   var i = -1,
-      len = fns.length,
-      data = data || {};
+      len = fns.length;
+  data = data || {};
 
   function next() {
     var fn;
     var finish = function finish(result) {
       if (fn.name && result) data[fn.name] = result;
       if (result instanceof Error) {
-        if (done) done(data);
+        if (done) done(result);
       } else next();
-    }
+    };
     if (++i >= len) {
       if (done) done(data);
     } else {
