@@ -1,3 +1,9 @@
+0.0.8 / 2016-08-17
+==================
+
+  * Fixed error returning
+  * Removed unused arguments in tests
+
 0.0.7 / 2016-08-14
 ==================
 

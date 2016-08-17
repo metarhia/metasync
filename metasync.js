@@ -8,7 +8,7 @@ module.exports = metasync;
 //     data - incoming data
 //     callback - function(data)
 //       data - outgoing data
-//   done - callback(data)
+//   done - on `done` callback(data)
 //     data - hash with of functions results
 //   data - incoming data
 //
@@ -25,7 +25,7 @@ metasync.composition = function(fns, done, data) {
 //     data - incoming data
 //     callback - function(data)
 //       data - outgoing data
-//   done - callback(data)
+//   done - on `done` callback(data)
 //     data - hash with of functions results
 //   data - incoming data
 //
@@ -66,7 +66,7 @@ metasync.parallel = function(fns, done, data) {
 //     data - incoming data
 //     callback - function(data)
 //       data - outgoing data
-//   done - callback(data)
+//   done - on `done` callback(data)
 //     data - hash with of functions results
 //   data - incoming data
 //
@@ -100,7 +100,9 @@ metasync.sequential = function(fns, done, data) {
 };
 
 // Data Collector
-
+//   expected - number of `collect()` calls expected
+//   done - on `done` callback(data)
+//
 metasync.DataCollector = function(expected, done) {
   this.expected = expected;
   this.data = {};
@@ -108,6 +110,10 @@ metasync.DataCollector = function(expected, done) {
   this.done = done;
 };
 
+// Push data to collector
+//   key - key in result data
+//   data - value in result data
+//
 metasync.DataCollector.prototype.collect = function(key, data) {
   this.count++;
   this.data[key] = data;
@@ -115,8 +121,17 @@ metasync.DataCollector.prototype.collect = function(key, data) {
 };
 
 // Asynchrous filter
-
 // filter :: [a] -> (a -> (Boolean -> Void) -> Void) -> ([a] -> Void)
+//
+// Arguments:
+//   items - incoming array
+//   fn - function(value, callback)
+//     value - item from items array
+//     callback - callback function(accepted)
+//       accepted - true/false returned from fn
+//   done - on `done` function(result)
+//     result - filtered array
+//
 metasync.filter = function(items, fn, done) {
   var result = [],
       counter = 0;
@@ -143,8 +158,17 @@ metasync.filter = function(items, fn, done) {
 };
 
 // Asynchronous find
-
 // find :: [a] -> (a -> (Boolean -> Void) -> Void) -> (a -> Void)
+//
+// Arguments:
+//   items - incoming array
+//   fn - function(value, callback)
+//     value - item from items array
+//     callback - callback function(accepted)
+//       accepted - true/false returned from fn
+//   done - on `done` function(result)
+//     result - filtered array
+//
 metasync.find = function(items, fn, done) {
   var i = 0,
       len = items.length;
@@ -169,7 +193,14 @@ metasync.find = function(items, fn, done) {
 };
 
 // Asynchronous series
-
+//   items - incoming array
+//   fn - function(value, callback)
+//     value - item from items array
+//     callback - callback function(accepted)
+//       accepted - true/false returned from fn
+//   done - on `done` function(result)
+//     result - filtered array
+//
 metasync.series = function(items, fn, done) {
   var i = -1,
       len = items.length;
@@ -189,7 +220,14 @@ metasync.series = function(items, fn, done) {
 };
 
 // Asynchronous each
-
+//   items - incoming array
+//   fn - function(value, callback)
+//     value - item from items array
+//     callback - callback function(accepted)
+//       accepted - true/false returned from fn
+//   done - on `done` function(result)
+//     result - filtered array
+//
 metasync.each = function(items, fn, done) {
   var counter = 0,
       len = items.length,
