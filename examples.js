@@ -6,7 +6,7 @@ var ASYNC_TIMEOUT = 200;
 
 // Functional Asyncronous Composition
 
-function compositionTest(data, end) {
+function compositionTest(end) {
 
   metasync.composition(
     [f1, f2, f3, [[f4, f5, [f6, f7], f8]], [[f9, f10]], f11],
@@ -99,7 +99,7 @@ function compositionTest(data, end) {
 
 // Data Collector
 
-function collectorTest(data, end) {
+function collectorTest(end) {
 
   var dataCollector = new metasync.DataCollector(4, function(data) {
     console.dir(Object.keys(data));
@@ -125,7 +125,7 @@ function collectorTest(data, end) {
 
 // Parallel execution
 
-function parallelTest(data, end) {
+function parallelTest(end) {
 
   metasync.parallel([pf1, pf2, pf3], function done() {
     console.log('Parallel test done');
@@ -157,7 +157,7 @@ function parallelTest(data, end) {
 
 // Sequential execution
 
-function sequentialTest(data, end) {
+function sequentialTest(end) {
 
   metasync.sequential([sf1, sf2, sf3], function done() {
     console.log('Sequential test done');
@@ -189,7 +189,7 @@ function sequentialTest(data, end) {
 
 // Asynchrous filter
 
-function filterTest(data, end) {
+function filterTest(end) {
 
   var dataToFilter = [
    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
@@ -224,7 +224,7 @@ function filterTest(data, end) {
 
 // Asynchrous find
 
-function findTest(data, end) {
+function findTest(end) {
 
   metasync.find(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
@@ -242,7 +242,7 @@ function findTest(data, end) {
 
 // Asyncronous each in parallel
 
-function eachTest(data, end) {
+function eachTest(end) {
 
   metasync.each(
     ['a', 'b', 'c'],
@@ -260,7 +260,7 @@ function eachTest(data, end) {
 
 // Asyncronous series (sequential)
 
-function seriesTest(data, end) {
+function seriesTest(end) {
 
   metasync.series(
     ['a', 'b', 'c'],
