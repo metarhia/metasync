@@ -71,33 +71,46 @@ metasync.parallel = function(fns, done, data) {
 //   data - incoming data
 //
 metasync.sequential = function(fns, done, data) {
-  var i = -1,
-      len = fns.length;
-  data = data || {};
+  var len = fns.length,
+    data = data || {};
+  
+  if (len == 0) {
+    if (done) done(data);
+  } else {
+    var callbacks = fns.map(function(fn, i, fns) {
+      return function(result) {
+        if(fn.name  && result) data[fn.name] = result;
+        if(result instanceof Error) {
+          if (done) done(data);
+        } else {
+          var nextFn = fns[i + 1];
+          var nextCallback = callbacks[i + 1];
+          if (Array.isArray(nextFn)) metasync.composition(nextFn, nextCallback, data);
+          else {
+            if (nextFn.length === 2) nextFn(data, nextCallback);
+            else nextFn(nextCallback);
+          }
+        }
+      }  
+    });
 
-  function next() {
-    var fn;
-    var finish = function finish(result) {
-      if (fn.name && result) data[fn.name] = result;
-      if (result instanceof Error) {
-        if (done) done(result);
-      } else next();
-    };
-    if (++i >= len) {
+    callbacks[len - 1] = function(result) {
+      var fn = fns[len - 1];
+      if(fn.name  && result) data[fn.name] = result;
       if (done) done(data);
-    } else {
-      fn = fns[i];
-      if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else {
-        if (fn.length === 2) fn(data, finish);
-        else fn(finish);
-      }
     }
-  }
 
-  if (len > 0) next();
-  else if (done) done(data);
-};
+    var startFn = fns[0];
+    var startCallback = callbacks[0]; 
+
+    if (Array.isArray(startFn)) metasync.composition(startFn, startCallback, data);
+    else {
+      if (startFn.length === 2) startFn(data, startCallback);
+      else startFn(startCallback);
+    }
+  } 
+
+}
 
 // Data Collector
 //   expected - number of `collect()` calls expected
