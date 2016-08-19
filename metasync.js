@@ -79,8 +79,8 @@ metasync.sequential = function(fns, done, data) {
   } else {
     var callbacks = fns.map(function(fn, i, fns) {
       return function(result) {
-        if(fn.name  && result) data[fn.name] = result;
-        if(result instanceof Error) {
+        if (fn.name  && result) data[fn.name] = result;
+        if (result instanceof Error) {
           if (done) done(data);
         } else {
           var nextFn = fns[i + 1];
@@ -96,7 +96,7 @@ metasync.sequential = function(fns, done, data) {
 
     callbacks[len - 1] = function(result) {
       var fn = fns[len - 1];
-      if(fn.name  && result) data[fn.name] = result;
+      if (fn.name  && result) data[fn.name] = result;
       if (done) done(data);
     }
 
