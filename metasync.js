@@ -69,34 +69,24 @@ metasync.parallel = function(fns, done, data) {
 //   done - on `done` callback(data)
 //     data - hash with of functions results
 //   data - incoming data
-//
-metasync.sequential = function(fns, done, data) {
-  var i = -1,
-      len = fns.length;
-  data = data || {};
 
-  function next() {
-    var fn;
+metasync.sequential = function (fns, done, data) {
+  data = data || {};
+  function next(fns) {
+    var fn = fns[0];
     var finish = function finish(result) {
       if (fn.name && result) data[fn.name] = result;
       if (result instanceof Error) {
-        if (done) done(result);
-      } else next();
+       if (done) done(result)
+      } else if (fns.length > 1) next(fns.slice(1));
+          else if (done) done(data);
     };
-    if (++i >= len) {
-      if (done) done(data);
-    } else {
-      fn = fns[i];
-      if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else {
-        if (fn.length === 2) fn(data, finish);
-        else fn(finish);
-      }
-    }
+    if (Array.isArray(fn)) metasync.composition(fn, finish, data);
+    else if (fn.length === 2) fn(data, finish);
+    else fn(finish)
   }
 
-  if (len > 0) next();
-  else if (done) done(data);
+  next(fns)
 };
 
 // Data Collector
