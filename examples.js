@@ -278,16 +278,19 @@ function seriesTest(end) {
 
 // Run tests
 
+var start = new Date();
 metasync.composition([
-  compositionTest,
-  collectorTest,
-  parallelTest,
-  sequentialTest,
-  filterTest,
-  findTest,
-  eachTest,
-  seriesTest,
-  function allDone() {
-    console.log('All tests done');
-  }
+    compositionTest,
+    collectorTest,
+    parallelTest,
+    sequentialTest,
+    filterTest,
+    findTest,
+    eachTest,
+    seriesTest,
+    function allDone() {
+        console.log('All tests done');
+        console.log('Time = ' + (new Date() - start) + 'ms');
+    }
 ]);
+
