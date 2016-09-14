@@ -52,6 +52,7 @@ metasync.parallel = function(fns, done, data) {
           }
         }
       };
+      // fn may be array of function
       if (Array.isArray(fn)) metasync.composition(fn, finish, data);
       else {
         if (fn.length === 2) fn(data, finish);

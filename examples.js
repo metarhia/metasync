@@ -270,7 +270,7 @@ function seriesTest(end) {
     },
     function done(data) {
       console.log('Series test done');
-      end('series')
+      end('series');
     }
   );
 
@@ -287,7 +287,6 @@ metasync.composition([
   findTest,
   eachTest,
   seriesTest,
-  function allDone() {
+], function allDone() {
     console.log('All tests done');
-  }
-]);
+});
