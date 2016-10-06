@@ -121,7 +121,7 @@ metasync.DataCollector.prototype.collect = function(key, data) {
   if (this.expected === this.count) this.done(this.data);
 };
 
-// Asynchrous filter
+// Asynchrous filter (iterate parallel)
 // filter :: [a] -> (a -> (Boolean -> Void) -> Void) -> ([a] -> Void)
 //
 // Arguments:
@@ -158,7 +158,7 @@ metasync.filter = function(items, fn, done) {
   });
 };
 
-// Asynchronous find
+// Asynchronous find (iterate in series)
 // find :: [a] -> (a -> (Boolean -> Void) -> Void) -> (a -> Void)
 //
 // Arguments:
@@ -168,7 +168,7 @@ metasync.filter = function(items, fn, done) {
 //     callback - callback function(accepted)
 //       accepted - true/false returned from fn
 //   done - on `done` function(result)
-//     result - filtered array
+//     result - found item
 //
 metasync.find = function(items, fn, done) {
   var i = 0,
@@ -198,9 +198,9 @@ metasync.find = function(items, fn, done) {
 //   fn - function(value, callback)
 //     value - item from items array
 //     callback - callback function(accepted)
-//       accepted - true/false returned from fn
+//       err - instance of Error or null
 //   done - on `done` function(result)
-//     result - filtered array
+//     err - instance of Error or null
 //
 metasync.series = function(items, fn, done) {
   var i = -1,
@@ -210,9 +210,9 @@ metasync.series = function(items, fn, done) {
     i++;
     if (i >= len) {
       if (done) done();
-    } else fn(items[i], function(result) {
-      if (result instanceof Error) {
-        if (done) done(result);
+    } else fn(items[i], function(err) {
+      if (err instanceof Error) {
+        if (done) done(err);
       } else next();
     });
   }
@@ -220,14 +220,14 @@ metasync.series = function(items, fn, done) {
   next();
 };
 
-// Asynchronous each
+// Asynchronous each (iterate in parallel)
 //   items - incoming array
 //   fn - function(value, callback)
 //     value - item from items array
 //     callback - callback function(accepted)
-//       accepted - true/false returned from fn
+//       err - instance of Error or null
 //   done - on `done` function(result)
-//     result - filtered array
+//     err - instance of Error or null
 //
 metasync.each = function(items, fn, done) {
   var counter = 0,
@@ -238,10 +238,10 @@ metasync.each = function(items, fn, done) {
     if (done) done();
   } else {
     items.forEach(function(item) {
-      fn(item, function(result) {
-        if (result instanceof Error) {
+      fn(item, function(err) {
+        if (err instanceof Error) {
           if (!finished) {
-            if (done) done(result);
+            if (done) done(err);
           }
           finished = true;
         } else {
