@@ -254,3 +254,37 @@ metasync.each = function(items, fn, done) {
     });
   }
 };
+
+
+// Asyncronous reduce
+//   items - incoming array
+//   performer - function to execute on each value in the array
+//     previous - the value previously returned in the last invocation of the performer, or initialValue
+//     current - the current element being processed in the array
+//     response - callback for returning value back to function reduce
+//     counter - the index of the current element being processed in the array
+//     items - the array reduce was called upon
+//   callback - callback function
+//     err - true|false error state
+//     data - function result
+//   initialValue - optional value to use as the first argument to the first call of the performer
+metasync.reduce = function(items, performer, callback, initialValue) {
+	var nseted 				= (typeof initialValue === 'undefined'),
+			counter 			= nseted ? 1 : 0,
+			previous 			= nseted ? items[0] : initialValue,
+			current 			= nseted ? items[1] : items[0];
+
+	function response(err, data) {
+		if (!err && counter !== items.length - 1) {
+			++counter;
+			previous 	= data;
+			current 	= items[counter];
+			performer(previous, current, response, counter, items);
+		}
+		else {
+			if (callback) callback(err, data);
+		}
+	}
+
+	performer(previous, current, response, counter, items);
+}
