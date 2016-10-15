@@ -283,7 +283,7 @@ function reduceTest(end) {
   metasync.reduce(
     ['a', 'b', 'c'],
     function performer(prev, curr, callback) {
-      console.dir({ reduce: {prev, curr} });
+      console.dir({ reduce: {prev: prev, curr: curr} });
       callback(null, curr);
     },
     function done(err, data) {
