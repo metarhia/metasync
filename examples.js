@@ -305,7 +305,7 @@ metasync.composition([
   findTest,
   eachTest,
   seriesTest,
-	reduceTest,
+  reduceTest,
 ], function allDone() {
     console.log('All tests done');
 });

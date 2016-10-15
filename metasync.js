@@ -269,22 +269,22 @@ metasync.each = function(items, fn, done) {
 //     data - function result
 //   initialValue - optional value to use as the first argument to the first call of the performer
 metasync.reduce = function(items, performer, callback, initialValue) {
-	var nseted 				= (typeof initialValue === 'undefined'),
-			counter 			= nseted ? 1 : 0,
-			previous 			= nseted ? items[0] : initialValue,
-			current 			= nseted ? items[1] : items[0];
+  var nseted     = (typeof initialValue === 'undefined'),
+			counter    = nseted ? 1 : 0,
+			previous   = nseted ? items[0] : initialValue,
+			current    = nseted ? items[1] : items[0];
 
-	function response(err, data) {
-		if (!err && counter !== items.length - 1) {
-			++counter;
-			previous 	= data;
-			current 	= items[counter];
-			performer(previous, current, response, counter, items);
-		}
-		else {
-			if (callback) callback(err, data);
-		}
-	}
+  function response(err, data) {
+    if (!err && counter !== items.length - 1) {
+      ++counter;
+      previous 	= data;
+      current 	= items[counter];
+      performer(previous, current, response, counter, items);
+    }
+    else {
+      if (callback) callback(err, data);
+    }
+  }
 
-	performer(previous, current, response, counter, items);
+  performer(previous, current, response, counter, items);
 }
