@@ -258,33 +258,32 @@ metasync.each = function(items, fn, done) {
 
 // Asyncronous reduce
 //   items - incoming array
-//   performer - function to execute on each value in the array
-//     previous - the value previously returned in the last invocation of the performer, or initialValue
-//     current - the current element being processed in the array
+//   callback - function to be executed for each value in the array
+//     previous - value previously returned in the last iteration
+//     current - current element being processed in the array
 //     response - callback for returning value back to function reduce
 //     counter - the index of the current element being processed in the array
 //     items - the array reduce was called upon
-//   callback - callback function
-//     err - true|false error state
-//     data - function result
-//   initialValue - optional value to use as the first argument to the first call of the performer
-metasync.reduce = function(items, performer, callback, initialValue) {
-  var nseted     = (typeof initialValue === 'undefined'),
-      counter    = nseted ? 1 : 0,
-      previous   = nseted ? items[0] : initialValue,
-      current    = nseted ? items[1] : items[0];
+//   done - callback function on done
+//     err - error or null
+//     data - result if !err
+//   initial - optional value to be used as first arpument in first iteration
+//
+metasync.reduce = function(items, callback, done, initial) {
+  var counter = typeof(initial) === 'undefined' ? 1 : 0,
+      previous = counter === 1 ? items[0] : initial,
+      current = items[counter];
 
   function response(err, data) {
     if (!err && counter !== items.length - 1) {
-      ++counter;
-      previous 	= data;
-      current 	= items[counter];
-      performer(previous, current, response, counter, items);
-    }
-    else {
-      if (callback) callback(err, data);
+      counter++;
+      previous = data;
+      current = items[counter];
+      callback(previous, current, response, counter, items);
+    } else {
+      if (done) done(err, data);
     }
   }
 
-  performer(previous, current, response, counter, items);
+  callback(previous, current, response, counter, items);
 }
