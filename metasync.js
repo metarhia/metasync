@@ -102,9 +102,10 @@ metasync.sequential = function(fns, done, data) {
 
 // Data Collector
 //   expected - number of `collect()` calls expected
-//   done - on `done` callback(data)
+//   timeout
+//   done - on `done` callback(err, data)
 //
-metasync.DataCollector = function(expected, done) {
+metasync.DataCollector = function(expected, timeout, done) {
   this.expected = expected;
   this.data = {};
   this.count = 0;
@@ -119,6 +120,61 @@ metasync.DataCollector.prototype.collect = function(key, data) {
   this.count++;
   this.data[key] = data;
   if (this.expected === this.count) this.done(this.data);
+};
+
+// Key Collector
+//   ecpected - array of keys, example: ['config', 'users', 'cities']
+//   done - callback(err, data)
+//     data - hash {config, users, cities}
+
+metasync.KeyCollector = function(expected, timeout, done) {
+  thist.isDone = false;
+};
+
+metasync.KeyCollector.prototype.collect = function(key, data) {
+};
+
+metasync.KeyCollector.prototype.stop = function(isDone) {
+};
+
+metasync.KeyCollector.prototype.pause = function() {
+};
+
+metasync.KeyCollector.prototype.resume = function() {
+};
+
+metasync.KeyCollector.prototype.on = function(eventName, callback) {
+  // eventName:
+  //   .on('callect', ...)
+  //   .on('done', ...)
+  //   .on('pause', ...)
+  //   .on('resume', ...)
+  //   .on('error', ...)
+  //   .on('timeout', ...)
+};
+
+metasync.ConcurrentQueue = function(concurrency) {
+};
+
+metasync.ConcurrentQueue.prototype.add = function(item) {
+};
+
+metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
+  // eventName:
+  //   .on('empty', ...)
+  //   .on('process', ...)
+};
+
+metasync.ConcurrentQueue.prototype.pause = function() {
+};
+
+metasync.ConcurrentQueue.prototype.resume = function() {
+};
+
+metasync.ConcurrentQueue.prototype.stop = function() {
+};
+
+metasync.ConcurrentQueue.prototype.free = function() {
 };
 
 // Asynchrous filter (iterate parallel)
@@ -255,13 +311,12 @@ metasync.each = function(items, fn, done) {
   }
 };
 
-
 // Asyncronous reduce
 //   items - incoming array
 //   callback - function to be executed for each value in the array
 //     previous - value previously returned in the last iteration
 //     current - current element being processed in the array
-//     response - callback for returning value back to function reduce
+//     callback - callback for returning value back to function reduce
 //     counter - the index of the current element being processed in the array
 //     items - the array reduce was called upon
 //   done - callback function on done
@@ -286,4 +341,16 @@ metasync.reduce = function(items, callback, done, initial) {
   }
 
   callback(previous, current, response, counter, items);
-}
+};
+
+// Asyncronous map
+//   items - incoming array
+//   callback - function to be executed for each value in the array
+//     current - current element being processed in the array
+//     callback - callback for returning value back to function map
+//   done - callback function on done
+//     err - error or null
+//     data - result if !err
+//
+metasync.map = function(items, callback, done) {
+};
