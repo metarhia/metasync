@@ -101,8 +101,13 @@ function compositionTest(end) {
 
 function collectorTest(end) {
 
-  var dataCollector = new metasync.DataCollector(4, function(data) {
-    console.dir(Object.keys(data));
+  var dataCollector = new metasync.DataCollector(4);
+
+  dataCollector.on('done', function(err, data) {
+    console.dir({
+      err: err,
+      dataKeys: Object.keys(data)
+    });
     console.log('Collector test done');
     end('DataCollector');
   });
@@ -120,6 +125,40 @@ function collectorTest(end) {
   setTimeout(function() {
     dataCollector.collect('timer', { date: new Date() });
   }, ASYNC_TIMEOUT);
+
+}
+
+function collectorTimeoutTest(end) {
+
+  var dataCollector = new metasync.DataCollector(4, 1000);
+
+  dataCollector.on('timeout', function(err, data) {
+    console.dir({
+      err: err ? err.toString() : null,
+      dataKeys: Object.keys(data)
+    });
+    console.log('Collector timeout test done');
+    end('DataCollectorTimeout');
+  });
+
+  dataCollector.collect('user', { name: 'Marcus Aurelius' });
+
+}
+
+function collectorErrorTest(end) {
+
+  var dataCollector = new metasync.DataCollector(4);
+
+  dataCollector.on('error', function(err, data) {
+    console.dir({
+      err: err ? err.toString() : null,
+      dataKeys: Object.keys(data)
+    });
+    console.log('Collector Error test done');
+    end('DataCollectorError');
+  });
+
+  dataCollector.collect('user', new Error('Something went wrong'));
 
 }
 
@@ -296,16 +335,21 @@ function reduceTest(end) {
 
 // Run tests
 
+console.dir(collectorTimeoutTest);
+console.dir(collectorErrorTest);
+
 metasync.composition([
   compositionTest,
   collectorTest,
+  collectorTimeoutTest,
+  collectorErrorTest,
   parallelTest,
   sequentialTest,
-  filterTest,
-  findTest,
-  eachTest,
-  seriesTest,
-  reduceTest,
+  //filterTest,
+  //findTest,
+  //eachTest,
+  //seriesTest,
+  //reduceTest,
 ], function allDone() {
-    console.log('All tests done');
+  console.log('All tests done');
 });

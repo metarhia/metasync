@@ -102,24 +102,73 @@ metasync.sequential = function(fns, done, data) {
 
 // Data Collector
 //   expected - number of `collect()` calls expected
-//   timeout
-//   done - on `done` callback(err, data)
+//   timeout - collect tileout (optional)
 //
-metasync.DataCollector = function(expected, timeout, done) {
+metasync.DataCollector = function(expected, timeout) {
   this.expected = expected;
-  this.data = {};
+  this.timeout = timeout;
   this.count = 0;
-  this.done = done;
+  this.data = {};
+  this.err = null;
+  this.events = {
+    collect: [],
+    error: [],
+    timeout: [],
+    done: []
+  };
+  var collector = this;
+  if (this.timeout) {
+    this.timer = setTimeout(function() {
+      collector.emit('timeout', this.err, this.data);
+    }, timeout);
+  }
 };
 
 // Push data to collector
 //   key - key in result data
-//   data - value in result data
+//   data - value or error instance
 //
 metasync.DataCollector.prototype.collect = function(key, data) {
   this.count++;
   this.data[key] = data;
-  if (this.expected === this.count) this.done(this.data);
+  if (data instanceof Error) {
+    if (!this.err) {
+      this.err = new Error('Errors found in data');
+    }
+    this.emit('error', data, key);
+    this.emit('collect', data, null);
+  } else {
+    this.emit('collect', null, key, data);
+  }
+  if (this.expected === this.count) {
+    if (this.timer) {
+      this.timer.clearTimeout(this.timer);
+    }
+    this.emit('done', this.err, this.data);
+  }
+};
+
+// DataCollector events:
+//   on('collect', callback(err, key, data))
+//   on('error', callback(err, key))
+//   on('timeout', callback(err, data))
+//   on('done', callback(err, data))
+//
+metasync.DataCollector.prototype.on = function(eventName, callback) {
+  var event = this.events[eventName];
+  if (event) event.push(callback);
+};
+
+// Emit DataCollector events
+//
+metasync.DataCollector.prototype.emit = function(eventName, err, data) {
+  var collector = this;
+  var event = this.events[eventName];
+  if (event && event.length) {
+    event.forEach(function(fn) {
+      fn(collector.err, collector.data);
+    });
+  }
 };
 
 // Key Collector
@@ -128,7 +177,7 @@ metasync.DataCollector.prototype.collect = function(key, data) {
 //     data - hash {config, users, cities}
 
 metasync.KeyCollector = function(expected, timeout, done) {
-  thist.isDone = false;
+  this.isDone = false;
 };
 
 metasync.KeyCollector.prototype.collect = function(key, data) {
