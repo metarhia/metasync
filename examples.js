@@ -103,9 +103,9 @@ function collectorTest(end) {
 
   var dataCollector = new metasync.DataCollector(4);
 
-  dataCollector.on('done', function(err, data) {
+  dataCollector.on('done', function(errs, data) {
     console.dir({
-      err: err,
+      errs: errs,
       dataKeys: Object.keys(data)
     });
     console.log('Collector test done');
@@ -149,10 +149,10 @@ function collectorErrorTest(end) {
 
   var dataCollector = new metasync.DataCollector(4);
 
-  dataCollector.on('error', function(err, data) {
+  dataCollector.on('error', function(err, key) {
     console.dir({
       err: err ? err.toString() : null,
-      dataKeys: Object.keys(data)
+      key: key
     });
     console.log('Collector Error test done');
     end('DataCollectorError');

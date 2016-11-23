@@ -101,7 +101,7 @@ metasync.sequential = function(fns, done, data) {
 };
 
 // Data Collector
-//   expected - number of `collect()` calls expected
+//   expected - number of collect() calls expected
 //   timeout - collect timeout (optional)
 //
 metasync.DataCollector = function(expected, timeout) {
@@ -109,9 +109,8 @@ metasync.DataCollector = function(expected, timeout) {
   this.timeout = timeout;
   this.count = 0;
   this.data = {};
-  this.err = null;
+  this.errs = [];
   this.events = {
-    collect: [],
     error: [],
     timeout: [],
     done: []
@@ -119,7 +118,8 @@ metasync.DataCollector = function(expected, timeout) {
   var collector = this;
   if (this.timeout) {
     this.timer = setTimeout(function() {
-      collector.emit('timeout', this.err, this.data);
+      var err = new Error('DataCollector timeout');
+      collector.emit('timeout', err, collector.data);
     }, timeout);
   }
 };
@@ -130,29 +130,26 @@ metasync.DataCollector = function(expected, timeout) {
 //
 metasync.DataCollector.prototype.collect = function(key, data) {
   this.count++;
-  this.data[key] = data;
   if (data instanceof Error) {
-    if (!this.err) {
-      this.err = new Error('Errors found in data');
-    }
+    this.errs[key] = data;
     this.emit('error', data, key);
-    this.emit('collect', data, null);
   } else {
-    this.emit('collect', null, key, data);
+    this.data[key] = data;
   }
   if (this.expected === this.count) {
     if (this.timer) {
       this.timer.clearTimeout(this.timer);
     }
-    this.emit('done', this.err, this.data);
+    this.emit('done', this.errs, this.data);
   }
 };
 
 // DataCollector events:
-//   on('collect', function(err, key, data))
 //   on('error', function(err, key))
 //   on('timeout', function(err, data))
-//   on('done', function(err, data))
+//   on('done', function(errs, data))
+//     errs - hash of errors
+//     data - hash of sucessfully received adta
 //
 metasync.DataCollector.prototype.on = function(eventName, callback) {
   var event = this.events[eventName];
@@ -166,7 +163,7 @@ metasync.DataCollector.prototype.emit = function(eventName, err, data) {
   var event = this.events[eventName];
   if (event && event.length) {
     event.forEach(function(fn) {
-      fn(collector.err, collector.data);
+      fn(err, data);
     });
   }
 };
@@ -192,10 +189,9 @@ metasync.KeyCollector.prototype.resume = function() {
 };
 
 // KeyCollector events:
-//   on('collect', function(err, key, data))
 //   on('error', function(err, key))
 //   on('timeout', function(err, data))
-//   on('done', function(err, data))
+//   on('done', function(errs, data))
 //   on('pause', function())
 //   on('resume', function())
 //
