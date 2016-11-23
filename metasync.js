@@ -102,7 +102,7 @@ metasync.sequential = function(fns, done, data) {
 
 // Data Collector
 //   expected - number of `collect()` calls expected
-//   timeout - collect tileout (optional)
+//   timeout - collect timeout (optional)
 //
 metasync.DataCollector = function(expected, timeout) {
   this.expected = expected;
@@ -149,10 +149,10 @@ metasync.DataCollector.prototype.collect = function(key, data) {
 };
 
 // DataCollector events:
-//   on('collect', callback(err, key, data))
-//   on('error', callback(err, key))
-//   on('timeout', callback(err, data))
-//   on('done', callback(err, data))
+//   on('collect', function(err, key, data))
+//   on('error', function(err, key))
+//   on('timeout', function(err, data))
+//   on('done', function(err, data))
 //
 metasync.DataCollector.prototype.on = function(eventName, callback) {
   var event = this.events[eventName];
@@ -172,11 +172,10 @@ metasync.DataCollector.prototype.emit = function(eventName, err, data) {
 };
 
 // Key Collector
-//   ecpected - array of keys, example: ['config', 'users', 'cities']
-//   done - callback(err, data)
-//     data - hash {config, users, cities}
-
-metasync.KeyCollector = function(expected, timeout, done) {
+//   expected - array of keys, example: ['config', 'users', 'cities']
+//   timeout - collect timeout (optional)
+//
+metasync.KeyCollector = function(expected, timeout) {
   this.isDone = false;
 };
 
@@ -192,26 +191,36 @@ metasync.KeyCollector.prototype.pause = function() {
 metasync.KeyCollector.prototype.resume = function() {
 };
 
+// KeyCollector events:
+//   on('collect', function(err, key, data))
+//   on('error', function(err, key))
+//   on('timeout', function(err, data))
+//   on('done', function(err, data))
+//   on('pause', function())
+//   on('resume', function())
+//
 metasync.KeyCollector.prototype.on = function(eventName, callback) {
-  // eventName:
-  //   .on('callect', ...)
-  //   .on('done', ...)
-  //   .on('pause', ...)
-  //   .on('resume', ...)
-  //   .on('error', ...)
-  //   .on('timeout', ...)
 };
 
-metasync.ConcurrentQueue = function(concurrency) {
+// ConcurrentQueue
+//   concurrency - number of simultaneous and asynchronously executing tasks
+//   timeout - process timeout (optional), for single item
+//
+metasync.ConcurrentQueue = function(concurrency, timeout) {
 };
 
+// Add item to queue
+//
 metasync.ConcurrentQueue.prototype.add = function(item) {
 };
 
+// ConcurrentQueue events:
+//   on('empty', function()) - no more items in queue
+//   on('process', function(item, callback)) - process item function
+//   on('timeout', function(err, data))
+//   on('done', function(err, data))
+//
 metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
-  // eventName:
-  //   .on('empty', ...)
-  //   .on('process', ...)
 };
 
 metasync.ConcurrentQueue.prototype.pause = function() {

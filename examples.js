@@ -335,9 +335,6 @@ function reduceTest(end) {
 
 // Run tests
 
-console.dir(collectorTimeoutTest);
-console.dir(collectorErrorTest);
-
 metasync.composition([
   compositionTest,
   collectorTest,
@@ -345,11 +342,11 @@ metasync.composition([
   collectorErrorTest,
   parallelTest,
   sequentialTest,
-  //filterTest,
-  //findTest,
-  //eachTest,
-  //seriesTest,
-  //reduceTest,
+  filterTest,
+  findTest,
+  eachTest,
+  seriesTest,
+  reduceTest,
 ], function allDone() {
   console.log('All tests done');
 });
