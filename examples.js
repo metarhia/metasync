@@ -105,7 +105,6 @@ function collectorTest(end) {
 
   dataCollector.on('done', function(errs, data) {
     console.dir({
-      errs: errs,
       dataKeys: Object.keys(data)
     });
     console.log('Collector test done');
@@ -154,11 +153,21 @@ function collectorErrorTest(end) {
       err: err ? err.toString() : null,
       key: key
     });
+  });
+
+  dataCollector.on('done', function(errs, data) {
+    console.dir({
+      errorKeys: errs ? Object.keys(errs) : null,
+      dataKeys: Object.keys(data)
+    });
     console.log('Collector Error test done');
     end('DataCollectorError');
   });
 
-  dataCollector.collect('user', new Error('Something went wrong'));
+  dataCollector.collect('user', new Error('User not found'));
+  dataCollector.collect('file', 'file content');
+  dataCollector.collect('score', 1000);
+  dataCollector.collect('tcp', new Error('No socket'));
 
 }
 

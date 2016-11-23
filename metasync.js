@@ -140,7 +140,8 @@ metasync.DataCollector.prototype.collect = function(key, data) {
     if (this.timer) {
       this.timer.clearTimeout(this.timer);
     }
-    this.emit('done', this.errs, this.data);
+    var errs = this.errs.length ? this.errs : null;
+    this.emit('done', errs, this.data);
   }
 };
 
