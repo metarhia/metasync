@@ -204,20 +204,70 @@ metasync.KeyCollector.prototype.on = function(eventName, callback) {
 //   timeout - process timeout (optional), for single item
 //
 metasync.ConcurrentQueue = function(concurrency, timeout) {
+  this.concurrency = concurrency;
+  this.timeout = timeout;
+  this.count = 0;
+  this.items = [];
+  this.events = {
+    error: [],
+    timeout: [],
+    empty: [],
+    process: []
+  };
 };
 
 // Add item to queue
 //
 metasync.ConcurrentQueue.prototype.add = function(item) {
+  if (this.count < this.concurrency) {
+    this.next(item);
+  } else {
+    this.items.push(item);
+  }
+};
+
+// Get next item from queue
+//
+metasync.ConcurrentQueue.prototype.next = function(item) {
+  var queue = this;
+  queue.count++;
+  if (queue.timeout) {
+    var timer = setTimeout(function() {
+      var err = new Error('ConcurrentQueue timeout');
+      collector.emit('timeout', err);
+    }, queue.timeout);
+  }
+  var i, fn, fns = queue.events.process;
+  for (i = 0; i < fns.length; i++) {
+    fn = fns[i];
+    fn(item, function() {
+      queue.count--;
+      if (queue.timeout) {
+        clearTimeout(timer);
+      }
+      if (queue.count > 0) {
+        var item = queue.items.shift();
+        queue.next(item);
+      } else {
+        var i, fn, fns = queue.events.empty;
+        for (i = 0; i < fns.length; i++) {
+          fn = fns[i];
+          fn();
+        }
+      }
+    });
+  }
 };
 
 // ConcurrentQueue events:
+//   on('error', function(err))
 //   on('empty', function()) - no more items in queue
 //   on('process', function(item, callback)) - process item function
 //   on('timeout', function(err, data))
-//   on('done', function(err, data))
 //
 metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
+  var event = this.events[eventName];
+  if (event) event.push(fn);
 };
 
 metasync.ConcurrentQueue.prototype.pause = function() {

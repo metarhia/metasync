@@ -342,6 +342,30 @@ function reduceTest(end) {
 
 }
 
+function concurrentQueueTest(end) {
+
+  var queue =  new metasync.ConcurrentQueue(3, 2000);
+
+  queue.on('process', function(item, callback) {
+    callback();
+  });
+
+  queue.on('timeout', function() {
+  });
+
+  queue.on('done', function() {
+    console.log('ConcurrentQueue test done');
+    end('ConcurrentQueue');
+  });
+
+  queue.add({ id: 1 });
+  queue.add({ id: 2 });
+  queue.add({ id: 3 });
+  queue.add({ id: 4 });
+  queue.add({ id: 5 });
+
+}
+
 // Run tests
 
 metasync.composition([
@@ -356,6 +380,7 @@ metasync.composition([
   eachTest,
   seriesTest,
   reduceTest,
+  concurrentQueueTest
 ], function allDone() {
   console.log('All tests done');
 });
