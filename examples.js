@@ -91,7 +91,7 @@ function compositionTest(end) {
     setTimeout(function() {
       callback('result11');
       console.log('Composition test done');
-      end('composition');
+      end();
     }, ASYNC_TIMEOUT);
   }
 
@@ -108,7 +108,7 @@ function collectorTest(end) {
       dataKeys: Object.keys(data)
     });
     console.log('Collector test done');
-    end('DataCollector');
+    end();
   });
 
   dataCollector.collect('user', { name: 'Marcus Aurelius' });
@@ -137,7 +137,7 @@ function collectorTimeoutTest(end) {
       dataKeys: Object.keys(data)
     });
     console.log('Collector timeout test done');
-    end('DataCollectorTimeout');
+    end();
   });
 
   dataCollector.collect('user', { name: 'Marcus Aurelius' });
@@ -161,7 +161,7 @@ function collectorErrorTest(end) {
       dataKeys: Object.keys(data)
     });
     console.log('Collector Error test done');
-    end('DataCollectorError');
+    end();
   });
 
   dataCollector.collect('user', new Error('User not found'));
@@ -177,7 +177,7 @@ function parallelTest(end) {
 
   metasync.parallel([pf1, pf2, pf3], function done() {
     console.log('Parallel test done');
-    end('parallel');
+    end();
   });
 
   function pf1(data, callback) {
@@ -209,7 +209,7 @@ function sequentialTest(end) {
 
   metasync.sequential([sf1, sf2, sf3], function done() {
     console.log('Sequential test done');
-    end('sequential');
+    end();
   });
 
   function sf1(data, callback) {
@@ -265,7 +265,7 @@ function filterTest(end) {
   metasync.filter(dataToFilter, filterPredicate, function(result) {
     console.log('filtered array: ' + result);
     console.log('Filter test done');
-    end('filter');
+    end();
   });
 
 }
@@ -282,7 +282,7 @@ function findTest(end) {
     function(result) {
       console.log('found value: ' + result);
       console.log('Find test done');
-      end('find');
+      end();
     }
   );
 
@@ -300,7 +300,7 @@ function eachTest(end) {
     },
     function done(data) {
       console.log('Each test done');
-      end('each');
+      end();
     }
   );
 
@@ -318,7 +318,7 @@ function seriesTest(end) {
     },
     function done(data) {
       console.log('Series test done');
-      end('series');
+      end();
     }
   );
 
@@ -336,7 +336,7 @@ function reduceTest(end) {
     },
     function done(err, data) {
       console.log('Reduce test done');
-      end('reduce');
+      end();
     }
   );
 
@@ -347,15 +347,18 @@ function concurrentQueueTest(end) {
   var queue =  new metasync.ConcurrentQueue(3, 2000);
 
   queue.on('process', function(item, callback) {
-    callback();
+    setTimeout(function() {
+      console.dir({item})
+      callback();
+    }, 100);
   });
 
   queue.on('timeout', function() {
   });
 
-  queue.on('done', function() {
+  queue.on('empty', function() {
     console.log('ConcurrentQueue test done');
-    end('ConcurrentQueue');
+    end();
   });
 
   queue.add({ id: 1 });
@@ -363,6 +366,9 @@ function concurrentQueueTest(end) {
   queue.add({ id: 3 });
   queue.add({ id: 4 });
   queue.add({ id: 5 });
+  queue.add({ id: 6 });
+  queue.add({ id: 8 });
+  queue.add({ id: 9 });
 
 }
 

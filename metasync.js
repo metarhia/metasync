@@ -111,9 +111,9 @@ metasync.DataCollector = function(expected, timeout) {
   this.data = {};
   this.errs = [];
   this.events = {
-    error: [],
-    timeout: [],
-    done: []
+    error: null,
+    timeout: null,
+    done: null
   };
   var collector = this;
   if (this.timeout) {
@@ -153,20 +153,16 @@ metasync.DataCollector.prototype.collect = function(key, data) {
 //     data - hash of sucessfully received adta
 //
 metasync.DataCollector.prototype.on = function(eventName, callback) {
-  var event = this.events[eventName];
-  if (event) event.push(callback);
+  if (eventName in this.events) {
+    this.events[eventName] = callback;
+  }
 };
 
 // Emit DataCollector events
 //
 metasync.DataCollector.prototype.emit = function(eventName, err, data) {
-  var collector = this;
   var event = this.events[eventName];
-  if (event && event.length) {
-    event.forEach(function(fn) {
-      fn(err, data);
-    });
-  }
+  if (event) event(err, data);
 };
 
 // Key Collector
@@ -197,6 +193,9 @@ metasync.KeyCollector.prototype.resume = function() {
 //   on('resume', function())
 //
 metasync.KeyCollector.prototype.on = function(eventName, callback) {
+  if (eventName in this.events) {
+    this.events[eventName] = callback;
+  }
 };
 
 // ConcurrentQueue
@@ -209,10 +208,10 @@ metasync.ConcurrentQueue = function(concurrency, timeout) {
   this.count = 0;
   this.items = [];
   this.events = {
-    error: [],
-    timeout: [],
-    empty: [],
-    process: []
+    error: null,
+    timeout: null,
+    empty: null,
+    process: null
   };
 };
 
@@ -234,29 +233,25 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
   if (queue.timeout) {
     var timer = setTimeout(function() {
       var err = new Error('ConcurrentQueue timeout');
-      collector.emit('timeout', err);
+      queue.emit('timeout', err);
     }, queue.timeout);
   }
-  var i, fn, fns = queue.events.process;
-  for (i = 0; i < fns.length; i++) {
-    fn = fns[i];
-    fn(item, function() {
-      queue.count--;
-      if (queue.timeout) {
-        clearTimeout(timer);
-      }
-      if (queue.count > 0) {
-        var item = queue.items.shift();
-        queue.next(item);
-      } else {
-        var i, fn, fns = queue.events.empty;
-        for (i = 0; i < fns.length; i++) {
-          fn = fns[i];
-          fn();
-        }
-      }
-    });
-  }
+  var fn = queue.events.process || function(item, callback) {
+    callback();
+  };
+  fn(item, function() {
+    queue.count--;
+    if (queue.timeout) {
+      clearTimeout(timer);
+    }
+    if (queue.items.length > 0) {
+      var item = queue.items.shift();
+      queue.next(item);
+    } else if (queue.count === 0) {
+      var fn = queue.events.empty;
+      if (fn) fn();
+    }
+  });
 };
 
 // ConcurrentQueue events:
@@ -266,8 +261,16 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
 //   on('timeout', function(err, data))
 //
 metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
+  if (eventName in this.events) {
+    this.events[eventName] = fn;
+  }
+};
+
+// Emit DataCollector events
+//
+metasync.ConcurrentQueue.prototype.emit = function(eventName, data) {
   var event = this.events[eventName];
-  if (event) event.push(fn);
+  if (event) event(err, data);
 };
 
 metasync.ConcurrentQueue.prototype.pause = function() {
@@ -277,9 +280,6 @@ metasync.ConcurrentQueue.prototype.resume = function() {
 };
 
 metasync.ConcurrentQueue.prototype.stop = function() {
-};
-
-metasync.ConcurrentQueue.prototype.free = function() {
 };
 
 // Asynchrous filter (iterate parallel)
