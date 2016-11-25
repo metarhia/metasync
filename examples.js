@@ -348,7 +348,7 @@ function concurrentQueueTest(end) {
 
   queue.on('process', function(item, callback) {
     setTimeout(function() {
-      console.dir({item})
+      console.dir({ item: item });
       callback();
     }, 100);
   });

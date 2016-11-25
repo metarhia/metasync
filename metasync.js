@@ -248,8 +248,7 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
       var item = queue.items.shift();
       queue.next(item);
     } else if (queue.count === 0) {
-      var fn = queue.events.empty;
-      if (fn) fn();
+      queue.emit('empty');
     }
   });
 };
@@ -268,7 +267,7 @@ metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
 
 // Emit DataCollector events
 //
-metasync.ConcurrentQueue.prototype.emit = function(eventName, data) {
+metasync.ConcurrentQueue.prototype.emit = function(eventName, err, data) {
   var event = this.events[eventName];
   if (event) event(err, data);
 };
