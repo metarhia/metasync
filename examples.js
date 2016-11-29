@@ -372,6 +372,22 @@ function concurrentQueueTest(end) {
 
 }
 
+function throttleTest(end) {
+
+  var counter = 1;
+  var f1 = metasync.throttle(500, function() {
+    console.log('Throttled function');
+    counter++;
+    if (counter === 2) {
+      console.log('Throttle test done');
+      end();
+    }
+  });
+  f1(); f1(); f1();
+  setTimeout(f1, 600);
+
+}
+
 // Run tests
 
 metasync.composition([
@@ -386,7 +402,8 @@ metasync.composition([
   eachTest,
   seriesTest,
   reduceTest,
-  concurrentQueueTest
+  concurrentQueueTest,
+  throttleTest
 ], function allDone() {
   console.log('All tests done');
 });

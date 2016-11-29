@@ -458,3 +458,19 @@ metasync.reduce = function(items, callback, done, initial) {
 //
 metasync.map = function(items, callback, done) {
 };
+
+// Function throttling
+//   timeout - time interval
+//   fn - function to be executed once per timeout
+//
+metasync.throttle = function(timeout, fn) {
+  var timer = null;
+  return function() {
+    if (!timer) {
+      timer = setTimeout(function() {
+        timer = null;
+      }, timeout);
+      fn();
+    }
+  };
+};
