@@ -465,12 +465,17 @@ metasync.map = function(items, callback, done) {
 //
 metasync.throttle = function(timeout, fn) {
   var timer = null;
-  return function() {
+  var wait = false;
+  return function throttled() {
     if (!timer) {
       timer = setTimeout(function() {
         timer = null;
+        if (wait) throttled();
       }, timeout);
       fn();
+      wait = false;
+    } else {
+      wait = true;
     }
   };
 };

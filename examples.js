@@ -374,17 +374,44 @@ function concurrentQueueTest(end) {
 
 function throttleTest(end) {
 
-  var counter = 1;
+  var state;
   var f1 = metasync.throttle(500, function() {
-    console.log('Throttled function');
-    counter++;
-    if (counter === 2) {
+    console.log('Throttled function, state: ' + state);
+    if (state === 'I') {
       console.log('Throttle test done');
       end();
     }
   });
-  f1(); f1(); f1();
-  setTimeout(f1, 600);
+
+  // to be called 2 times (first and last: A and E)
+  state = 'A';
+  f1();
+  state = 'B';
+  f1();
+  state = 'C';
+  f1();
+  state = 'D';
+  f1();
+  state = 'E';
+  f1();
+
+  // to be called 2 times (last will be I)
+  setTimeout(function() {
+    state = 'F';
+    f1();
+  }, 600);
+  setTimeout(function() {
+    state = 'G';
+    f1();
+  }, 700);
+  setTimeout(function() {
+    state = 'H';
+    f1();
+  }, 1000);
+  setTimeout(function() {
+    state = 'I';
+    f1();
+  }, 1100);
 
 }
 

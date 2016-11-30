@@ -1,3 +1,47 @@
+0.0.16 / 2016-11-30
+==================
+
+  * Added final call to metasync.throttle after last function call
+
+0.0.15 / 2016-11-30
+==================
+
+  * Implementation of function throttling, close #20
+
+0.0.14 / 2016-08-25
+==================
+
+  * ConcurrentQueue fixed
+
+0.0.13 / 2016-08-24
+==================
+
+  * Implemented ConcurrentQueue
+
+0.0.12 / 2016-08-23
+==================
+
+  * Fixed DataCollector
+
+0.0.11 / 2016-08-23
+==================
+
+  * Removed DataCollector.on('collect') event
+  * Added errors hash to DataCollector.on('done', function(errs, data))
+
+0.0.10 / 2016-08-23
+==================
+
+  * Changed KeyCollector interface
+  * Changed ConcurentQueue interface
+  * Removed debug output
+
+0.0.9 / 2016-08-21
+==================
+
+  * Implemented async reduce
+  * Multiple fixes
+
 0.0.8 / 2016-08-17
 ==================
 
