@@ -232,7 +232,7 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
   queue.count++;
   if (queue.timeout) {
     var timer = setTimeout(function() {
-      var err = new Error('ConcurrentQueue timeout');
+      var err = new Error('ConcurrentQueue timed out');
       queue.emit('timeout', err);
     }, queue.timeout);
   }
@@ -462,8 +462,9 @@ metasync.map = function(items, callback, done) {
 // Function throttling
 //   timeout - time interval
 //   fn - function to be executed once per timeout
+//   args - arguments array for fn (optional)
 //
-metasync.throttle = function(timeout, fn) {
+metasync.throttle = function(timeout, fn, args) {
   var timer = null;
   var wait = false;
   return function throttled() {
@@ -472,7 +473,8 @@ metasync.throttle = function(timeout, fn) {
         timer = null;
         if (wait) throttled();
       }, timeout);
-      fn();
+      if (args) fn.apply(null, args);
+      else fn();
       wait = false;
     } else {
       wait = true;

@@ -354,6 +354,7 @@ function concurrentQueueTest(end) {
   });
 
   queue.on('timeout', function() {
+    console.log('ConcurrentQueue timed out');
   });
 
   queue.on('empty', function() {
@@ -374,14 +375,16 @@ function concurrentQueueTest(end) {
 
 function throttleTest(end) {
 
-  var state;
-  var f1 = metasync.throttle(500, function() {
+  function fn(letter) {
     console.log('Throttled function, state: ' + state);
-    if (state === 'I') {
+    if (state === letter) {
       console.log('Throttle test done');
       end();
     }
-  });
+  }
+
+  var state;
+  var f1 = metasync.throttle(500, fn, ['I']);
 
   // to be called 2 times (first and last: A and E)
   state = 'A';
