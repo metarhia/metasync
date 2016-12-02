@@ -2,6 +2,7 @@
 
 var metasync = require('./metasync');
 var fs = require('fs');
+var assert = require('assert');
 var ASYNC_TIMEOUT = 200;
 
 // Functional Asyncronous Composition
@@ -418,6 +419,32 @@ function throttleTest(end) {
 
 }
 
+function mapTest() {
+  metasync.map([1, 2, 3], function(item, callback) {
+    setTimeout(function() {
+      callback(null, item * item);
+    }, item * 10);
+  }, function(error, result) {
+    assert.ifError(error);
+    assert.deepStrictEqual(result, [1, 4, 9]);
+    console.log('Map test #1 done');
+  });
+
+  metasync.map([1, 2, 3], function(item, callback) {
+    setTimeout(function() {
+      if (item === 2) {
+        callback(new Error());
+      } else {
+        callback(null, item);
+      }
+    }, item * 10);
+  }, function(error, result) {
+    assert.ok(error);
+    assert.ifError(result);
+    console.log('Map test #2 done');
+  });
+}
+
 // Run tests
 
 metasync.composition([
@@ -433,7 +460,8 @@ metasync.composition([
   seriesTest,
   reduceTest,
   concurrentQueueTest,
-  throttleTest
+  throttleTest,
+  mapTest
 ], function allDone() {
   console.log('All tests done');
 });
