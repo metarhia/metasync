@@ -3,7 +3,7 @@
 var metasync = {};
 module.exports = metasync;
 
-// Functional Asyncronous Composition
+// Functional Asynchronous Composition
 //   fns - array of function([data,] callback)
 //     data - incoming data
 //     callback - function(data)
@@ -415,7 +415,7 @@ metasync.each = function(items, fn, done) {
   }
 };
 
-// Asyncronous reduce
+// Asynchronous reduce
 //   items - incoming array
 //   callback - function to be executed for each value in the array
 //     previous - value previously returned in the last iteration
@@ -447,7 +447,7 @@ metasync.reduce = function(items, callback, done, initial) {
   callback(previous, current, response, counter, items);
 };
 
-// Asyncronous map
+// Asynchronous map
 //   items - incoming array
 //   callback - function to be executed for each value in the array
 //     current - current element being processed in the array
