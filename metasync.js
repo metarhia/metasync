@@ -452,11 +452,29 @@ metasync.reduce = function(items, callback, done, initial) {
 //   callback - function to be executed for each value in the array
 //     current - current element being processed in the array
 //     callback - callback for returning value back to function map
+//       err - error or null
+//       value - result
 //   done - callback function on done
 //     err - error or null
 //     data - result if !err
 //
 metasync.map = function(items, callback, done) {
+  var result = [];
+  var hadError = false;
+  var count = 0;
+  items.forEach(function(item, index) {
+    callback(item, function(err, value) {
+      if (err) {
+        hadError = true;
+        return done(err);
+      }
+      if (hadError) return;
+      result[index] = value;
+      if (++count === items.length) {
+        done(null, result);
+      }
+    });
+  });
 };
 
 // Function throttling
