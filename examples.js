@@ -5,6 +5,19 @@ var fs = require('fs');
 var assert = require('assert');
 var ASYNC_TIMEOUT = 200;
 
+// assert.deepStrictEqual polyfill for pre-io.js
+if (!assert.deepStrictEqual) {
+  assert.deepStrictEqual = function(actual, expected, message) {
+    var actualKeys = Object.keys(actual);
+    var expectedKeys = Object.keys(expected);
+    assert.strictEqual(actualKeys.length, expectedKeys.length, message);
+    for (var i = 0; i < actualKeys.length; i++) {
+      var key = actualKeys[i];
+      assert.strictEqual(actual[key], expected[key], message);
+    }
+  }
+}
+
 // Functional Asyncronous Composition
 
 function compositionTest(end) {
