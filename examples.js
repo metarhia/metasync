@@ -15,7 +15,7 @@ if (!assert.deepStrictEqual) {
       var key = actualKeys[i];
       assert.strictEqual(actual[key], expected[key], message);
     }
-  }
+  };
 }
 
 // Functional Asyncronous Composition
@@ -254,9 +254,9 @@ function sequentialTest(end) {
 function filterTest(end) {
 
   var dataToFilter = [
-   'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
-   'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
-   'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
+    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
+    'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
+    'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
   ];
 
   function filterPredicate(item, callback) {
@@ -389,6 +389,8 @@ function concurrentQueueTest(end) {
 
 function throttleTest(end) {
 
+  var state;
+
   function fn(letter) {
     console.log('Throttled function, state: ' + state);
     if (state === letter) {
@@ -397,7 +399,6 @@ function throttleTest(end) {
     }
   }
 
-  var state;
   var f1 = metasync.throttle(500, fn, ['I']);
 
   // to be called 2 times (first and last: A and E)

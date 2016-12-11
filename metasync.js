@@ -46,17 +46,16 @@ metasync.parallel = function(fns, done, data) {
             if (done) done(result);
           }
           finished = true;
-        } else {
-          if (++counter >= len) {
-            if (done) done(data);
-          }
+        } else if (++counter >= len) {
+          if (done) done(data);
         }
       };
       // fn may be array of function
       if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else {
-        if (fn.length === 2) fn(data, finish);
-        else fn(finish);
+      else if (fn.length === 2) {
+        fn(data, finish);
+      } else {
+        fn(finish);
       }
     });
   }
@@ -89,9 +88,10 @@ metasync.sequential = function(fns, done, data) {
     } else {
       fn = fns[i];
       if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else {
-        if (fn.length === 2) fn(data, finish);
-        else fn(finish);
+      else if (fn.length === 2) {
+        fn(data, finish);
+      } else {
+        fn(finish);
       }
     }
   }
@@ -439,8 +439,8 @@ metasync.reduce = function(items, callback, done, initial) {
       previous = data;
       current = items[counter];
       callback(previous, current, response, counter, items);
-    } else {
-      if (done) done(err, data);
+    } else if (done) {
+      done(err, data);
     }
   }
 
