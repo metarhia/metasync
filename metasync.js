@@ -499,3 +499,28 @@ metasync.throttle = function(timeout, fn, args) {
     }
   };
 };
+
+// Set timeout for function execution
+//    timeout - time interval
+//    asyncFunction - async function to be executed
+//      done - callback function
+//    doneFunction - callback function on done
+//
+metasync.timeout = function(timeout, asyncFunction, doneFunction) {
+  var finished = false;
+
+  var timer = setTimeout(function() {
+    if (finished === false) {
+      finished = true;
+      doneFunction();
+    }
+  }, timeout);
+
+  asyncFunction(function() {
+    if (finished === false) {
+      clearTimeout(timer);
+      finished = true;
+      doneFunction();
+    }
+  });
+}

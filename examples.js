@@ -459,6 +459,28 @@ function mapTest() {
   });
 }
 
+function timeoutTest() {
+  // Done function called by timer
+  var start1 = new Date();
+  metasync.timeout(200, function(done) {
+    setTimeout(done, 300);
+  }, function() {
+    var timeDiff = new Date() - start1;
+    assert(timeDiff < 250);
+    console.log('Timout test #1 done');
+  });
+
+  // Done function called by async function
+  var start2 = new Date();
+  metasync.timeout(300, function(done) {
+    setTimeout(done, 200);
+  }, function() {
+    var timeDiff = new Date() - start2;
+    assert(timeDiff < 250);
+    console.log('Timout test #2 done');
+  })
+}
+
 // Run tests
 
 metasync.composition([
@@ -475,7 +497,8 @@ metasync.composition([
   reduceTest,
   concurrentQueueTest,
   throttleTest,
-  mapTest
+  mapTest,
+  timeoutTest
 ], function allDone() {
   console.log('All tests done');
 });
