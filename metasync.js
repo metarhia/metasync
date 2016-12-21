@@ -510,14 +510,14 @@ metasync.timeout = function(timeout, asyncFunction, doneFunction) {
   var finished = false;
 
   var timer = setTimeout(function() {
-    if (finished === false) {
+    if (!finished) {
       finished = true;
       doneFunction();
     }
   }, timeout);
 
   asyncFunction(function() {
-    if (finished === false) {
+    if (!finished) {
       clearTimeout(timer);
       finished = true;
       doneFunction();
