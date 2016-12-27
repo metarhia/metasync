@@ -207,6 +207,7 @@ metasync.ConcurrentQueue = function(concurrency, timeout) {
   this.timeout = timeout;
   this.count = 0;
   this.items = [];
+  this.isOnPause = false;
   this.events = {
     error: null,
     timeout: null,
@@ -218,10 +219,12 @@ metasync.ConcurrentQueue = function(concurrency, timeout) {
 // Add item to queue
 //
 metasync.ConcurrentQueue.prototype.add = function(item) {
-  if (this.count < this.concurrency) {
-    this.next(item);
-  } else {
-    this.items.push(item);
+  if (!this.isOnPause){
+	  if (this.count < this.concurrency) {
+		this.next(item);
+	  } else {
+		this.items.push(item);
+	  }
   }
 };
 
@@ -229,28 +232,30 @@ metasync.ConcurrentQueue.prototype.add = function(item) {
 //
 metasync.ConcurrentQueue.prototype.next = function(item) {
   var queue = this;
-  queue.count++;
-  if (queue.timeout) {
-    var timer = setTimeout(function() {
-      var err = new Error('ConcurrentQueue timed out');
-      queue.emit('timeout', err);
-    }, queue.timeout);
+  if (!queue.isOnPause){
+	  queue.count++;
+	  if (queue.timeout) {
+		var timer = setTimeout(function() {
+		  var err = new Error('ConcurrentQueue timed out');
+		  queue.emit('timeout', err);
+		}, queue.timeout);
+	  }
+	  var fn = queue.events.process || function(item, callback) {
+		callback();
+	  };
+	  fn(item, function() {
+		queue.count--;
+		if (queue.timeout) {
+		  clearTimeout(timer);
+		}
+		if (queue.items.length > 0) {
+		  var item = queue.items.shift();
+		  queue.next(item);
+		} else if (queue.count === 0) {
+		  queue.emit('empty');
+		}
+	  });
   }
-  var fn = queue.events.process || function(item, callback) {
-    callback();
-  };
-  fn(item, function() {
-    queue.count--;
-    if (queue.timeout) {
-      clearTimeout(timer);
-    }
-    if (queue.items.length > 0) {
-      var item = queue.items.shift();
-      queue.next(item);
-    } else if (queue.count === 0) {
-      queue.emit('empty');
-    }
-  });
 };
 
 // ConcurrentQueue events:
@@ -260,25 +265,42 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
 //   on('timeout', function(err, data))
 //
 metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
-  if (eventName in this.events) {
-    this.events[eventName] = fn;
+  if (!this.isOnPause){
+	  if (eventName in this.events) {
+		this.events[eventName] = fn;
+	  }
   }
 };
 
 // Emit DataCollector events
 //
 metasync.ConcurrentQueue.prototype.emit = function(eventName, err, data) {
-  var event = this.events[eventName];
-  if (event) event(err, data);
+  if (!this.isOnPause){
+	  var event = this.events[eventName];
+	  if (event) event(err, data);
+  }
 };
 
 metasync.ConcurrentQueue.prototype.pause = function() {
+	this.isOnPause = true;
 };
 
 metasync.ConcurrentQueue.prototype.resume = function() {
+  this.isOnPause = false;
 };
 
 metasync.ConcurrentQueue.prototype.stop = function() {
+  this.concurrency = null;
+  this.timeout = null;
+  this.count = 0;
+  this.items = [];
+  this.isOnPause = false;
+  this.events = {
+    error: null,
+    timeout: null,
+    empty: null,
+    process: null
+  }
 };
 
 // Asynchrous filter (iterate parallel)
