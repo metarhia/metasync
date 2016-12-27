@@ -220,11 +220,11 @@ metasync.ConcurrentQueue = function(concurrency, timeout) {
 //
 metasync.ConcurrentQueue.prototype.add = function(item) {
   if (!this.isOnPause){
-	  if (this.count < this.concurrency) {
-		this.next(item);
-	  } else {
-		this.items.push(item);
-	  }
+    if (this.count < this.concurrency) {
+      this.next(item);
+	} else {
+      this.items.push(item);
+    }
   }
 };
 
@@ -233,28 +233,28 @@ metasync.ConcurrentQueue.prototype.add = function(item) {
 metasync.ConcurrentQueue.prototype.next = function(item) {
   var queue = this;
   if (!queue.isOnPause){
-	  queue.count++;
-	  if (queue.timeout) {
-		var timer = setTimeout(function() {
-		  var err = new Error('ConcurrentQueue timed out');
-		  queue.emit('timeout', err);
-		}, queue.timeout);
-	  }
-	  var fn = queue.events.process || function(item, callback) {
-		callback();
-	  };
-	  fn(item, function() {
-		queue.count--;
-		if (queue.timeout) {
-		  clearTimeout(timer);
-		}
-		if (queue.items.length > 0) {
-		  var item = queue.items.shift();
-		  queue.next(item);
-		} else if (queue.count === 0) {
-		  queue.emit('empty');
-		}
-	  });
+    queue.count++;
+    if (queue.timeout) {
+      var timer = setTimeout(function() {
+        var err = new Error('ConcurrentQueue timed out');
+        queue.emit('timeout', err);
+      }, queue.timeout);
+    }
+    var fn = queue.events.process || function(item, callback) {
+      callback();
+    };
+    fn(item, function() {
+      queue.count--;
+      if (queue.timeout) {
+        clearTimeout(timer);
+      }
+      if (queue.items.length > 0) {
+        var item = queue.items.shift();
+        queue.next(item);
+      } else if (queue.count === 0) {
+        queue.emit('empty');
+      }
+    });
   }
 };
 
@@ -266,9 +266,9 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
 //
 metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
   if (!this.isOnPause){
-	  if (eventName in this.events) {
-		this.events[eventName] = fn;
-	  }
+    if (eventName in this.events) {
+      this.events[eventName] = fn;
+    }
   }
 };
 
@@ -276,13 +276,13 @@ metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
 //
 metasync.ConcurrentQueue.prototype.emit = function(eventName, err, data) {
   if (!this.isOnPause){
-	  var event = this.events[eventName];
-	  if (event) event(err, data);
+    var event = this.events[eventName];
+    if (event) event(err, data);
   }
 };
 
 metasync.ConcurrentQueue.prototype.pause = function() {
-	this.isOnPause = true;
+  this.isOnPause = true;
 };
 
 metasync.ConcurrentQueue.prototype.resume = function() {

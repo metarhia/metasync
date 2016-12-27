@@ -388,34 +388,27 @@ function concurrentQueueTest(end) {
 
 function concurrentQueuePauseResumeStopTest(end){
   var queue =  new metasync.ConcurrentQueue(3, 2000);
-	  
+  
   queue.pause();
-
   queue.on('empty', function() {
     end();
   });
-  
   if (queue.events['empty'] == null) {
     console.log('ConcurrentQueue pause test done');
   }
   
   queue.resume();
-
   queue.on('empty', function() {
     end();
   });
-  
   if (queue.events['empty'] != null) {
     console.log('ConcurrentQueue resume test done');
   }
-	  
- 
   
   queue.stop();
   if (queue.count == 0) {
 	  console.log('ConcurrentQueue stop test done');
   }
-
 }
 
 function throttleTest(end) {
