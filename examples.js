@@ -392,19 +392,19 @@ function concurrentQueuePauseResumeStopTest(end) {
   queue.on('empty', function() {
     end();
   });
-  if (queue.events['empty'] == null) {
+  if (!queue.events.empty) {
     console.log('ConcurrentQueue pause test done');
   }
   queue.resume();
   queue.on('empty', function() {
     end();
   });
-  if (queue.events['empty'] != null) {
+  if (queue.events.empty) {
     console.log('ConcurrentQueue resume test done');
   }
   queue.stop();
-  if (queue.count == 0) {
-	  console.log('ConcurrentQueue stop test done');
+  if (queue.count === 0) {
+    console.log('ConcurrentQueue stop test done');
   }
 }
 
@@ -499,7 +499,7 @@ function timeoutTest() {
     var timeDiff = new Date() - start2;
     assert(timeDiff < 250);
     console.log('Timout test #2 done');
-  })
+  });
 }
 
 // Run tests

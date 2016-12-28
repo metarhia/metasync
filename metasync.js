@@ -219,10 +219,10 @@ metasync.ConcurrentQueue = function(concurrency, timeout) {
 // Add item to queue
 //
 metasync.ConcurrentQueue.prototype.add = function(item) {
-  if (!this.isOnPause){
+  if (!this.isOnPause) {
     if (this.count < this.concurrency) {
       this.next(item);
-	} else {
+    } else {
       this.items.push(item);
     }
   }
@@ -232,7 +232,7 @@ metasync.ConcurrentQueue.prototype.add = function(item) {
 //
 metasync.ConcurrentQueue.prototype.next = function(item) {
   var queue = this;
-  if (!queue.isOnPause){
+  if (!queue.isOnPause) {
     queue.count++;
     if (queue.timeout) {
       var timer = setTimeout(function() {
@@ -265,7 +265,7 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
 //   on('timeout', function(err, data))
 //
 metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
-  if (!this.isOnPause){
+  if (!this.isOnPause) {
     if (eventName in this.events) {
       this.events[eventName] = fn;
     }
@@ -275,7 +275,7 @@ metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
 // Emit DataCollector events
 //
 metasync.ConcurrentQueue.prototype.emit = function(eventName, err, data) {
-  if (!this.isOnPause){
+  if (!this.isOnPause) {
     var event = this.events[eventName];
     if (event) event(err, data);
   }
@@ -300,7 +300,7 @@ metasync.ConcurrentQueue.prototype.stop = function() {
     timeout: null,
     empty: null,
     process: null
-  }
+  };
 };
 
 // Asynchrous filter (iterate parallel)
@@ -545,4 +545,4 @@ metasync.timeout = function(timeout, asyncFunction, doneFunction) {
       doneFunction();
     }
   });
-}
+};
