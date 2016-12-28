@@ -166,17 +166,51 @@ metasync.DataCollector.prototype.emit = function(eventName, err, data) {
 };
 
 // Key Collector
-//   expected - array of keys, example: ['config', 'users', 'cities']
+//   keys - array of keys, example: ['config', 'users', 'cities']
 //   timeout - collect timeout (optional)
 //
-metasync.KeyCollector = function(expected, timeout) {
+metasync.KeyCollector = function(keys, timeout) {
   this.isDone = false;
+  this.keys = keys;
+  this.expected = keys.length;
+  this.count = 0;
+  this.timeout = timeout;
+  this.data = {};
+  this.errs = [];
+  this.events = {
+    error: null,
+    timeout: null,
+    done: null
+  };
+  var collector = this;
+  if (this.timeout) {
+    this.timer = setTimeout(function() {
+      var err = new Error('KeyCollector timeout');
+      collector.emit('timeout', err, collector.data);
+    }, timeout);
+  }
 };
 
 metasync.KeyCollector.prototype.collect = function(key, data) {
+  if (this.keys.indexOf(key) !== -1) {
+    this.count++;
+    if (data instanceof Error) {
+      this.errs[key] = data;
+      this.emit('error', data, key);
+    } else {
+      this.data[key] = data;
+    }
+    if (this.expected === this.count) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      var errs = this.errs.length ? this.errs : null;
+      this.emit('done', errs, this.data);
+    }
+  }
 };
 
-metasync.KeyCollector.prototype.stop = function(isDone) {
+metasync.KeyCollector.prototype.stop = function() {
 };
 
 metasync.KeyCollector.prototype.pause = function() {
@@ -196,6 +230,13 @@ metasync.KeyCollector.prototype.on = function(eventName, callback) {
   if (eventName in this.events) {
     this.events[eventName] = callback;
   }
+};
+
+// Emit DataCollector events
+//
+metasync.KeyCollector.prototype.emit = function(eventName, err, data) {
+  var event = this.events[eventName];
+  if (event) event(err, data);
 };
 
 // ConcurrentQueue

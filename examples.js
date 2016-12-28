@@ -113,7 +113,7 @@ function compositionTest(end) {
 
 // Data Collector
 
-function collectorTest(end) {
+function dataCollectorTest(end) {
 
   var dataCollector = new metasync.DataCollector(4);
 
@@ -121,7 +121,7 @@ function collectorTest(end) {
     console.dir({
       dataKeys: Object.keys(data)
     });
-    console.log('Collector test done');
+    console.log('DataCollector test done');
     end();
   });
 
@@ -141,7 +141,7 @@ function collectorTest(end) {
 
 }
 
-function collectorTimeoutTest(end) {
+function dataCollectorTimeoutTest(end) {
 
   var dataCollector = new metasync.DataCollector(4, 1000);
 
@@ -158,7 +158,7 @@ function collectorTimeoutTest(end) {
 
 }
 
-function collectorErrorTest(end) {
+function dataCollectorErrorTest(end) {
 
   var dataCollector = new metasync.DataCollector(4);
 
@@ -185,6 +185,27 @@ function collectorErrorTest(end) {
 
 }
 
+// Key Collector
+
+function keyCollectorTest(end) {
+
+  var keyCollector = new metasync.KeyCollector(['user', 'history'], 1000);
+
+  keyCollector.on('done', function(errs, data) {
+    console.dir({
+      dataKeys: Object.keys(data)
+    });
+    console.log('KeyCollector test done');
+    end();
+  });
+
+  keyCollector.collect('user', { name: 'Marcus Aurelius' });
+
+  fs.readFile('HISTORY.md', function(err, data) {
+    keyCollector.collect('history', data);
+  });
+
+}
 // Parallel execution
 
 function parallelTest(end) {
@@ -262,7 +283,6 @@ function filterTest(end) {
   function filterPredicate(item, callback) {
     // filter words which consists of unique letters only
     var letters = [];
-    var isUniqueLetters = false;
     console.log('checking value: ' + item);
     for (var i = 0; i < item.length; ++i) {
       if (letters.indexOf(item[i].toLowerCase()) > -1) {
@@ -312,7 +332,7 @@ function eachTest(end) {
       console.dir({ each: item });
       callback();
     },
-    function done(data) {
+    function done(/*data*/) {
       console.log('Each test done');
       end();
     }
@@ -330,7 +350,7 @@ function seriesTest(end) {
       console.dir({ series: item });
       callback();
     },
-    function done(data) {
+    function done(/*data*/) {
       console.log('Series test done');
       end();
     }
@@ -348,7 +368,7 @@ function reduceTest(end) {
       console.dir({ reduce: { prev: prev, curr: curr } });
       callback(null, curr);
     },
-    function done(err, data) {
+    function done(/*err, data*/) {
       console.log('Reduce test done');
       end();
     }
@@ -506,9 +526,10 @@ function timeoutTest() {
 
 metasync.composition([
   compositionTest,
-  collectorTest,
-  collectorTimeoutTest,
-  collectorErrorTest,
+  dataCollectorTest,
+  dataCollectorTimeoutTest,
+  dataCollectorErrorTest,
+  keyCollectorTest,
   parallelTest,
   sequentialTest,
   filterTest,
