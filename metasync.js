@@ -203,11 +203,11 @@ metasync.KeyCollector.prototype.on = function(eventName, callback) {
 //   timeout - process timeout (optional), for single item
 //
 metasync.ConcurrentQueue = function(concurrency, timeout) {
+  this.isOnPause = false;
   this.concurrency = concurrency;
   this.timeout = timeout;
   this.count = 0;
   this.items = [];
-  this.isOnPause = false;
   this.events = {
     error: null,
     timeout: null,
@@ -290,11 +290,11 @@ metasync.ConcurrentQueue.prototype.resume = function() {
 };
 
 metasync.ConcurrentQueue.prototype.stop = function() {
+  this.isOnPause = false;
   this.concurrency = null;
   this.timeout = null;
   this.count = 0;
   this.items = [];
-  this.isOnPause = false;
   this.events = {
     error: null,
     timeout: null,
