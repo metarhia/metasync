@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.0.19",
+  "version": "0.1.1",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Metasync is a Meta Async Programming Approach",
   "keywords": [
@@ -21,5 +21,12 @@
   "readmeFilename": "README.md",
   "scripts": {
     "test": "node examples"
+  },
+  "jshintConfig": {
+    "esversion": 6,
+    "predef": [],
+    "node": true,
+    "indent": 2,
+    "maxcomplexity": 25
   }
 }
