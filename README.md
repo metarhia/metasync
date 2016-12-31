@@ -61,21 +61,21 @@ function f3(data, callback) {
 var metasync = require('metasync');
 var fs = require('fs');
 
-var dataCollector = new metasync.DataCollector(4, function(data) {
+var dataCollector = new metasync.DataCollector(4, (data) => {
   console.dir(Object.keys(data));
 });
 
 dataCollector.collect('user', { name: 'Marcus Aurelius' });
 
-fs.readFile('HISTORY.md', function(err, data) {
+fs.readFile('HISTORY.md', (err, data) => {
   dataCollector.collect('history', data);
 });
 
-fs.readFile('README.md', function(err, data) {
+fs.readFile('README.md', (err, data) => {
   dataCollector.collect('readme', data);
 });
 
-setTimeout(function() {
+setTimeout(() => {
   dataCollector.collect('timer', { date: new Date() });
 }, 1000);
 ```
@@ -83,21 +83,21 @@ setTimeout(function() {
 ## Parallel execution
 
 ```JavaScript
-metasync.parallel([f1, f2, f3], function done() {});
+metasync.parallel([f1, f2, f3], () =>  { ... });
 ```
 
 ## Sequential execution
 
 ```JavaScript
-metasync.sequential([f1, f2, f3], function done() {});
+metasync.sequential([f1, f2, f3], () => { ... });
 ```
 
 ## Asynchrous filter
 
 ```JavaScript
-metasync.filter(['data', 'to', 'filter'], function(item, callback) {
+metasync.filter(['data', 'to', 'filter'], (item, callback) => {
   callback(item.length > 2);
-}, function(result) {
+}, (result) => {
   console.dir(result);
 });
 ```
@@ -107,10 +107,10 @@ metasync.filter(['data', 'to', 'filter'], function(item, callback) {
 ```JavaScript
 metasync.find(
   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-  function(item, callback) {
-    callback(item % 3 === 0 && item % 5 === 0);
-  },
-  function(result) {
+  (item, callback) => (
+    callback(item % 3 === 0 && item % 5 === 0)
+  ),
+  (result) => {
     console.dir(result);
   }
 );
@@ -121,11 +121,11 @@ metasync.find(
 ```JavaScript
 metasync.series(
   ['a', 'b', 'c'],
-  function iterator(item, callback) {
+  (item, callback) => {
     console.dir({ series: item });
     callback();
   },
-  function done(data) {
+  (data) => {
     console.dir('series done');
   }
 );
@@ -136,11 +136,11 @@ metasync.series(
 ```JavaScript
 metasync.each(
   ['a', 'b', 'c'],
-  function iterator(item, callback) {
+  (item, callback) => {
     console.dir({ each: item });
     callback();
   },
-  function done(data) {
+  (data) => {
     console.dir('each done');
   }
 );

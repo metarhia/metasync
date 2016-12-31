@@ -1,3 +1,9 @@
+0.1.0 / 2016-12-31
+==================
+
+  * Refactored to ES6
+  * Removed old Node.js support, now MetaSync will support just Node.js 6.x and 7.x
+
 0.0.19 / 2016-12-11
 ==================
 
