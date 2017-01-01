@@ -29,17 +29,16 @@ metasync.composition = (fns, done, data) => {
 //     data - hash with of functions results
 //   data - incoming data
 //
-metasync.parallel = (fns, done, data) => {
-  let counter = 0,
-      len = fns.length,
-      finished = false;
-  data = data || {};
+metasync.parallel = (fns, done, data = {}) => {
+  const len = fns.length;
+  let counter = 0;
+  let finished = false;
 
   if (len < 1) {
     if (done) done(data);
   } else {
     fns.forEach((fn) => {
-      let finish = (result) => {
+      const finish = (result) => {
         if (fn.name && result) data[fn.name] = result;
         if (result instanceof Error) {
           if (!finished) {
@@ -70,14 +69,13 @@ metasync.parallel = (fns, done, data) => {
 //     data - hash with of functions results
 //   data - incoming data
 //
-metasync.sequential = (fns, done, data) => {
-  let i = -1,
-      len = fns.length;
-  data = data || {};
+metasync.sequential = (fns, done, data = {}) => {
+  let i = -1;
+  const len = fns.length;
 
   function next() {
     let fn;
-    let finish = (result) => {
+    const finish = (result) => {
       if (fn.name && result) data[fn.name] = result;
       if (result instanceof Error) {
         if (done) done(result);
@@ -115,10 +113,10 @@ metasync.DataCollector = function(expected, timeout) {
     timeout: null,
     done: null
   };
-  let collector = this;
+  const collector = this;
   if (this.timeout) {
     this.timer = setTimeout(() => {
-      let err = new Error('DataCollector timeout');
+      const err = new Error('DataCollector timeout');
       collector.emit('timeout', err, collector.data);
     }, timeout);
   }
@@ -140,7 +138,7 @@ metasync.DataCollector.prototype.collect = function(key, data) {
     if (this.timer) {
       clearTimeout(this.timer);
     }
-    let errs = this.errs.length ? this.errs : null;
+    const errs = this.errs.length ? this.errs : null;
     this.emit('done', errs, this.data);
   }
 };
@@ -161,7 +159,7 @@ metasync.DataCollector.prototype.on = function(eventName, callback) {
 // Emit DataCollector events
 //
 metasync.DataCollector.prototype.emit = function(eventName, err, data) {
-  let event = this.events[eventName];
+  const event = this.events[eventName];
   if (event) event(err, data);
 };
 
@@ -182,10 +180,10 @@ metasync.KeyCollector = function(keys, timeout) {
     timeout: null,
     done: null
   };
-  let collector = this;
+  const collector = this;
   if (this.timeout) {
     this.timer = setTimeout(() => {
-      let err = new Error('KeyCollector timeout');
+      const err = new Error('KeyCollector timeout');
       collector.emit('timeout', err, collector.data);
     }, timeout);
   }
@@ -204,7 +202,7 @@ metasync.KeyCollector.prototype.collect = function(key, data) {
       if (this.timer) {
         clearTimeout(this.timer);
       }
-      let errs = this.errs.length ? this.errs : null;
+      const errs = this.errs.length ? this.errs : null;
       this.emit('done', errs, this.data);
     }
   }
@@ -235,7 +233,7 @@ metasync.KeyCollector.prototype.on = function(eventName, callback) {
 // Emit DataCollector events
 //
 metasync.KeyCollector.prototype.emit = function(eventName, err, data) {
-  let event = this.events[eventName];
+  const event = this.events[eventName];
   if (event) event(err, data);
 };
 
@@ -272,26 +270,24 @@ metasync.ConcurrentQueue.prototype.add = function(item) {
 // Get next item from queue
 //
 metasync.ConcurrentQueue.prototype.next = function(item) {
-  let queue = this;
+  const queue = this;
   let timer;
   if (!queue.isOnPause) {
     queue.count++;
     if (queue.timeout) {
       timer = setTimeout(() => {
-        let err = new Error('ConcurrentQueue timed out');
+        const err = new Error('ConcurrentQueue timed out');
         queue.emit('timeout', err);
       }, queue.timeout);
     }
-    let fn = queue.events.process || (
-      (item, callback) => callback()
-    );
+    const fn = queue.events.process || ((item, callback) => callback());
     fn(item, () => {
       queue.count--;
       if (queue.timeout) {
         clearTimeout(timer);
       }
       if (queue.items.length > 0) {
-        let item = queue.items.shift();
+        const item = queue.items.shift();
         queue.next(item);
       } else if (queue.count === 0) {
         queue.emit('empty');
@@ -318,7 +314,7 @@ metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
 //
 metasync.ConcurrentQueue.prototype.emit = function(eventName, err, data) {
   if (!this.isOnPause) {
-    let event = this.events[eventName];
+    const event = this.events[eventName];
     if (event) event(err, data);
   }
 };
@@ -358,8 +354,8 @@ metasync.ConcurrentQueue.prototype.stop = function() {
 //     result - filtered array
 //
 metasync.filter = (items, fn, done) => {
-  let result = [],
-      counter = 0;
+  let result = [];
+  let counter = 0;
 
   function finish() {
     // Callbacks might be called in any possible order,
@@ -376,7 +372,7 @@ metasync.filter = (items, fn, done) => {
 
   items.forEach((value, index) => {
     fn(value, (accepted) => {
-      if (accepted) result.push({ index: index, value: value });
+      if (accepted) result.push({ index, value });
       if (++counter === items.length) finish();
     });
   });
@@ -395,8 +391,8 @@ metasync.filter = (items, fn, done) => {
 //     result - found item
 //
 metasync.find = (items, fn, done) => {
-  let i = 0,
-      len = items.length;
+  let i = 0;
+  const len = items.length;
 
   function next() {
     if (i === len) {
@@ -427,8 +423,8 @@ metasync.find = (items, fn, done) => {
 //     err - instance of Error or null
 //
 metasync.series = (items, fn, done) => {
-  let i = -1,
-      len = items.length;
+  let i = -1;
+  const len = items.length;
 
   function next() {
     i++;
@@ -454,9 +450,9 @@ metasync.series = (items, fn, done) => {
 //     err - instance of Error or null
 //
 metasync.each = (items, fn, done) => {
-  let counter = 0,
-      len = items.length,
-      finished = false;
+  let counter = 0;
+  let finished = false;
+  const len = items.length;
 
   if (len < 1) {
     if (done) done();
@@ -493,9 +489,9 @@ metasync.each = (items, fn, done) => {
 //   initial - optional value to be used as first arpument in first iteration
 //
 metasync.reduce = (items, callback, done, initial) => {
-  let counter = typeof(initial) === 'undefined' ? 1 : 0,
-      previous = counter === 1 ? items[0] : initial,
-      current = items[counter];
+  let counter = typeof(initial) === 'undefined' ? 1 : 0;
+  let previous = counter === 1 ? items[0] : initial;
+  let current = items[counter];
 
   function response(err, data) {
     if (!err && counter !== items.length - 1) {
@@ -523,7 +519,7 @@ metasync.reduce = (items, callback, done, initial) => {
 //     data - result if !err
 //
 metasync.map = (items, callback, done) => {
-  let result = [];
+  const result = [];
   let hadError = false;
   let count = 0;
   items.forEach((item, index) => {
@@ -555,7 +551,7 @@ metasync.throttle = (timeout, fn, args) => {
         timer = null;
         if (wait) throttled();
       }, timeout);
-      if (args) fn.apply(null, args);
+      if (args) fn(...args);
       else fn();
       wait = false;
     } else {
@@ -573,7 +569,7 @@ metasync.throttle = (timeout, fn, args) => {
 metasync.timeout = (timeout, asyncFunction, doneFunction) => {
   let finished = false;
 
-  let timer = setTimeout(() => {
+  const timer = setTimeout(() => {
     if (!finished) {
       finished = true;
       doneFunction();

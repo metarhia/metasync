@@ -8,11 +8,11 @@ const ASYNC_TIMEOUT = 200;
 // assert.deepStrictEqual polyfill for pre-io.js
 if (!assert.deepStrictEqual) {
   assert.deepStrictEqual = (actual, expected, message) => {
-    let actualKeys = Object.keys(actual);
-    let expectedKeys = Object.keys(expected);
+    const actualKeys = Object.keys(actual);
+    const expectedKeys = Object.keys(expected);
     assert.strictEqual(actualKeys.length, expectedKeys.length, message);
     for (let i = 0; i < actualKeys.length; i++) {
-      let key = actualKeys[i];
+      const key = actualKeys[i];
       assert.strictEqual(actual[key], expected[key], message);
     }
   };
@@ -95,7 +95,7 @@ function compositionTest(end) {
 
 function dataCollectorTest(end) {
 
-  let dataCollector = new metasync.DataCollector(4);
+  const dataCollector = new metasync.DataCollector(4);
 
   dataCollector.on('done', (errs, data) => {
     console.dir({
@@ -123,7 +123,7 @@ function dataCollectorTest(end) {
 
 function dataCollectorTimeoutTest(end) {
 
-  let dataCollector = new metasync.DataCollector(4, 1000);
+  const dataCollector = new metasync.DataCollector(4, 1000);
 
   dataCollector.on('timeout', (err, data) => {
     console.dir({
@@ -140,12 +140,12 @@ function dataCollectorTimeoutTest(end) {
 
 function dataCollectorErrorTest(end) {
 
-  let dataCollector = new metasync.DataCollector(4);
+  const dataCollector = new metasync.DataCollector(4);
 
   dataCollector.on('error', (err, key) => {
     console.dir({
       err: err ? err.toString() : null,
-      key: key
+      key
     });
   });
 
@@ -169,7 +169,7 @@ function dataCollectorErrorTest(end) {
 
 function keyCollectorTest(end) {
 
-  let keyCollector = new metasync.KeyCollector(['user', 'history'], 1000);
+  const keyCollector = new metasync.KeyCollector(['user', 'history'], 1000);
 
   keyCollector.on('done', (errs, data) => {
     console.dir({
@@ -242,7 +242,7 @@ function sequentialTest(end) {
 
 function filterTest(end) {
 
-  let dataToFilter = [
+  const dataToFilter = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
     'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
     'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
@@ -250,7 +250,7 @@ function filterTest(end) {
 
   function filterPredicate(item, callback) {
     // filter words which consists of unique letters only
-    let letters = [];
+    const letters = [];
     console.log('checking value: ' + item);
     for (let i = 0; i < item.length; ++i) {
       if (letters.indexOf(item[i].toLowerCase()) > -1) {
@@ -331,7 +331,7 @@ function reduceTest(end) {
   metasync.reduce(
     ['a', 'b', 'c'],
     (prev, curr, callback) => {
-      console.dir({ reduce: { prev: prev, curr: curr } });
+      console.dir({ reduce: { prev, curr } });
       callback(null, curr);
     },
     (/*err, data*/) => {
@@ -344,11 +344,11 @@ function reduceTest(end) {
 
 function concurrentQueueTest(end) {
 
-  let queue =  new metasync.ConcurrentQueue(3, 2000);
+  const queue =  new metasync.ConcurrentQueue(3, 2000);
 
   queue.on('process', (item, callback) => {
     setTimeout(() => {
-      console.dir({ item: item });
+      console.dir({ item });
       callback();
     }, 100);
   });
@@ -373,7 +373,7 @@ function concurrentQueueTest(end) {
 }
 
 function concurrentQueuePauseResumeStopTest(end) {
-  let queue =  new metasync.ConcurrentQueue(3, 2000);
+  const queue =  new metasync.ConcurrentQueue(3, 2000);
   queue.pause();
   queue.on('empty', end);
   if (!queue.events.empty) {
@@ -402,7 +402,7 @@ function throttleTest(end) {
     }
   }
 
-  let f1 = metasync.throttle(500, fn, ['I']);
+  const f1 = metasync.throttle(500, fn, ['I']);
 
   // to be called 2 times (first and last: A and E)
   state = 'A';
@@ -464,19 +464,19 @@ function mapTest() {
 
 function timeoutTest() {
   // Done function called by timer
-  let start1 = new Date();
+  const start1 = new Date();
   metasync.timeout(200, (done) => {
     setTimeout(done, 300);
   }, () => {
-    let timeDiff = new Date() - start1;
+    const timeDiff = new Date() - start1;
     assert(timeDiff < 250);
     console.log('Timout test #1 done');
   });
 
   // Done function called by async function
-  let start2 = new Date();
+  const start2 = new Date();
   metasync.timeout(300, done => setTimeout(done, 200), () => {
-    let timeDiff = new Date() - start2;
+    const timeDiff = new Date() - start2;
     assert(timeDiff < 250);
     console.log('Timout test #2 done');
   });
