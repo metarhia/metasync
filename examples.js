@@ -11,8 +11,9 @@ if (!assert.deepStrictEqual) {
     const actualKeys = Object.keys(actual);
     const expectedKeys = Object.keys(expected);
     assert.strictEqual(actualKeys.length, expectedKeys.length, message);
-    for (let i = 0; i < actualKeys.length; i++) {
-      const key = actualKeys[i];
+    let i, key;
+    for (i = 0; i < actualKeys.length; i++) {
+      key = actualKeys[i];
       assert.strictEqual(actual[key], expected[key], message);
     }
   };
@@ -252,8 +253,9 @@ function filterTest(end) {
     // filter words which consists of unique letters only
     const letters = [];
     console.log('checking value: ' + item);
-    for (let i = 0; i < item.length; ++i) {
-      if (letters.indexOf(item[i].toLowerCase()) > -1) {
+    let i;
+    for (i = 0; i < item.length; ++i) {
+      if (letters.includes(item[i].toLowerCase())) {
         break;
       }
       letters.push(item[i].toLowerCase());

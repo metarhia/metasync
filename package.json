@@ -30,6 +30,6 @@
     "predef": [],
     "node": true,
     "indent": 2,
-    "maxcomplexity": 25
+    "maxcomplexity": 7
   }
 }

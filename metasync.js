@@ -51,11 +51,8 @@ metasync.parallel = (fns, done, data = {}) => {
       };
       // fn may be array of function
       if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else if (fn.length === 2) {
-        fn(data, finish);
-      } else {
-        fn(finish);
-      }
+      else if (fn.length === 2) fn(data, finish);
+      else fn(finish);
     });
   }
 };
@@ -86,11 +83,8 @@ metasync.sequential = (fns, done, data = {}) => {
     } else {
       fn = fns[i];
       if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else if (fn.length === 2) {
-        fn(data, finish);
-      } else {
-        fn(finish);
-      }
+      else if (fn.length === 2) fn(data, finish);
+      else fn(finish);
     }
   }
 
@@ -135,9 +129,7 @@ metasync.DataCollector.prototype.collect = function(key, data) {
     this.data[key] = data;
   }
   if (this.expected === this.count) {
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
+    if (this.timer) clearTimeout(this.timer);
     const errs = this.errs.length ? this.errs : null;
     this.emit('done', errs, this.data);
   }
@@ -190,7 +182,7 @@ metasync.KeyCollector = function(keys, timeout) {
 };
 
 metasync.KeyCollector.prototype.collect = function(key, data) {
-  if (this.keys.indexOf(key) !== -1) {
+  if (this.keys.includes(key)) {
     this.count++;
     if (data instanceof Error) {
       this.errs[key] = data;
@@ -199,9 +191,7 @@ metasync.KeyCollector.prototype.collect = function(key, data) {
       this.data[key] = data;
     }
     if (this.expected === this.count) {
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
+      if (this.timer) clearTimeout(this.timer);
       const errs = this.errs.length ? this.errs : null;
       this.emit('done', errs, this.data);
     }
