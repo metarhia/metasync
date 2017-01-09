@@ -1,7 +1,9 @@
 # Meta Async Programming Approach
 
-[![Build Status](https://travis-ci.org/metarhia/MetaSync.svg?branch=master)](https://travis-ci.org/metarhia/MetaSync)
-[![Dependency Status](https://david-dm.org/metarhia/MetaSync.svg)](https://david-dm.org/metarhia/MetaSync)
+[![TravisCI](https://img.shields.io/travis/metarhia/MetaSync.svg?branch=master&style=flat-square)](https://travis-ci.org/metarhia/MetaSync)
+[![NPM Version](https://img.shields.io/npm/v/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
+[![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
+[![NPM Downloads](https://img.shields.io/npm/dt/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
 
 ## Installation
 
