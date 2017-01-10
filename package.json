@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Metasync is a Meta Async Programming Approach",
+  "license": "MIT",
   "keywords": [
     "async",
     "callback",
@@ -24,6 +25,9 @@
   },
   "engines": {
     "node": ">=6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "3.x"
   },
   "jshintConfig": {
     "esversion": 6,

@@ -3,16 +3,16 @@
 const metasync = {};
 module.exports = metasync;
 
-// Functional Asynchronous Composition
-//   fns - array of function([data,] callback)
-//     data - incoming data
-//     callback - function(data)
-//       data - outgoing data
-//   done - on `done` callback(data)
-//     data - hash with of functions results
-//   data - incoming data
-//
-metasync.composition = (fns, done, data) => {
+metasync.composition = (
+  // Functional Asynchronous Composition
+  fns, // array of function([data,] callback)
+  // data - incoming data
+  // callback(data)
+  //   data - outgoing data
+  done, // callback(data)
+  // data - hash with of functions results
+  data // incoming data
+) => {
   if (fns.length === 1) {
     metasync.parallel(fns[0], done, data);
   } else {
@@ -20,16 +20,16 @@ metasync.composition = (fns, done, data) => {
   }
 };
 
-// Parallel execution
-//   fns - array of function([data,] callback)
-//     data - incoming data
-//     callback - function(data)
-//       data - outgoing data
-//   done - on `done` callback(data)
-//     data - hash with of functions results
-//   data - incoming data
-//
-metasync.parallel = (fns, done, data = {}) => {
+metasync.parallel = (
+  // Parallel execution
+  fns, // array of function([data,] callback)
+  // data - incoming data
+  // callback - function(data)
+  //   data - outgoing data
+  done, // on done callback(data)
+  // data - hash with of functions results
+  data = {} // incoming data
+) => {
   const len = fns.length;
   let counter = 0;
   let finished = false;
@@ -57,16 +57,16 @@ metasync.parallel = (fns, done, data = {}) => {
   }
 };
 
-// Sequential execution
-//   fns - array of function([data,] callback)
-//     data - incoming data
-//     callback - function(data)
-//       data - outgoing data
-//   done - on `done` callback(data)
-//     data - hash with of functions results
-//   data - incoming data
-//
-metasync.sequential = (fns, done, data = {}) => {
+metasync.sequential = (
+  // Sequential execution
+  fns, // array of function([data,] callback)
+  // data - incoming data
+  // callback - function(data)
+  //   data - outgoing data
+  done, // on done callback(data)
+  // data - hash with of functions results
+  data = {} // incoming data
+) => {
   let i = -1;
   const len = fns.length;
 
@@ -92,11 +92,10 @@ metasync.sequential = (fns, done, data = {}) => {
   else if (done) done(data);
 };
 
-// Data Collector
-//   expected - number of collect() calls expected
-//   timeout - collect timeout (optional)
-//
-metasync.DataCollector = function(expected, timeout) {
+metasync.DataCollector = function(
+  expected, // number of collect() calls expected
+  timeout // collect timeout (optional)
+) {
   this.expected = expected;
   this.timeout = timeout;
   this.count = 0;
@@ -116,11 +115,11 @@ metasync.DataCollector = function(expected, timeout) {
   }
 };
 
-// Push data to collector
-//   key - key in result data
-//   data - value or error instance
-//
-metasync.DataCollector.prototype.collect = function(key, data) {
+metasync.DataCollector.prototype.collect = function(
+  // Push data to collector
+  key, // key in result data
+  data // value or error instance
+) {
   this.count++;
   if (data instanceof Error) {
     this.errs[key] = data;
@@ -135,31 +134,36 @@ metasync.DataCollector.prototype.collect = function(key, data) {
   }
 };
 
-// DataCollector events:
-//   on('error', function(err, key))
-//   on('timeout', function(err, data))
-//   on('done', function(errs, data))
-//     errs - hash of errors
-//     data - hash of sucessfully received adta
-//
-metasync.DataCollector.prototype.on = function(eventName, callback) {
+metasync.DataCollector.prototype.on = function(
+  // DataCollector events:
+  eventName,
+  callback
+  // on('error', function(err, key))
+  // on('timeout', function(err, data))
+  // on('done', function(errs, data))
+  //   errs - hash of errors
+  //   data - hash of sucessfully received adta
+) {
   if (eventName in this.events) {
     this.events[eventName] = callback;
   }
 };
 
-// Emit DataCollector events
-//
-metasync.DataCollector.prototype.emit = function(eventName, err, data) {
+metasync.DataCollector.prototype.emit = function(
+  // Emit DataCollector events
+  eventName,
+  err,
+  data
+) {
   const event = this.events[eventName];
   if (event) event(err, data);
 };
 
-// Key Collector
-//   keys - array of keys, example: ['config', 'users', 'cities']
-//   timeout - collect timeout (optional)
-//
-metasync.KeyCollector = function(keys, timeout) {
+metasync.KeyCollector = function(
+  // Key Collector
+  keys, // array of keys, example: ['config', 'users', 'cities']
+  timeout // collect timeout (optional)
+) {
   this.isDone = false;
   this.keys = keys;
   this.expected = keys.length;
@@ -181,7 +185,10 @@ metasync.KeyCollector = function(keys, timeout) {
   }
 };
 
-metasync.KeyCollector.prototype.collect = function(key, data) {
+metasync.KeyCollector.prototype.collect = function(
+  key,
+  data
+) {
   if (this.keys.includes(key)) {
     this.count++;
     if (data instanceof Error) {
@@ -207,31 +214,36 @@ metasync.KeyCollector.prototype.pause = function() {
 metasync.KeyCollector.prototype.resume = function() {
 };
 
-// KeyCollector events:
-//   on('error', function(err, key))
-//   on('timeout', function(err, data))
-//   on('done', function(errs, data))
-//   on('pause', function())
-//   on('resume', function())
-//
-metasync.KeyCollector.prototype.on = function(eventName, callback) {
+metasync.KeyCollector.prototype.on = function(
+  // KeyCollector events:
+  eventName,
+  callback
+  // on('error', function(err, key))
+  // on('timeout', function(err, data))
+  // on('done', function(errs, data))
+  // on('pause', function())
+  // on('resume', function())
+) {
   if (eventName in this.events) {
     this.events[eventName] = callback;
   }
 };
 
-// Emit DataCollector events
-//
-metasync.KeyCollector.prototype.emit = function(eventName, err, data) {
+metasync.KeyCollector.prototype.emit = function(
+  // Emit DataCollector events
+  eventName,
+  err,
+  data
+) {
   const event = this.events[eventName];
   if (event) event(err, data);
 };
 
-// ConcurrentQueue
-//   concurrency - number of simultaneous and asynchronously executing tasks
-//   timeout - process timeout (optional), for single item
-//
-metasync.ConcurrentQueue = function(concurrency, timeout) {
+metasync.ConcurrentQueue = function(
+  // ConcurrentQueue
+  concurrency, // number of simultaneous and asynchronously executing tasks
+  timeout // process timeout (optional), for single item
+) {
   this.isOnPause = false;
   this.concurrency = concurrency;
   this.timeout = timeout;
@@ -245,9 +257,9 @@ metasync.ConcurrentQueue = function(concurrency, timeout) {
   };
 };
 
-// Add item to queue
-//
-metasync.ConcurrentQueue.prototype.add = function(item) {
+metasync.ConcurrentQueue.prototype.add = function(
+  item // add item to queue
+) {
   if (!this.isOnPause) {
     if (this.count < this.concurrency) {
       this.next(item);
@@ -257,9 +269,9 @@ metasync.ConcurrentQueue.prototype.add = function(item) {
   }
 };
 
-// Get next item from queue
-//
-metasync.ConcurrentQueue.prototype.next = function(item) {
+metasync.ConcurrentQueue.prototype.next = function(
+  item // process next item from queue
+) {
   const queue = this;
   let timer;
   if (!queue.isOnPause) {
@@ -270,7 +282,8 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
         queue.emit('timeout', err);
       }, queue.timeout);
     }
-    const fn = queue.events.process || ((item, callback) => callback());
+    const stub = (item, callback) => callback();
+    const fn = queue.events.process || stub;
     fn(item, () => {
       queue.count--;
       if (queue.timeout) {
@@ -286,13 +299,15 @@ metasync.ConcurrentQueue.prototype.next = function(item) {
   }
 };
 
-// ConcurrentQueue events:
-//   on('error', function(err))
-//   on('empty', function()) - no more items in queue
-//   on('process', function(item, callback)) - process item function
-//   on('timeout', function(err, data))
-//
-metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
+metasync.ConcurrentQueue.prototype.on = function(
+  // ConcurrentQueue events:
+  eventName,
+  fn
+  // on('error', function(err))
+  // on('empty', function()) - no more items in queue
+  // on('process', function(item, callback)) - process item function
+  // on('timeout', function(err, data))
+) {
   if (!this.isOnPause) {
     if (eventName in this.events) {
       this.events[eventName] = fn;
@@ -300,9 +315,11 @@ metasync.ConcurrentQueue.prototype.on = function(eventName, fn) {
   }
 };
 
-// Emit DataCollector events
-//
-metasync.ConcurrentQueue.prototype.emit = function(eventName, err, data) {
+metasync.ConcurrentQueue.prototype.emit = function(
+  eventName, // event name
+  err, // instance of Error
+  data // attached data
+) {
   if (!this.isOnPause) {
     const event = this.events[eventName];
     if (event) event(err, data);
@@ -331,19 +348,17 @@ metasync.ConcurrentQueue.prototype.stop = function() {
   };
 };
 
-// Asynchrous filter (iterate parallel)
-// filter :: [a] -> (a -> (Boolean -> Void) -> Void) -> ([a] -> Void)
-//
-// Arguments:
-//   items - incoming array
-//   fn - function(value, callback)
-//     value - item from items array
-//     callback - callback function(accepted)
-//       accepted - true/false returned from fn
-//   done - on `done` function(result)
-//     result - filtered array
-//
-metasync.filter = (items, fn, done) => {
+metasync.filter = (
+  // Asynchrous filter (iterate parallel)
+  // filter :: [a] -> (a -> (Boolean -> Void) -> Void) -> ([a] -> Void)
+  items, // incoming array
+  fn, // function(value, callback)
+  // value - item from items array
+  // callback - callback function(accepted)
+  //   accepted - true/false returned from fn
+  done // on done function(result)
+  // result - filtered array
+) => {
   let result = [];
   let counter = 0;
 
@@ -368,19 +383,17 @@ metasync.filter = (items, fn, done) => {
   });
 };
 
-// Asynchronous find (iterate in series)
-// find :: [a] -> (a -> (Boolean -> Void) -> Void) -> (a -> Void)
-//
-// Arguments:
-//   items - incoming array
-//   fn - function(value, callback)
-//     value - item from items array
-//     callback - callback function(accepted)
-//       accepted - true/false returned from fn
-//   done - on `done` function(result)
-//     result - found item
-//
-metasync.find = (items, fn, done) => {
+metasync.find = (
+  // Asynchronous find (iterate in series)
+  // find :: [a] -> (a -> (Boolean -> Void) -> Void) -> (a -> Void)
+  items, // incoming array
+  fn, // function(value, callback)
+  // value - item from items array
+  // callback - callback function(accepted)
+  //   accepted - true/false returned from fn
+  done // on done function(result)
+  // result - found item
+) => {
   let i = 0;
   const len = items.length;
 
@@ -403,16 +416,16 @@ metasync.find = (items, fn, done) => {
   else if (done) done();
 };
 
-// Asynchronous series
-//   items - incoming array
-//   fn - function(value, callback)
-//     value - item from items array
-//     callback - callback function(accepted)
-//       err - instance of Error or null
-//   done - on `done` function(result)
-//     err - instance of Error or null
-//
-metasync.series = (items, fn, done) => {
+metasync.series = (
+  // Asynchronous series
+  items, // incoming array
+  fn, // function(value, callback)
+  // value - item from items array
+  // callback - callback function(accepted)
+  //   err - instance of Error or null
+  done // on done function(result)
+  // err - instance of Error or null
+) => {
   let i = -1;
   const len = items.length;
 
@@ -430,16 +443,16 @@ metasync.series = (items, fn, done) => {
   next();
 };
 
-// Asynchronous each (iterate in parallel)
-//   items - incoming array
-//   fn - function(value, callback)
-//     value - item from items array
-//     callback - callback function(accepted)
-//       err - instance of Error or null
-//   done - on `done` function(result)
-//     err - instance of Error or null
-//
-metasync.each = (items, fn, done) => {
+metasync.each = (
+  // Asynchronous each (iterate in parallel)
+  items, // incoming array
+  fn, // function(value, callback)
+  // value - item from items array
+  // callback - callback function(accepted)
+  //   err - instance of Error or null
+  done // on `done` function(result)
+  // err - instance of Error or null
+) => {
   let counter = 0;
   let finished = false;
   const len = items.length;
@@ -465,20 +478,20 @@ metasync.each = (items, fn, done) => {
   }
 };
 
-// Asynchronous reduce
-//   items - incoming array
-//   callback - function to be executed for each value in the array
-//     previous - value previously returned in the last iteration
-//     current - current element being processed in the array
-//     callback - callback for returning value back to function reduce
-//     counter - the index of the current element being processed in the array
-//     items - the array reduce was called upon
-//   done - callback function on done
-//     err - error or null
-//     data - result if !err
-//   initial - optional value to be used as first arpument in first iteration
-//
-metasync.reduce = (items, callback, done, initial) => {
+metasync.reduce = (
+  // Asynchronous reduce
+  items, //   items - incoming array
+  callback, //   callback - function to be executed for each value in the array
+  //     previous - value previously returned in the last iteration
+  //     current - current element being processed in the array
+  //     callback - callback for returning value back to function reduce
+  //     counter - the index of the current element being processed in the array
+  //     items - the array reduce was called upon
+  done, //   done - callback function on done
+  //     err - error or null
+  //     data - result if !err
+  initial // optional value to be used as first arpument in first iteration
+) => {
   let counter = typeof(initial) === 'undefined' ? 1 : 0;
   let previous = counter === 1 ? items[0] : initial;
   let current = items[counter];
@@ -497,18 +510,18 @@ metasync.reduce = (items, callback, done, initial) => {
   callback(previous, current, response, counter, items);
 };
 
-// Asynchronous map
-//   items - incoming array
-//   callback - function to be executed for each value in the array
-//     current - current element being processed in the array
-//     callback - callback for returning value back to function map
-//       err - error or null
-//       value - result
-//   done - callback function on done
-//     err - error or null
-//     data - result if !err
-//
-metasync.map = (items, callback, done) => {
+metasync.map = (
+  // Asynchronous map
+  items, // incoming array
+  callback, // function to be executed for each value in the array
+  // current - current element being processed in the array
+  // callback - callback for returning value back to function map
+  //   err - error or null
+  //   value - result
+  done // callback function on done
+  // err - error or null
+  // data - result if !err
+) => {
   const result = [];
   let hadError = false;
   let count = 0;
@@ -527,12 +540,12 @@ metasync.map = (items, callback, done) => {
   });
 };
 
-// Function throttling
-//   timeout - time interval
-//   fn - function to be executed once per timeout
-//   args - arguments array for fn (optional)
-//
-metasync.throttle = (timeout, fn, args) => {
+metasync.throttle = (
+  // Function throttling
+  timeout, // time interval
+  fn, // function to be executed once per timeout
+  args // arguments array for fn (optional)
+) => {
   let timer = null;
   let wait = false;
   return function throttled() {
@@ -550,13 +563,13 @@ metasync.throttle = (timeout, fn, args) => {
   };
 };
 
-// Set timeout for function execution
-//    timeout - time interval
-//    asyncFunction - async function to be executed
-//      done - callback function
-//    doneFunction - callback function on done
-//
-metasync.timeout = (timeout, asyncFunction, doneFunction) => {
+metasync.timeout = (
+  // Set timeout for function execution
+  timeout, // time interval
+  asyncFunction, // async function to be executed
+  // done - callback function
+  doneFunction // callback function on done
+) => {
   let finished = false;
 
   const timer = setTimeout(() => {
