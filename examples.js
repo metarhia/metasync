@@ -313,9 +313,10 @@ function eachTest(end) {
 function seriesTest(end) {
 
   metasync.series(
-    ['a', 'b', 'c'],
+    //['a', 'b', 'c'],
+    new Array(5000),
     (item, callback) => {
-      console.dir({ series: item });
+      //console.dir({ series: item });
       callback();
     },
     (/*data*/) => {

@@ -436,7 +436,7 @@ metasync.series = (
     } else fn(items[i], (err) => {
       if (err instanceof Error) {
         if (done) done(err);
-      } else next();
+      } else setImmediate(next);
     });
   }
 
