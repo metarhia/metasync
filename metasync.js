@@ -36,25 +36,25 @@ metasync.parallel = (
 
   if (len < 1) {
     if (done) done(data);
-  } else {
-    fns.forEach((fn) => {
-      const finish = (result) => {
-        if (fn.name && result) data[fn.name] = result;
-        if (result instanceof Error) {
-          if (!finished) {
-            if (done) done(result);
-          }
-          finished = true;
-        } else if (++counter >= len) {
-          if (done) done(data);
-        }
-      };
-      // fn may be array of function
-      if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else if (fn.length === 2) fn(data, finish);
-      else fn(finish);
-    });
+    return;
   }
+  fns.forEach((fn) => {
+    const finish = (result) => {
+      if (fn.name && result) data[fn.name] = result;
+      if (result instanceof Error) {
+        if (!finished) {
+          if (done) done(result);
+        }
+        finished = true;
+      } else if (++counter >= len) {
+        if (done) done(data);
+      }
+    };
+    // fn may be array of function
+    if (Array.isArray(fn)) metasync.composition(fn, finish, data);
+    else if (fn.length === 2) fn(data, finish);
+    else fn(finish);
+  });
 };
 
 metasync.sequential = (
@@ -76,7 +76,9 @@ metasync.sequential = (
       if (fn.name && result) data[fn.name] = result;
       if (result instanceof Error) {
         if (done) done(result);
-      } else next();
+        return;
+      }
+      next();
     };
     if (++i >= len) {
       if (done) done(data);
@@ -274,29 +276,28 @@ metasync.ConcurrentQueue.prototype.next = function(
 ) {
   const queue = this;
   let timer;
-  if (!queue.isOnPause) {
-    queue.count++;
-    if (queue.timeout) {
-      timer = setTimeout(() => {
-        const err = new Error('ConcurrentQueue timed out');
-        queue.emit('timeout', err);
-      }, queue.timeout);
-    }
-    const stub = (item, callback) => callback();
-    const fn = queue.events.process || stub;
-    fn(item, () => {
-      queue.count--;
-      if (queue.timeout) {
-        clearTimeout(timer);
-      }
-      if (queue.items.length > 0) {
-        const item = queue.items.shift();
-        queue.next(item);
-      } else if (queue.count === 0) {
-        queue.emit('empty');
-      }
-    });
+  if (queue.isOnPause) return;
+  queue.count++;
+  if (queue.timeout) {
+    timer = setTimeout(() => {
+      const err = new Error('ConcurrentQueue timed out');
+      queue.emit('timeout', err);
+    }, queue.timeout);
   }
+  const stub = (item, callback) => callback();
+  const fn = queue.events.process || stub;
+  fn(item, () => {
+    queue.count--;
+    if (queue.timeout) {
+      clearTimeout(timer);
+    }
+    if (queue.items.length > 0) {
+      const item = queue.items.shift();
+      queue.next(item);
+    } else if (queue.count === 0) {
+      queue.emit('empty');
+    }
+  });
 };
 
 metasync.ConcurrentQueue.prototype.on = function(
@@ -308,10 +309,8 @@ metasync.ConcurrentQueue.prototype.on = function(
   // on('process', function(item, callback)) - process item function
   // on('timeout', function(err, data))
 ) {
-  if (!this.isOnPause) {
-    if (eventName in this.events) {
-      this.events[eventName] = fn;
-    }
+  if (!this.isOnPause && eventName in this.events) {
+    this.events[eventName] = fn;
   }
 };
 
@@ -400,16 +399,16 @@ metasync.find = (
   function next() {
     if (i === len) {
       if (done) done();
-    } else {
-      fn(items[i], (accepted) => {
-        if (accepted) {
-          if (done) done(items[i]);
-        } else {
-          i++;
-          next();
-        }
-      });
+      return;
     }
+    fn(items[i], (accepted) => {
+      if (accepted) {
+        if (done) done(items[i]);
+      } else {
+        i++;
+        next();
+      }
+    });
   }
 
   if (len > 0) next();
@@ -433,7 +432,9 @@ metasync.series = (
     i++;
     if (i >= len) {
       if (done) done();
-    } else fn(items[i], (err) => {
+      return;
+    }
+    fn(items[i], (err) => {
       if (err instanceof Error) {
         if (done) done(err);
       } else setImmediate(next);
@@ -459,23 +460,23 @@ metasync.each = (
 
   if (len < 1) {
     if (done) done();
-  } else {
-    items.forEach((item) => {
-      fn(item, (err) => {
-        if (err instanceof Error) {
-          if (!finished) {
-            if (done) done(err);
-          }
-          finished = true;
-        } else {
-          counter++;
-          if (counter >= len) {
-            if (done) done();
-          }
-        }
-      });
-    });
+    return;
   }
+  items.forEach((item) => {
+    fn(item, (err) => {
+      if (err instanceof Error) {
+        if (!finished) {
+          if (done) done(err);
+        }
+        finished = true;
+      } else {
+        counter++;
+        if (counter >= len) {
+          if (done) done();
+        }
+      }
+    });
+  });
 };
 
 metasync.reduce = (
@@ -497,14 +498,14 @@ metasync.reduce = (
   let current = items[counter];
 
   function response(err, data) {
-    if (!err && counter !== items.length - 1) {
-      counter++;
-      previous = data;
-      current = items[counter];
-      callback(previous, current, response, counter, items);
-    } else if (done) {
-      done(err, data);
+    if (err || counter === items.length - 1) {
+      if (done) done(err, data);
+      return;
     }
+    counter++;
+    previous = data;
+    current = items[counter];
+    callback(previous, current, response, counter, items);
   }
 
   callback(previous, current, response, counter, items);
