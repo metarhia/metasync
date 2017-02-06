@@ -590,3 +590,13 @@ metasync.timeout = (
     }
   });
 };
+
+// Wrap metacallback to common callback
+//    callback - function to wrap
+metasync.fromMetaCallback = callback => (err, data) => callback(err || data);
+
+// Wrap common callback to metacallback
+//    callback - function to wrap
+metasync.toMetaCallback   = callback => dataE => dataE instanceof Error
+                                               ? callback(dataE)
+                                               : callback(null, dataE);
