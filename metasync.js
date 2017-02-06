@@ -82,12 +82,12 @@ metasync.sequential = (
     };
     if (++i >= len) {
       if (done) done(data);
-    } else {
-      fn = fns[i];
-      if (Array.isArray(fn)) metasync.composition(fn, finish, data);
-      else if (fn.length === 2) fn(data, finish);
-      else fn(finish);
+      return;
     }
+    fn = fns[i];
+    if (Array.isArray(fn)) metasync.composition(fn, finish, data);
+    else if (fn.length === 2) fn(data, finish);
+    else fn(finish);
   }
 
   if (len > 0) next();
@@ -404,10 +404,10 @@ metasync.find = (
     fn(items[i], (accepted) => {
       if (accepted) {
         if (done) done(items[i]);
-      } else {
-        i++;
-        next();
+        return;
       }
+      i++;
+      next();
     });
   }
 
@@ -437,7 +437,9 @@ metasync.series = (
     fn(items[i], (err) => {
       if (err instanceof Error) {
         if (done) done(err);
-      } else setImmediate(next);
+        return;
+      }
+      setImmediate(next);
     });
   }
 
