@@ -71,7 +71,7 @@ metasync.sequential = (
   const len = fns.length;
 
   function next() {
-    let fn;
+    let fn = null;
     const finish = (result) => {
       if (fn.name && result) data[fn.name] = result;
       if (result instanceof Error) {
