@@ -1,8 +1,9 @@
 # Meta Async Programming Approach
 
-[![TravisCI](https://img.shields.io/travis/metarhia/MetaSync.svg?branch=master&style=flat-square)](https://travis-ci.org/metarhia/MetaSync)
-[![bitHound](https://img.shields.io/bithound/code/github/metarhia/MetaSync.svg?style=flat-square)](https://www.bithound.io/github/metarhia/MetaSync)
-[![NPM Version](https://img.shields.io/npm/v/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
+[![TravisCI](https://travis-ci.org/metarhia/MetaSync.svg?branch=master)](https://travis-ci.org/metarhia/MetaSync)
+[![bitHound](https://www.bithound.io/github/metarhia/MetaSync/badges/score.svg)](https://www.bithound.io/github/metarhia/MetaSync)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/60fe108b31614b4191cd557d49112169)](https://www.codacy.com/app/metarhia/MetaSync)
+[![NPM Version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
 [![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
 [![NPM Downloads](https://img.shields.io/npm/dt/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
 
