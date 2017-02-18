@@ -485,6 +485,14 @@ function timeoutTest() {
   });
 }
 
+function chainTest() {
+  // Just to make sure we don't forget to merge the tests. There's some bug in
+  // metasync.composition so part of tests, including this one, are not run.
+  // As a temporary workaround, you can run it via
+  //   $ node chain-example
+  require('./chain-example');
+}
+
 // Run tests
 
 metasync.composition([
@@ -504,7 +512,8 @@ metasync.composition([
   concurrentQueuePauseResumeStopTest,
   throttleTest,
   mapTest,
-  timeoutTest
+  timeoutTest,
+  chainTest
 ], () => {
   console.log('All tests done');
 });
