@@ -4,8 +4,8 @@
 [![bitHound](https://www.bithound.io/github/metarhia/MetaSync/badges/score.svg)](https://www.bithound.io/github/metarhia/MetaSync)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/60fe108b31614b4191cd557d49112169)](https://www.codacy.com/app/metarhia/MetaSync)
 [![NPM Version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
-[![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
-[![NPM Downloads](https://img.shields.io/npm/dt/metasync.svg?style=flat-square)](https://www.npmjs.com/package/metasync)
+[![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg)](https://www.npmjs.com/package/metasync)
+[![NPM Downloads](https://img.shields.io/npm/dt/metasync.svg)](https://www.npmjs.com/package/metasync)
 
 ## Installation
 
