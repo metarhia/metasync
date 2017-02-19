@@ -2,15 +2,23 @@
 
 const arrayUtils = require('./array-utils');
 
+const resolver = (resolve, reject) => (
+  (err, result) => {
+    if (err) reject(err);
+    else resolve(result);
+  }
+);
+
 class AsyncArray {
+
   constructor(array) {
     this._promise = Promise.resolve(array);
   }
 
   then(fn) {
-    return this._promise.then(fn);
-  }  // eslint-disable-line brace-style
-  // (^ probably a bug in ESLint)
+    const promise = this._promise.then(fn);
+    return promise;
+  }
 
   catch(fn) {
     return this._promise.catch(fn);
@@ -18,81 +26,52 @@ class AsyncArray {
 
   map(fn) {
     this._update((array, resolve, reject) => {
-      arrayUtils.map(array, fn, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
+      arrayUtils.map(array, fn, resolver(resolve, reject));
     });
     return this;
   }
 
   filter(fn) {
     this._update((array, resolve) => {
-      arrayUtils.filter(array, fn, (result) => {
-        resolve(result);
-      });
+      arrayUtils.filter(array, fn, result => resolve(result));
     });
     return this;
   }
 
   reduce(fn, initial) {
     this._update((array, resolve, reject) => {
-      arrayUtils.reduce(array, fn, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      }, initial);
+      arrayUtils.reduce(array, fn, resolver(resolve, reject), initial);
     });
     return this._promise;
   }
 
   each(fn) {
     this._update((array, resolve, reject) => {
-      arrayUtils.each(array, fn, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
+      arrayUtils.each(array, fn, resolver(resolve, reject));
     });
     return this._promise;
   }
 
   series(fn) {
     this._update((array, resolve, reject) => {
-      arrayUtils.series(array, fn, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
+      arrayUtils.series(array, fn, resolver(resolve, reject));
     });
     return this._promise;
   }
 
   find(fn) {
     this._update((array, resolve) => {
-      arrayUtils.find((array, fn, (result) => {
-        resolve(result);
-      }));
+      arrayUtils.find(array, fn, result => resolve(result));
     });
     return this._promise;
   }
 
   _update(fn) {
     this._promise = this._promise.then((array) => (
-      new Promise((resolve, reject) => {
-        fn(array, resolve, reject);
-      })
+      new Promise((resolve, reject) => fn(array, resolve, reject))
     ));
   }
+
 }
 
 module.exports = AsyncArray;
