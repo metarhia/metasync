@@ -1,11 +1,11 @@
 'use strict';
 
 const assert = require('assert');
-const metasync = require('.');
+const metasync = require('..');
 
-// TODO(aqrln): test all the methods. Though AsyncArray just wraps
+// TODO(aqrln): test all the methods. Though ArrayChain just wraps
 // array-related metasync functions in uniform fashion, and they are covered by
-// their own tests (so if they work correctly and a couple of AsyncArray
+// their own tests (so if they work correctly and a couple of ArrayChain
 // methods work properly, all of its methods should do too), extra tests are
 // never superfluous.
 
