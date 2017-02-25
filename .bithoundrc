@@ -8,6 +8,6 @@
     }
   },
   "test": [
-    "examples.js"
+    "tests/**"
   ]
 }
