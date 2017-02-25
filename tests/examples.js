@@ -1,6 +1,6 @@
 'use strict';
 
-const metasync = require('./metasync');
+const metasync = require('..');
 const fs = require('fs');
 const assert = require('assert');
 const ASYNC_TIMEOUT = 200;
