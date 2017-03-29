@@ -19,7 +19,7 @@ metasync.for([1, 2, 3, 4]).filter((item, cb) => {
   process.nextTick(cb, null, a + b);
 }).then((result) => {
   console.log('Chaining test #1 with process.nextTick done: ' + result);
-  assert.strictEqual(result, 12);  // 2 * 2 + 4 * 2
+  assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
 }).catch((error) => {
   const description = error.stack || 'Error: ' + error.toString();
   console.error(description);
@@ -34,9 +34,25 @@ metasync.for([1, 2, 3, 4]).filter((item, cb) => {
   cb(null, a + b);
 }).then((result) => {
   console.log('Chaining test #2 with callbacks done: ' + result);
-  assert.strictEqual(result, 12);  // 2 * 2 + 4 * 2
+  assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
 }).catch((error) => {
   const description = error.stack || 'Error: ' + error.toString();
   console.error(description);
   process.exit(1);
+});
+
+//TODO: check implementation, .then() should not be called on error
+metasync.for([1, 2, 3, 4]).filter((item, cb) => {
+  cb(item % 2 === 0);
+}).map((item, cb) => {
+  cb(new Error('Shit!'));
+}).reduce((a, b, cb) => {
+  cb(null, a + b);
+}).then((result) => {
+  console.log('Chaining test #3 with callbacks done: ' + result);
+  assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
+}).catch((error) => {
+  const description = error.toString();
+  console.log('Chaining test #3 with error done: ' + description);
+  assert.strictEqual(description, 'Error: Shit!');
 });
