@@ -2,9 +2,12 @@
 
 const api = {};
 api.metasync = {};
+api.common = require('metarhia-common');
+
 module.exports = api.metasync;
 
 const submodules = [
+  'utils', // Basic utilities
   'flow', // Flow control
   'array', // Array utilities
   'chain', // Process arrays sync and async array in chain

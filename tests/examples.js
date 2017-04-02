@@ -394,7 +394,6 @@ function concurrentQueuePauseResumeStopTest(end) {
 }
 
 function throttleTest(end) {
-
   let state;
 
   function fn(letter) {
@@ -439,7 +438,7 @@ function throttleTest(end) {
 
 }
 
-function mapTest() {
+function mapTest(end) {
   metasync.map([1, 2, 3], (item, callback) => {
     setTimeout(() => {
       callback(null, item * item);
@@ -462,10 +461,11 @@ function mapTest() {
     assert.ok(error);
     assert.ifError(result);
     console.log('Map test #2 done');
+    end();
   });
 }
 
-function timeoutTest() {
+function timeoutTest(end) {
   // Done function called by timer
   const start1 = new Date();
   metasync.timeout(200, (done) => {
@@ -482,20 +482,40 @@ function timeoutTest() {
     const timeDiff = new Date() - start2;
     assert(timeDiff < 250);
     console.log('Timout test #2 done');
+    end();
   });
 }
 
-function chainTest() {
+function chainTest(end) {
   // Just to make sure we don't forget to merge the tests. There's some bug in
   // metasync.composition so part of tests, including this one, are not run.
   // As a temporary workaround, you can run it via
   //   $ node chain-example
   require('./chain-example');
+  end();
+}
+
+function cbTest(end) {
+  const fn1 = undefined;
+  const fn2 = null;
+  const fn3 = (err, data) => console.log('Done callback test');
+
+  const cb1 = metasync.cb(fn1);
+  const cb2 = metasync.cb(fn2);
+  const cb3 = metasync.cb(fn3);
+
+  cb1(null, 'ok');
+  cb2(null, 'ok');
+  cb3(null, 'ok');
+  cb3(null, 'ok');
+
+  end();
 }
 
 // Run tests
 
 metasync.composition([
+  cbTest,
   compositionTest,
   dataCollectorTest,
   dataCollectorTimeoutTest,
