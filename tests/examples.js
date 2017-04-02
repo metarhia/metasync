@@ -264,7 +264,7 @@ function filterTest(end) {
     setTimeout(() => callback(letters.length === item.length), ASYNC_TIMEOUT);
   }
 
-  metasync.filter(dataToFilter, filterPredicate, (result) => {
+  metasync.filter(dataToFilter, filterPredicate, (err, result) => {
     console.log('filtered array: ' + result);
     console.log('Filter test done');
     end();
@@ -281,7 +281,7 @@ function findTest(end) {
     (item, callback) => (
       callback(item % 3 === 0 && item % 5 === 0)
     ),
-    (result) => {
+    (err, result) => {
       console.log('found value: ' + result);
       console.log('Find test done');
       end();
