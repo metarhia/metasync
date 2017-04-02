@@ -26,6 +26,9 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "dependencies": {
+    "metarhia-common": "0.0.x"
+  },
   "devDependencies": {
     "eslint": "3.x"
   },
