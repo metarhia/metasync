@@ -261,7 +261,10 @@ function filterTest(end) {
       letters.push(item[i].toLowerCase());
     }
 
-    setTimeout(() => callback(null, letters.length === item.length), ASYNC_TIMEOUT);
+    setTimeout(
+      () => callback(null, letters.length === item.length),
+      ASYNC_TIMEOUT
+    );
   }
 
   metasync.filter(dataToFilter, filterPredicate, (err, result) => {
