@@ -9,7 +9,35 @@ const metasync = require('..');
 // methods work properly, all of its methods should do too), extra tests are
 // never superfluous.
 
-console.log('Chaining test');
+console.log('Chaining tests');
+
+metasync.for([1, 2, 3, 4]).filter((item, cb) => {
+  cb(null, item % 2 === 0);
+}).map((item, cb) => {
+  cb(null, item * 2);
+}).reduce((a, b, cb) => {
+  cb(null, a + b);
+}).then((result) => {
+  console.log('Chaining test #1 done: ' + result);
+  assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
+}).catch((error) => {
+  const description = error.stack || 'Error: ' + error.toString();
+  console.error(description);
+  process.exit(1);
+});
+
+metasync.for([1, 2, 3, 4]).filter((item, cb) => {
+  cb(null, item % 2 === 0);
+}).map((item, cb) => {
+  cb(new Error('Something happens'));
+}).reduce((a, b, cb) => {
+  cb(null, a + b);
+}).then((result) => {
+  console.log('Chaining test fails');
+  process.exit(1);
+}).catch((error) => {
+  console.log('Chaining test #2 done: catch works');
+});
 
 metasync.for([1, 2, 3, 4]).filter((item, cb) => {
   process.nextTick(cb, null, item % 2 === 0);
@@ -18,8 +46,8 @@ metasync.for([1, 2, 3, 4]).filter((item, cb) => {
 }).reduce((a, b, cb) => {
   process.nextTick(cb, null, a + b);
 }).then((result) => {
-  console.log('Chaining test done: ' + result);
-  assert.strictEqual(result, 12);  // 2 * 2 + 4 * 2
+  console.log('Chaining test #3 done: ' + result);
+  assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
 }).catch((error) => {
   const description = error.stack || 'Error: ' + error.toString();
   console.error(description);
