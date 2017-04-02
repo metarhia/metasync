@@ -12,7 +12,7 @@ const metasync = require('..');
 console.log('Chaining test');
 
 metasync.for([1, 2, 3, 4]).filter((item, cb) => {
-  process.nextTick(cb, item % 2 === 0);
+  process.nextTick(cb, null, item % 2 === 0);
 }).map((item, cb) => {
   process.nextTick(cb, null, item * 2);
 }).reduce((a, b, cb) => {
