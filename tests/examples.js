@@ -498,7 +498,7 @@ function chainTest(end) {
 function cbTest(end) {
   const fn1 = undefined;
   const fn2 = null;
-  const fn3 = (err, data) => console.log('Done callback test');
+  const fn3 = (err, data) => console.log('Done callback test ' + data);
 
   const cb1 = metasync.cb(fn1);
   const cb2 = metasync.cb(fn2);

@@ -21,7 +21,8 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/examples && node tests/chain"
+    "test": "node tests/examples && node tests/chain && npm run lint",
+    "lint": "eslint ."
   },
   "engines": {
     "node": ">=6.0.0"
