@@ -39,6 +39,7 @@ metasync.for([1, 2, 3, 4]).filter((item, cb) => {
   console.log('Chaining test #2 done: catch works');
 });
 
+console.log('Automatic execution');
 metasync.for([1, 2, 3, 4]).filter((item, cb) => {
   process.nextTick(cb, null, item % 2 === 0);
 }).map((item, cb) => {
@@ -46,10 +47,26 @@ metasync.for([1, 2, 3, 4]).filter((item, cb) => {
 }).reduce((a, b, cb) => {
   process.nextTick(cb, null, a + b);
 }).then((result) => {
-  console.log('Chaining test #3 done: ' + result);
+  console.log('Chaining test #3 automatic execution done: ' + result);
   assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
 }).catch((error) => {
   const description = error.stack || 'Error: ' + error.toString();
   console.error(description);
   process.exit(1);
 });
+
+console.log('Manual execution');
+metasync.for([1, 2, 3, 4]).filter((item, cb) => {
+  process.nextTick(cb, null, item % 2 === 0);
+}).map((item, cb) => {
+  process.nextTick(cb, null, item * 2);
+}).reduce((a, b, cb) => {
+  process.nextTick(cb, null, a + b);
+}).then((result) => {
+  console.log('Chaining test #3 manual execution done: ' + result);
+  assert.strictEqual(result, 12);  // 2 * 2 + 4 * 2
+}).catch((error) => {
+  const description = error.stack || 'Error: ' + error.toString();
+  console.error(description);
+  process.exit(1);
+}).execute();
