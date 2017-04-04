@@ -32,10 +32,10 @@ metasync.for([1, 2, 3, 4]).filter((item, cb) => {
   cb(new Error('Something happens'));
 }).reduce((a, b, cb) => {
   cb(null, a + b);
-}).then((result) => {
+}).then(() => {
   console.log('Chaining test fails');
   process.exit(1);
-}).catch((error) => {
+}).catch(() => {
   console.log('Chaining test #2 done: catch works');
 });
 
