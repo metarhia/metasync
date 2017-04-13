@@ -261,7 +261,7 @@ function filterTest(end) {
       letters.push(item[i].toLowerCase());
     }
 
-    setTimeout(() => callback(letters.length === item.length), ASYNC_TIMEOUT);
+    setTimeout(() => callback(null, letters.length === item.length), ASYNC_TIMEOUT);
   }
 
   metasync.filter(dataToFilter, filterPredicate, (err, result) => {
@@ -279,7 +279,7 @@ function findTest(end) {
   metasync.find(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     (item, callback) => (
-      callback(item % 3 === 0 && item % 5 === 0)
+      callback(null, item % 3 === 0 && item % 5 === 0)
     ),
     (err, result) => {
       console.log('found value: ' + result);
