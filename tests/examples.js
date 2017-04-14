@@ -285,6 +285,9 @@ function findTest(end) {
       callback(null, item % 3 === 0 && item % 5 === 0)
     ),
     (err, result) => {
+      assert.strictEqual(typeof(result), 'array');
+      assert.strictEqual(result.length, 1);
+      assert.strictEqual(result[0], 15);
       console.log('found value: ' + result);
       console.log('Find test done');
       end();
