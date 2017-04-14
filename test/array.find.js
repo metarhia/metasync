@@ -7,7 +7,7 @@ tap.test('find with error', (test) => {
   const data = [1, 2, 3];
   const predicate = (item, callback) => process.nextTick(() => {
     if (item % 2 === 0) {
-      callback(new Error('Intentioanal error'));
+      callback(new Error('Intentional error'));
     } else {
       callback(null, true);
     }
