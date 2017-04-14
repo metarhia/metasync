@@ -3,6 +3,7 @@
 const api = {};
 api.metasync = {};
 api.common = require('metarhia-common');
+api.util = require('util');
 
 module.exports = api.metasync;
 
