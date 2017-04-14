@@ -348,6 +348,46 @@ function reduceTest(end) {
 
 }
 
+// Asyncronous reduceRightLazy (sequential)
+
+function reduceRightLazyTest(end) {
+
+  metasync.reduceRightLazy(
+    ['a', 'b', 'c'],
+    (getPrev, curr, callback) => getPrev((err, prev) => {
+      console.dir({ reduceRightLazy: { prev, curr } });
+      callback(null, curr);
+    }),
+    (/*err, data*/) => {
+      console.log('ReduceRightLazy test done');
+      end();
+    }
+  );
+
+}
+
+function reduceRightLazyEvalPartOfListTest(end) {
+  metasync.reduceRightLazy(
+    ['a', 'b', 'c', 'd', 'e', 'f'],
+    (getPrev, curr, callback, index) => {
+      if (index < 3) {
+        getPrev((err, prev) => {
+          console.dir({ reduceRightLazy: { prev, curr } });
+          callback(null, curr);
+        });
+      } else {
+        console.dir({ reduceRightLazy: { curr } });
+        callback(null, curr);
+      }
+    },
+    (/*err, data*/) => {
+      console.log('ReduceRightLazyEvalPartOfList test done');
+      end();
+    }
+  );
+
+}
+
 function concurrentQueueTest(end) {
 
   const queue =  new metasync.ConcurrentQueue(3, 2000);
@@ -531,6 +571,8 @@ metasync.composition([
   eachTest,
   seriesTest,
   reduceTest,
+  reduceRightLazyTest,
+  reduceRightLazyEvalPartOfListTest,
   concurrentQueueTest,
   concurrentQueuePauseResumeStopTest,
   throttleTest,
