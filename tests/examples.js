@@ -293,6 +293,24 @@ function findTest(end) {
 
 }
 
+
+// Asynchrous some
+function someTest(end) {
+  metasync.some(
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    (item, callback) => {
+      const res = (item % 3 === 0 && item % 5 === 0);
+      console.log('Some test ' + item + ': ' + res);
+      callback(null, res);
+    },
+    (err, result) => {
+      console.log('Value ' + (result ? 'found' : 'not found'));
+      console.log('Some test done');
+      end();
+    }
+  );
+}
+
 // Asyncronous each in parallel
 
 function eachTest(end) {
@@ -528,6 +546,7 @@ metasync.composition([
   sequentialTest,
   filterTest,
   findTest,
+  someTest,
   eachTest,
   seriesTest,
   reduceTest,
