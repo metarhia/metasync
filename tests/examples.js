@@ -524,6 +524,62 @@ function chainTest(end) {
   end();
 }
 
+function printCallbackArgs(end) {
+  return (err, ...args) => {
+    if (err) {
+      return console.log('Error: ' + err);
+    }
+    console.log(...args);
+    console.log('done');
+    end();
+  };
+}
+
+function ofTest(end) {
+  console.log('of test:');
+  metasync.monad.of(4, 'str', [1, 2, 3])(printCallbackArgs(end));
+}
+
+function fmapTest(end) {
+  console.log('fmap test:');
+  const M = metasync.monad;
+  const args = [4, 'str', [1, 2, 3]];
+  const reverseArgs = (...args) => args.reverse();
+  M.fmap(reverseArgs, M.of(...args))(printCallbackArgs(end));
+}
+
+function monadChainTest(end) {
+  console.log('Monad concat test:');
+  const M = metasync.monad;
+  const args = [4, 'str', [1, 2, 3]];
+  const asyncPrint = M.withCb((args, callback) =>
+    printCallbackArgs(callback)(null, ...args)
+  );
+  M.concat(M.of(...args), asyncPrint)(end);
+}
+
+function apTest(end) {
+  console.log('ap test:');
+  const M = metasync.monad;
+  const storage = {};
+
+  function collect(key, val) {
+    if (key === undefined) return;
+    storage[key] = val;
+    return collect;
+  }
+
+  const arrOfAsyncFunctions = [
+    ['first', 1], ['second', 2], ['third', 3]
+  ].map(args => M.of(...args));
+
+  arrOfAsyncFunctions.reduce(M.ap, M.of(collect))(() => {
+    console.log(storage);
+    console.log('done');
+    end();
+  });
+}
+
 function cbTest(end) {
   const fn1 = undefined;
   const fn2 = null;
@@ -557,12 +613,16 @@ metasync.composition([
   seriesTest,
   reduceTest,
   concurrentQueueTest,
+  ofTest,
+  fmapTest,
+  monadChainTest,
+  apTest,
   concurrentQueuePauseResumeStopTest,
   throttleTest,
   debounceTest,
   mapTest,
   timeoutTest,
-  chainTest
+  chainTest,
 ], () => {
   console.log('All tests done');
 });
