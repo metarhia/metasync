@@ -17,7 +17,7 @@ $ npm install metasync
 
 ## Functional Asyncronous Composition
 
-Syntax: `metasync.composition(functions, [done, [data]]);`
+Syntax: `metasync.flow(functions)(data, callback);`
 
 Parameters:
 - functions - array of `function([data,] callback)` where:
@@ -29,7 +29,7 @@ Parameters:
 - data - incoming data
 
 ```JavaScript
-metasync.composition(
+const f = metasync.flow(
   [f1, f2, f3, [[f4, f5, [f6, f7], f8]], f9]
 );
 ```
@@ -37,35 +37,34 @@ metasync.composition(
 - Array of functions gives sequential execution: `[f1, f2, f3]`
 - Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
 
-Examples of functions:
-
-```JavaScript
-// with one argiment and no result
-function f1(callback) {
-  callback();
-}
-
-// with one argiment and returning result
-function f2(callback) {
-  callback('value');
-}
-
-// with two argiments and result
-function f3(data, callback) {
-  // assign result to data random key
-  data.keyName = 'value';
-  // returning no result
-  callback();
-}
-```
-
 ## An Event-driven Asyncronous Data Collector
 
 ```JavaScript
-var metasync = require('metasync');
-var fs = require('fs');
+const metasync = require('metasync');
+const fs = require('fs');
 
-var dataCollector = new metasync.DataCollector(4, (data) => {
+// Data collector (collect keys of any names)
+const dc = metasync.collect(4);
+dc('user', { name: 'Marcus Aurelius' });
+fs.readFile('HISTORY.md', (err, data) => dc('history', data));
+fs.readFile('README.md', (err, data) => dc('readme', data));
+setTimeout(() => dc('timer', { date: new Date() }), 1000);
+
+// Key collector (collect certain keys)
+const kc = metasync.collect(['user', 'history', 'readme', 'timer']);
+kc('user', { name: 'Marcus Aurelius' });
+fs.readFile('HISTORY.md', (err, data) => kc('history', data));
+fs.readFile('README.md', (err, data) => kc('readme', data));
+setTimeout(() => kc('timer', { date: new Date() }), 1000);
+```
+
+In object-oriented style:
+
+```JavaScript
+const metasync = require('metasync');
+const fs = require('fs');
+
+const dataCollector = new metasync.DataCollector(4, (data) => {
   console.dir(Object.keys(data));
 });
 
@@ -87,13 +86,13 @@ setTimeout(() => {
 ## Parallel execution
 
 ```JavaScript
-metasync.parallel([f1, f2, f3], () =>  { ... });
+metasync.parallel([f1, f2, f3], () =>  {});
 ```
 
 ## Sequential execution
 
 ```JavaScript
-metasync.sequential([f1, f2, f3], () => { ... });
+metasync.sequential([f1, f2, f3], () => {});
 ```
 
 ## Asynchrous filter
