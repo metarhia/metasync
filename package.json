@@ -21,7 +21,7 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/examples && node tests/chain && npm run lint",
+    "test": "node tests/examples && node tests/chain && jest && npm run lint",
     "lint": "eslint ."
   },
   "engines": {
@@ -31,7 +31,8 @@
     "metarhia-common": "0.0.x"
   },
   "devDependencies": {
-    "eslint": "3.x"
+    "eslint": "3.x",
+    "jest": "^19.0.2"
   },
   "jshintConfig": {
     "esversion": 6,
