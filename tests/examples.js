@@ -441,6 +441,50 @@ function throttleTest(end) {
 
 }
 
+function debounceTest(end) {
+  let state;
+
+  function fn(letter) {
+    console.log('Debounced function, state: ' + state);
+    if (state === letter) {
+      console.log('Debounce test done');
+      end();
+    }
+  }
+
+  const f1 = metasync.debounce(500, fn, ['I']);
+
+  // to be called one time (E)
+  state = 'A';
+  f1();
+  state = 'B';
+  f1();
+  state = 'C';
+  f1();
+  state = 'D';
+  f1();
+  state = 'E';
+  f1();
+
+  // to be called one time (I)
+  setTimeout(() => {
+    state = 'F';
+    f1();
+  }, 600);
+  setTimeout(() => {
+    state = 'G';
+    f1();
+  }, 700);
+  setTimeout(() => {
+    state = 'H';
+    f1();
+  }, 1000);
+  setTimeout(() => {
+    state = 'I';
+    f1();
+  }, 1100);
+}
+
 function mapTest(end) {
   metasync.map([1, 2, 3], (item, callback) => {
     setTimeout(() => {
@@ -534,6 +578,7 @@ metasync.composition([
   concurrentQueueTest,
   concurrentQueuePauseResumeStopTest,
   throttleTest,
+  debounceTest,
   mapTest,
   timeoutTest,
   chainTest
