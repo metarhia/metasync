@@ -1,0 +1,77 @@
+'use strict';
+
+const tap = require('tap');
+const metasync = require('..');
+
+function strictSameResult(input, expectedResult, test, done) {
+
+  function identity(x, callback) {
+    callback(null, x);
+  }
+
+  metasync.every(input, identity, (err, result) => {
+    test.error(err, 'must not return an error');
+    test.ok(result === false || result, 'result must be initialized');
+    test.strictSame(result, expectedResult);
+
+    done();
+  });
+}
+
+function fewStrictSameResult(inOutPairs, test) {
+  const testsEnd = new metasync.DataCollector(inOutPairs.length);
+  testsEnd.on('done', _ =>  test.end());
+
+  for (const [input, output] of inOutPairs) {
+    strictSameResult(input, output, test, _ => testsEnd.collect());
+  }
+}
+
+tap.test('every with error', test => {
+  const data = [1, 2, 3];
+  const predicateErr = new Error('Intentional error');
+
+  function predicate(item, callback) {
+    process.nextTick(_ => (
+      item % 2 === 0 ? callback(predicateErr) : callback(null, true)
+    ));
+  }
+    
+  metasync.every(data, predicate, err => {
+    test.strictSame(err, predicateErr);
+    test.end();
+  });
+});
+
+tap.test('every with empty array', test =>
+  strictSameResult([], true, test, _ => test.end())
+);
+
+tap.test('every with one-element arrays', test =>
+  fewStrictSameResult([ [[false], false], [[true], true] ], test)
+);
+
+tap.test('every with two-element arrays', test =>
+  fewStrictSameResult([
+    [[false, false], false],
+    [[false, true ], false],
+    [[true , false], false],
+    [[true , true ], true ],
+  ], test)
+);
+
+tap.test('every', test => {
+  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  
+  function predicate(item, callback) {
+    process.nextTick(_ => callback(null, item > 0));
+  }
+
+  metasync.every(data, predicate, (err, result) => {
+    test.error(err, 'must not return an error');
+    test.ok(result, 'result must be initialized');
+    test.type(result, 'boolean', 'type of result must be boolean');
+    test.strictSame(result, true);
+    test.end();
+  });
+});

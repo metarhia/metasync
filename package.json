@@ -21,14 +21,15 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/examples && node tests/chain && npm run lint",
+    "test": "tap -b -t 1000 test/*.js && npm run lint",
     "lint": "eslint ."
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "metarhia-common": "0.0.x"
+    "metarhia-common": "0.0.x",
+    "tap": "^10.0.0"
   },
   "devDependencies": {
     "eslint": "3.x"
