@@ -103,4 +103,5 @@ kc.pick('key3', 3);
   dc.pick('key1', 1);
   dc('key2', null, 2);
   dc.take('key3', asyncReturn, 3);
+  dc.take('key4', asyncReturn, 5);
 }
