@@ -33,6 +33,18 @@ tap.test('Getting asynchronous error', (test) => {
   });
 });
 
+tap.test('Getting error with no second argument execution', (test) => {
+  let executed = false;
+  metasync.monad.fmap(asyncErrorCb, (str) => {
+    executed = true;
+    return appendColon(str);
+  })(() => {
+    test.strictSame(executed, false);
+    test.end();
+  });
+});
+
+
 tap.test('functor law I', (test) => {
   metasync.monad.fmap(asyncDataCb, identity)((err, res) => {
     test.error(err);
