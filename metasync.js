@@ -14,7 +14,8 @@ const submodules = [
   'chain', // Process arrays sync and async array in chain
   'collectors', // DataCollector and KeyCollector
   'queue', // Concurrency
-  'throttle' // Throttling
+  'throttle', // Throttling
+  'monad', // Async functions as monad
 ];
 
 submodules
