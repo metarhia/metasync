@@ -23,6 +23,7 @@
   "scripts": {
     "test": "node tests/all && tap test/*.js && npm run lint",
     "code-coverage": "tap test/*.js --100",
+    "code-coverage-report": "tap test/*.js --coverage-report=html",
     "lint": "eslint ."
   },
   "engines": {
