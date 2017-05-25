@@ -47,10 +47,8 @@ tap.test('with empty array', (test) => {
 
 tap.test('with array without element which is searching', (test) => {
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-  const expected = undefined;
-  const predicate = 
   metasync.find(data, (el, callback) => (
-    process.nextTick(() => callback(null, el == 20))
+    process.nextTick(() => callback(null, el === 20))
   ), (err, result) => {
     test.error(err);
     test.strictSame(result, undefined);
