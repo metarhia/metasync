@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Metasync is a Meta Async Programming Approach",
   "license": "MIT",
@@ -21,7 +21,9 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/examples && node tests/chain && npm run lint",
+    "test": "node tests/all && tap test/*.js && npm run lint",
+    "code-coverage": "tap test/*.js --100",
+    "code-coverage-report": "tap test/*.js --coverage-report=html",
     "lint": "eslint ."
   },
   "engines": {
@@ -31,7 +33,8 @@
     "metarhia-common": "0.0.x"
   },
   "devDependencies": {
-    "eslint": "3.x"
+    "eslint": "3.x",
+    "tap": "^10.0.0"
   },
   "jshintConfig": {
     "esversion": 6,

@@ -275,24 +275,6 @@ function filterTest(end) {
 
 }
 
-// Asynchrous find
-
-function findTest(end) {
-
-  metasync.find(
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    (item, callback) => (
-      callback(null, item % 3 === 0 && item % 5 === 0)
-    ),
-    (err, result) => {
-      console.log('found value: ' + result);
-      console.log('Find test done');
-      end();
-    }
-  );
-
-}
-
 // Asyncronous each in parallel
 
 function eachTest(end) {
@@ -441,6 +423,50 @@ function throttleTest(end) {
 
 }
 
+function debounceTest(end) {
+  let state;
+
+  function fn(letter) {
+    console.log('Debounced function, state: ' + state);
+    if (state === letter) {
+      console.log('Debounce test done');
+      end();
+    }
+  }
+
+  const f1 = metasync.debounce(500, fn, ['I']);
+
+  // to be called one time (E)
+  state = 'A';
+  f1();
+  state = 'B';
+  f1();
+  state = 'C';
+  f1();
+  state = 'D';
+  f1();
+  state = 'E';
+  f1();
+
+  // to be called one time (I)
+  setTimeout(() => {
+    state = 'F';
+    f1();
+  }, 600);
+  setTimeout(() => {
+    state = 'G';
+    f1();
+  }, 700);
+  setTimeout(() => {
+    state = 'H';
+    f1();
+  }, 1000);
+  setTimeout(() => {
+    state = 'I';
+    f1();
+  }, 1100);
+}
+
 function mapTest(end) {
   metasync.map([1, 2, 3], (item, callback) => {
     setTimeout(() => {
@@ -498,6 +524,63 @@ function chainTest(end) {
   end();
 }
 
+function printCallbackArgs(end) {
+  return (err, ...args) => {
+    if (err) {
+      return console.log('Error: ' + err);
+    }
+    console.log(...args);
+    console.log('done');
+    end();
+  };
+}
+
+function ofTest(end) {
+  console.log('of test:');
+  metasync.monad.of(4, 'str', [1, 2, 3])(printCallbackArgs(end));
+}
+
+function fmapTest(end) {
+  console.log('fmap test:');
+  const of = metasync.monad.of;
+  const args = [4, 'str', [1, 2, 3]];
+  const reverseArgs = (...args) => args.reverse();
+  of(...args).fmap(reverseArgs)(printCallbackArgs(end));
+}
+
+function monadChainTest(end) {
+  console.log('Monad concat test:');
+  const M = metasync.monad;
+  const args = [4, 'str', [1, 2, 3]];
+  const asyncPrint = M.toAsync((args, callback) =>
+    printCallbackArgs(callback)(null, ...args)
+  );
+  M.of(...args).concat(asyncPrint)(end);
+}
+
+function apTest(end) {
+  console.log('ap test:');
+  const M = metasync.monad;
+  const storage = {};
+
+  function collect(key, val) {
+    if (key === undefined) return;
+    storage[key] = val;
+    return collect;
+  }
+
+  const arrOfAsyncFunctions = [
+    ['first', 1], ['second', 2], ['third', 3]
+  ].map(args => M.of(...args));
+  const apR = (prev, next) => M.ap(next, prev);
+
+  arrOfAsyncFunctions.reduce(apR, M.of(collect))(() => {
+    console.log(storage);
+    console.log('done');
+    end();
+  });
+}
+
 function cbTest(end) {
   const fn1 = undefined;
   const fn2 = null;
@@ -527,16 +610,20 @@ metasync.composition([
   parallelTest,
   sequentialTest,
   filterTest,
-  findTest,
   eachTest,
   seriesTest,
   reduceTest,
   concurrentQueueTest,
+  ofTest,
+  fmapTest,
+  monadChainTest,
+  apTest,
   concurrentQueuePauseResumeStopTest,
   throttleTest,
+  debounceTest,
   mapTest,
   timeoutTest,
-  chainTest
+  chainTest,
 ], () => {
   console.log('All tests done');
 });
