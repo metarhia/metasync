@@ -1,8 +1,8 @@
 {
   "name": "metasync",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
-  "description": "Metasync is a Meta Async Programming Approach",
+  "description": "Library of Asynchronous Programming Abstractions",
   "license": "MIT",
   "keywords": [
     "async",
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/metarhia/MetaSync"
+    "url": "https://github.com/metarhia/metasync"
   },
   "main": "./metasync.js",
   "readmeFilename": "README.md",
