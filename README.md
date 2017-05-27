@@ -1,8 +1,8 @@
-# Meta Async Programming Approach
+# Library of Asynchronous Programming Abstractions
 
-[![TravisCI](https://travis-ci.org/metarhia/MetaSync.svg?branch=master)](https://travis-ci.org/metarhia/MetaSync)
-[![bitHound](https://www.bithound.io/github/metarhia/MetaSync/badges/score.svg)](https://www.bithound.io/github/metarhia/MetaSync)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/60fe108b31614b4191cd557d49112169)](https://www.codacy.com/app/metarhia/MetaSync)
+[![TravisCI](https://travis-ci.org/metarhia/metasync.svg?branch=master)](https://travis-ci.org/metarhia/metasync)
+[![bitHound](https://www.bithound.io/github/metarhia/metasync/badges/score.svg)](https://www.bithound.io/github/metarhia/metasync)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/60fe108b31614b4191cd557d49112169)](https://www.codacy.com/app/metarhia/metasync)
 [![NPM Version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
 [![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg)](https://www.npmjs.com/package/metasync)
 [![NPM Downloads](https://img.shields.io/npm/dt/metasync.svg)](https://www.npmjs.com/package/metasync)
@@ -152,4 +152,4 @@ metasync.each(
 ## Contributors
 
   - Timur Shemsedinov (marcusaurelius)
-  - See github for full [contributors list](https://github.com/metarhia/MetaSync/graphs/contributors)
+  - See github for full [contributors list](https://github.com/metarhia/metasync/graphs/contributors)
