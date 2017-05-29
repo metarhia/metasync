@@ -16,7 +16,6 @@ tap.test('successful some', (test) => {
 
 tap.test('failing some', (test) => {
   const arr = [1, 2, 3];
-  const someError = new Error('Some error');
 
   const predicate = (x, callback) => callback(null, x > 3);
   metasync.some(arr, predicate, (err, accepted) => {
