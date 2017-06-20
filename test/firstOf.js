@@ -4,7 +4,7 @@ const tap = require('tap');
 const metasync = require('..');
 
 tap.test('firstOf', (test) => {
-  const returningFnIndex = 1;
+  const returningFnIndex = 2;
   let dataReturned = false;
 
   const execUnlessDataReturned = (data) => (callback) => {
@@ -14,15 +14,21 @@ tap.test('firstOf', (test) => {
       process.nextTick(execUnlessDataReturned);
     }
   };
-  const fn = (i) => (callback) => process.nextTick(() => {
-    if (i == returningFnIndex
+  const makeIFn = (i) => (callback) => process.nextTick(() => {
+    const iData = 'data' + i;
+    if (i === returningFnIndex) {
+      dataReturned = true;
+      callback(null, iData);
+    } else {
+      execUnlessDataReturned(iData);
+    }
   });
 
-  const fns = api.common.range(1, 3).map(makeIFn);
+  const fns = [1, 2, 3].map(makeIFn);
 
-  api.metasync.firstOf(fns, (err, data) => {
+  metasync.firstOf(fns, (err, data) => {
     test.error(err);
-    test.strictSame(data, 'data');
+    test.strictSame(data, 'data2');
     test.end();
   });
 });
