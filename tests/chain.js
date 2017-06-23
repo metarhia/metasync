@@ -79,3 +79,39 @@ metasync
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0], 15);
   });
+
+const arrayEqual = (arr1, arr2) => {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+};
+
+metasync
+  .for([1, 2, 3, 4])
+  .concat([8, 6, 7])
+  .slice(1)
+  .sort()
+  .reverse()
+  .shift()
+  .unshift(10)
+  .pop()
+  .push(11)
+  .fetch((error, result, resume) => {
+    console.log('Chaining test #5a result: ', result);
+    const expected = [10, 7, 6, 4, 3, 11];
+    assert.strictEqual(arrayEqual(result, expected), true);
+    resume(null, result);
+  })
+  .includes(6)
+  .fetch((error, result, resume) => {
+    console.log('Chaining test #5b result: ', result);
+    assert.strictEqual(result, true);
+    resume(null, [6, 8]);
+  })
+  .includes(7)
+  .fetch((error, result) => {
+    console.log('Chaining test #5c result: ', result);
+    assert.strictEqual(result, false);
+  });

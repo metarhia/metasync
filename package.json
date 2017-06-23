@@ -1,8 +1,8 @@
 {
   "name": "metasync",
-  "version": "0.2.1",
+  "version": "0.2.7",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
-  "description": "Metasync is a Meta Async Programming Approach",
+  "description": "Library of Asynchronous Programming Abstractions",
   "license": "MIT",
   "keywords": [
     "async",
@@ -16,22 +16,25 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/metarhia/MetaSync"
+    "url": "https://github.com/metarhia/metasync"
   },
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/examples && node tests/chain && npm run lint",
+    "test": "node tests/all && tap test/*.js && npm run lint",
+    "code-coverage": "tap test/*.js --100",
+    "code-coverage-report": "tap test/*.js --coverage-report=html",
     "lint": "eslint ."
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "metarhia-common": "0.0.x"
+    "metarhia-common": "^0.0.10"
   },
   "devDependencies": {
-    "eslint": "3.x"
+    "eslint": "3.x",
+    "tap": "^10.0.0"
   },
   "jshintConfig": {
     "esversion": 6,
