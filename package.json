@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Library of Asynchronous Programming Abstractions",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "metarhia-common": "0.0.x"
+    "metarhia-common": "^0.0.10"
   },
   "devDependencies": {
     "eslint": "3.x",
