@@ -88,6 +88,7 @@ kc.pick('key3', 3);
   kc('key1', null, 2);
   kc('key2', null, 2);
 }
+
 {
   const dc = metasync
     .collect(3)

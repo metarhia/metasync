@@ -7,7 +7,7 @@ tap.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
-    key3: 3,
+    key3: 3
   };
 
   const dc = metasync
@@ -28,7 +28,7 @@ tap.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
-    key3: 3,
+    key3: 3
   };
 
   const kc = metasync
@@ -49,7 +49,7 @@ tap.test('distinct data collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
-    key3: 3,
+    key3: 3
   };
 
   const dc = metasync
@@ -71,7 +71,7 @@ tap.test('distinct key collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
-    key3: 3,
+    key3: 3
   };
 
   const kc = metasync
@@ -92,7 +92,7 @@ tap.test('distinct key collector', (test) => {
 tap.test('data collector with repeated keys', (test) => {
   const expectedResult = {
     key1: 2,
-    key2: 2,
+    key2: 2
   };
 
   const dc = metasync
@@ -111,7 +111,7 @@ tap.test('data collector with repeated keys', (test) => {
 tap.test('key collector with repeated keys', (test) => {
   const expectedResult = {
     key1: 2,
-    key2: 2,
+    key2: 2
   };
 
   const kc = metasync
@@ -121,7 +121,6 @@ tap.test('key collector with repeated keys', (test) => {
       test.strictSame(result, expectedResult);
       test.end();
     });
-
 
   kc('key1', null, 1);
   kc('key1', null, 2);
