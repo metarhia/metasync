@@ -68,6 +68,7 @@ tap.test('flow with complex flow', (test) => {
   const expectedDataInFn1 = { test: 'data' };
   const expectedDataInFn2 = { test: 'data', fn1: 'data 1' };
   const expectedDataInRes = { test: 'data' };
+
   let i;
   for (i = 1; i < 6; i++) {
     expectedDataInRes['fn' + i] = 'data ' + i;
