@@ -32,28 +32,43 @@ const f = metasync.flow(
 - Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
 
 ## Collector
-`metasync.collect(expected)`
+`metasync.collect(expected)(key, error, value)`
 - expected - count or array of string
 - returns: collector functor
+
+### Collector functor methods:
+- `collector(key, error, value)` - pick or fail
+- `collector.pick(key, value)` - pick a key
+- `collector.fail(key, error)` - fail a key
+- `collector.take(key, method, ...arguments)` - take method result
+- `collector.timeout(msec)` - set timeout
+- `collector.done(callback)` - set done listener (errback)
+- `collector.distinct(true/false)` - deny unlisted keys
 
 Example:
 ```JavaScript
 const metasync = require('metasync');
 const fs = require('fs');
 
-// Data collector (collect keys of any names)
+// Data collector (collect keys by count)
 const dc = metasync.collect(4);
-dc('user', { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md', (err, data) => dc('history', data));
-fs.readFile('README.md', (err, data) => dc('readme', data));
-setTimeout(() => dc('timer', { date: new Date() }), 1000);
 
-// Key collector (collect certain keys)
-const kc = metasync.collect(['user', 'history', 'readme', 'timer']);
-kc('user', { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md', (err, data) => kc('history', data));
-fs.readFile('README.md', (err, data) => kc('readme', data));
-setTimeout(() => kc('timer', { date: new Date() }), 1000);
+dc('user', null, { name: 'Marcus Aurelius' });
+fs.readFile('HISTORY.md', (err, data) => dc('history', err, data));
+dc.take('readme', fs.readFile, 'README.md');
+setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
+
+// Key collector (collect certain keys by names)
+const kc = metasync
+  .collect(['user', 'history', 'readme', 'timer'])
+  .timeout(2000)
+  .distinct()
+  .done((err, data) => console.log(data));
+
+kc.pick('user', { name: 'Marcus Aurelius' });
+kc.take('history', fs.readFile, 'HISTORY.md');
+kc.take('readme', fs.readFile, 'README.md');
+setTimeout(() => kc.pick('timer', { date: new Date() }), 1000);
 ```
 
 ## Data Collector
