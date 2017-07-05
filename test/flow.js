@@ -51,7 +51,7 @@ tap.test('sequential with error', (test) => {
 
   function fn2(data, cb) {
     process.nextTick(() => {
-      tap.strictSame(data, expectedDataInFn2);
+      tap.same(data, expectedDataInFn2);
       cb(sequentialError);
     });
   }
@@ -64,6 +64,7 @@ tap.test('sequential with error', (test) => {
 });
 
 tap.test('flow with complex flow', (test) => {
+
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
   const expectedDataInFn2 = { test: 'data', fn1: 'data 1' };
@@ -115,4 +116,132 @@ tap.test('flow with complex flow', (test) => {
     test.strictSame(data, expectedDataInRes);
     test.end();
   });
+
+});
+
+tap.test('flow cancel before start', (test) => {
+
+  let count = 0;
+
+  function fn1(data, cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 1'));
+  }
+
+  function fn2(data, cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 2'));
+  }
+
+  function fn3(cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 3'));
+  }
+
+  function fn4(cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 4'));
+  }
+
+  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  fc.cancel();
+  fc({}, (err, data) => {
+    test.strictSame(data, undefined);
+    test.strictSame(count, 0);
+    test.end();
+  });
+
+});
+
+tap.test('flow cancel in the middle', (test) => {
+
+  let count = 0;
+  let finished = 0;
+
+  function fn1(data, cb) {
+    count++;
+    process.nextTick(() => {
+      finished++;
+      cb(null, 'data 1');
+    });
+  }
+
+  function fn2(data, cb) {
+    count++;
+    setTimeout(() => {
+      finished++;
+      cb(null, 'data 2');
+    }, 200);
+  }
+
+  function fn3(cb) {
+    count++;
+    setTimeout(() => {
+      finished++;
+      cb(null, 'data 3');
+    }, 200);
+  }
+
+  function fn4(cb) {
+    count++;
+    setTimeout(() => {
+      finished++;
+      cb(null, 'data 4');
+    }, 200);
+  }
+
+  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  fc({}, (err, data) => {
+    test.strictSame(data, undefined);
+    test.strictSame(count, 3);
+    test.strictSame(finished, 1);
+    test.end();
+  });
+
+  setTimeout(() => {
+    fc.cancel();
+  }, 100);
+
+});
+
+tap.test('flow cancel after end', (test) => {
+
+  let count = 0;
+
+  function fn1(data, cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 1'));
+  }
+
+  function fn2(data, cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 2'));
+  }
+
+  function fn3(cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 3'));
+  }
+
+  function fn4(cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 4'));
+  }
+
+  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  fc({}, (err, data) => {
+    test.strictSame(data, {
+      fn1: 'data 1',
+      fn2: 'data 2',
+      fn3: 'data 3',
+      fn4: 'data 4'
+    });
+    test.strictSame(count, 4);
+    test.end();
+  });
+
+  setTimeout(() => {
+    fc.cancel();
+  }, 100);
+
 });
