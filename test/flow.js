@@ -51,7 +51,7 @@ tap.test('sequential with error', (test) => {
 
   function fn2(data, cb) {
     process.nextTick(() => {
-      tap.strictSame(data, expectedDataInFn2);
+      tap.same(data, expectedDataInFn2);
       cb(sequentialError);
     });
   }
@@ -64,6 +64,7 @@ tap.test('sequential with error', (test) => {
 });
 
 tap.test('flow with complex flow', (test) => {
+
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
   const expectedDataInFn2 = { test: 'data', fn1: 'data 1' };
@@ -115,4 +116,5 @@ tap.test('flow with complex flow', (test) => {
     test.strictSame(data, expectedDataInRes);
     test.end();
   });
+
 });
