@@ -8,7 +8,7 @@
     }
   },
   "ignore": [
-    "test/flow.js",
+    "test/flow.js"
   ],
   "test": [
     "tests/**"
