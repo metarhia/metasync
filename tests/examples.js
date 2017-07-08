@@ -19,79 +19,6 @@ if (!assert.deepStrictEqual) {
   };
 }
 
-// Functional Asyncronous Composition
-
-function compositionTest(end) {
-
-  metasync.composition(
-    [f1, f2, f3, [[f4, f5, [f6, f7], f8]], [[f9, f10]], f11],
-    (data) => console.dir(data)
-  );
-
-  function f1(callback) {
-    console.log('f1');
-    setTimeout(() => callback('result1'), ASYNC_TIMEOUT);
-  }
-
-  function f2(data, callback) {
-    console.log('f2');
-    setTimeout(() => callback('result2'), ASYNC_TIMEOUT);
-  }
-
-  function f3(data, callback) {
-    console.log('f3');
-    setTimeout(() => {
-      data.third = 'result3';
-      callback();
-    }, ASYNC_TIMEOUT);
-  }
-
-  function f4(callback) {
-    console.log('f4');
-    setTimeout(() => callback(), ASYNC_TIMEOUT);
-  }
-
-  function f5(data, callback) {
-    console.log('f5');
-    setTimeout(() => callback(5), ASYNC_TIMEOUT);
-  }
-
-  function f6(data, callback) {
-    console.log('f6');
-    setTimeout(() => callback('result6'), ASYNC_TIMEOUT);
-  }
-
-  function f7(data, callback) {
-    console.log('f7');
-    setTimeout(() => callback('result7'), ASYNC_TIMEOUT);
-  }
-
-  function f8(data, callback) {
-    console.log('f8');
-    setTimeout(() => callback('result8'), ASYNC_TIMEOUT);
-  }
-
-  function f9(data, callback) {
-    console.log('f9');
-    setTimeout(() => callback('result9'), ASYNC_TIMEOUT);
-  }
-
-  function f10(data, callback) {
-    console.log('f10');
-    setTimeout(() => callback('result10'), ASYNC_TIMEOUT);
-  }
-
-  function f11(data, callback) {
-    console.log('f11');
-    setTimeout(() => {
-      callback('result11');
-      console.log('Composition test done');
-      end();
-    }, ASYNC_TIMEOUT);
-  }
-
-}
-
 // Data Collector
 
 function dataCollectorTest(end) {
@@ -634,9 +561,8 @@ function cbTest(end) {
 
 // Run tests
 
-metasync.composition([
+metasync.flow([
   cbTest,
-  compositionTest,
   dataCollectorTest,
   dataCollectorTimeoutTest,
   dataCollectorErrorTest,
