@@ -13,20 +13,14 @@
 $ npm install metasync
 ```
 
-# Examples
+## Create a composed function from flow syntax
+`metasync.flow(fns)(data, done)`
+- `fns` - array of errback functions
+- `data` - input data
+- `done` - errback don callback
+- returns: composed errback function
 
-## Functional Asyncronous Composition
-
-Syntax: `metasync.flow(functions)(data, callback);`
-
-Parameters:
-- functions - array of `function([data,] callback)` where:
-  - data - optional incoming data
-  - callback - `function([data])` where:
-    - data - outgoing data
-- done - `callback(data)` where:
-  - data - hash with of functions results
-- data - incoming data
+![composition](https://cloud.githubusercontent.com/assets/4405297/16968374/1b81f160-4e17-11e6-96fa-9d7e2b422396.png)
 
 ```JavaScript
 const f = metasync.flow(
@@ -37,29 +31,53 @@ const f = metasync.flow(
 - Array of functions gives sequential execution: `[f1, f2, f3]`
 - Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
 
-## An Event-driven Asyncronous Data Collector
+## Collector
+`metasync.collect(expected)(key, error, value)`
+- expected - count or array of string
+- returns: collector functor
 
+### Collector functor methods:
+- `collector(key, error, value)` - pick or fail
+- `collector.pick(key, value)` - pick a key
+- `collector.fail(key, error)` - fail a key
+- `collector.take(key, method, ...arguments)` - take method result
+- `collector.timeout(msec)` - set timeout
+- `collector.done(callback)` - set done listener (errback)
+- `collector.distinct(true/false)` - deny unlisted keys
+
+Example:
 ```JavaScript
 const metasync = require('metasync');
 const fs = require('fs');
 
-// Data collector (collect keys of any names)
+// Data collector (collect keys by count)
 const dc = metasync.collect(4);
-dc('user', { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md', (err, data) => dc('history', data));
-fs.readFile('README.md', (err, data) => dc('readme', data));
-setTimeout(() => dc('timer', { date: new Date() }), 1000);
 
-// Key collector (collect certain keys)
-const kc = metasync.collect(['user', 'history', 'readme', 'timer']);
-kc('user', { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md', (err, data) => kc('history', data));
-fs.readFile('README.md', (err, data) => kc('readme', data));
-setTimeout(() => kc('timer', { date: new Date() }), 1000);
+dc('user', null, { name: 'Marcus Aurelius' });
+fs.readFile('HISTORY.md', (err, data) => dc('history', err, data));
+dc.take('readme', fs.readFile, 'README.md');
+setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
+
+// Key collector (collect certain keys by names)
+const kc = metasync
+  .collect(['user', 'history', 'readme', 'timer'])
+  .timeout(2000)
+  .distinct()
+  .done((err, data) => console.log(data));
+
+kc.pick('user', { name: 'Marcus Aurelius' });
+kc.take('history', fs.readFile, 'HISTORY.md');
+kc.take('readme', fs.readFile, 'README.md');
+setTimeout(() => kc.pick('timer', { date: new Date() }), 1000);
 ```
 
-In object-oriented style:
+## Data Collector
+`metasync.DataCollector()`
+- `expected` - number of `collect()` calls expected
+- `timeout` - collect timeout (optional)
+- returns: instance of `DataCollector`
 
+Example:
 ```JavaScript
 const metasync = require('metasync');
 const fs = require('fs');
@@ -83,59 +101,80 @@ setTimeout(() => {
 }, 1000);
 ```
 
-## Parallel execution
+## Key Collector
+`new metasync.KeyCollector(keys, timeout)`
+- `keys` - array of keys, example: `['config', 'users', 'cities']`
+- `timeout` - collect timeout (optional)
+- returns: instance of `DataCollector`
 
-```JavaScript
-metasync.parallel([f1, f2, f3], () =>  {});
-```
+## Parallel execution
+`metasync.parallel(fns)`
+- `fns` - array of errback functions
+- `done` - errback on done
+- `data` - incoming data
+
+Example:
+`metasync.parallel([f1, f2, f3], (err, data) => {});`
 
 ## Sequential execution
+`metasync.sequential(fns, done, data)`
+- `fns` - array of errback functions
+- `done` - errback on done
+- `data` - incoming data
 
+Example:
 ```JavaScript
-metasync.sequential([f1, f2, f3], () => {});
+metasync.sequential([f1, f2, f3], (err, data) => {});
 ```
 
-## Asynchrous filter
+## Executes all asynchronous functions and pass first result to callback
+`metasync.firstOf(fns, done)`
+- `fns` - array of errback functions
+- `done` - errback on done
 
+## Asynchronous map (iterate parallel)
+`metasync.map(items, fn, done)`
+- `items` - incoming array
+- `fn` - errback `(current, callback) => callback(err, value)`
+  - to be executed for each value in the array
+  - `current` - current element being processed in the array
+  - `callback` - errback rerurn
+- `done` - optional done errback function
+
+## Asynchrous filter (iterate parallel)
+`metasync.filter(items)`
+- `items` - incoming array
+
+Example:
 ```JavaScript
-metasync.filter(['data', 'to', 'filter'], (item, callback) => {
-  callback(item.length > 2);
-}, (result) => {
-  console.dir(result);
-});
-```
-
-## Asynchrous find
-
-```JavaScript
-metasync.find(
-  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-  (item, callback) => (
-    callback(item % 3 === 0 && item % 5 === 0)
-  ),
-  (result) => {
-    console.dir(result);
-  }
+metasync.filter(
+  ['data', 'to', 'filter'],
+  (item, callback) => callback(item.length > 2),
+  (err, result) => console.dir(result)
 );
 ```
 
-## Asyncronous series (sequential)
+## Asynchronous reduce
+`metasync.reduce(items, callback, done, initial)`
+- `items` - incoming array
+- `callback` - function to be executed for each value in array
+  - `previous` - value previously returned in the last iteration
+  - `current` - current element being processed in the array
+  - `callback` - callback for returning value back to function reduce
+  - `counter` - index of the current element being processed in array
+  - `items` - the array reduce was called upon
+- `done` - optional on done callback `function(err, result)`
+- `initial` - optional value to be used as first arpument in first iteration
 
-```JavaScript
-metasync.series(
-  ['a', 'b', 'c'],
-  (item, callback) => {
-    console.dir({ series: item });
-    callback();
-  },
-  (data) => {
-    console.dir('series done');
-  }
-);
-```
+## Asynchronous each (iterate in parallel)
+`metasync.each(items, fn, done)`
+- `items` - incoming array
+- `fn` - errback `(value, callback) => callback(err)`
+  - `value` - item from items array
+  - `callback` - callback `function(err)`
+- `done` - optional on done callback `function(err)`
 
-## Asyncronous each (parallel)
-
+Example:
 ```JavaScript
 metasync.each(
   ['a', 'b', 'c'],
@@ -143,11 +182,92 @@ metasync.each(
     console.dir({ each: item });
     callback();
   },
-  (data) => {
-    console.dir('each done');
+  (err, data) => console.dir('each done')
+);
+```
+
+## Asynchronous series
+`metasync.series(items, fn, done)`
+- `items` - incoming array
+- `fn` - errback `(value, callback) => callback(err)`
+  - `value` - item from items array
+  - `callback` - callback `(err)`
+- `done` optional on done callback `function(err)`
+
+Example:
+```JavaScript
+metasync.series(
+  ['a', 'b', 'c'],
+  (item, callback) => {
+    console.dir({ series: item });
+    callback();
+  },
+  (err, data) => {
+    console.dir('series done');
   }
 );
 ```
+
+## Asynchronous find (iterate in series)
+`metasync.find(items, fn, done)`
+- `items` - incoming array
+- `fn` - errback `(value, callback) => callback(err, accepted)`
+  - `value` - item from items array
+  - `callback` - callback function `(err, accepted)`
+- `done` - optional on done callback `function(err, result)`
+
+Example:
+```JavaScript
+metasync.find(
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  (item, callback) => (
+    callback(null, item % 3 === 0 && item % 5 === 0)
+  ),
+  (err, result) => {
+    console.dir(result);
+  }
+);
+```
+
+## Asynchronous every
+`metasync.every(items, fn, done)`
+- `items` - incoming array
+- `fn` - errback `(value, callback) => callback(err, fits)`
+  - `value` - item from items array
+  - `callback` - callback function `(err, fits)`
+- `done` - optional on done callback `function(err, result)`
+
+## Asynchronous some (iterate in series)
+`metasync.some(items)`
+- `items` - incoming array
+
+## Create an ArrayChain instance
+`metasync.for(array)`
+- `array` - start mutations from this data
+
+
+## ConcurrentQueue
+`new metasync.ConcurrentQueue(concurrency, timeout)`
+- `concurrency` - number of simultaneous and asynchronously executing tasks
+- `timeout` - process timeout (optional), for single item
+
+## Function throttling
+`metasync.throttle`
+- `timeout` - time interval
+- `fn` - function to be executed once per timeout
+- `args` - arguments array for fn (optional)
+
+## Debounce wrapper
+`metasync.debounce`
+- `timeout` - msec timeout
+- `fn` - function to be wrapped
+- `args` - function arguments
+
+## Set timeout for function execution
+`metasync.timeout`
+- `timeout` - time interval
+- `fn` - async function to be executed
+- `done` - callback function
 
 ## Contributors
 

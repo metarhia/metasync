@@ -1,0 +1,140 @@
+## Wrap callback
+api.metasync.cb
+- Deprecated, use api.common.cb instead
+- callback function (optional)
+
+## Create a composed function from flow syntax
+api.metasync.flow
+- fns array of errback functions
+- returns: composed errback function
+
+## Create a composed function from flow syntax
+api.metasync.composition
+- it's deprecated, use metasync.flow instead
+- fns, array of errback functions
+- done, errback on done
+- data incoming data
+
+## Parallel execution
+api.metasync.parallel
+- fns, array of errback functions
+- done, errback on done
+- data = {} incoming data
+
+## Sequential execution
+api.metasync.sequential
+- fns, array of errback functions
+- done, errback on done
+- data = {} incoming data
+
+## Executes all asynchronous functions and pass first result to callback
+api.metasync.firstOf
+- fns, array of errback functions
+- done errback on done
+
+## Asynchronous map (iterate parallel)
+api.metasync.map
+- items, incoming array
+- fn, (current, callback) => callback(err, value)
+- to be executed for each value in the array
+-   current - current element being processed in the array
+-   callback - function(err, value)
+- done optional on done callback function(err, result)
+
+## Asynchrous filter (iterate parallel)
+api.metasync.filter
+- items, incoming array
+
+## Asynchronous reduce
+api.metasync.reduce
+- items, incoming array
+- callback, function to be executed for each value in array
+-   previous - value previously returned in the last iteration
+-   current - current element being processed in the array
+-   callback - callback for returning value back to function reduce
+-   counter - index of the current element being processed in array
+-   items - the array reduce was called upon
+- done, optional on done callback function(err, result)
+- initial optional value to be used as first arpument in first iteration
+
+## Asynchronous each (iterate in parallel)
+api.metasync.each
+- items, incoming array
+- fn, (value, callback) => callback(err)
+-   value - item from items array
+-   callback - callback function(err)
+- done optional on done callback function(err)
+
+## Asynchronous series
+api.metasync.series
+- items, incoming array
+- fn, (value, callback) => callback(err)
+-   value - item from items array
+-   callback - callback (err)
+- done optional on done callback (err)
+
+## Asynchronous find (iterate in series)
+api.metasync.find
+- items, incoming array
+- fn, (value, callback) => callback(err, accepted)
+-   value - item from items array
+-   callback - callback function(err, accepted)
+- done optional on done callback function(err, result)
+
+## Asynchronous every
+api.metasync.every
+- items, incoming array
+- fn, (value, callback) => callback(err, fits)
+-   value - item from items array
+-   callback - callback function(err, fits)
+- done optional on done callback function(err, result)
+
+## Asynchronous some (iterate in series)
+api.metasync.some
+- items, incoming array
+
+## Create an ArrayChain instance
+api.metasync.for
+- array start mutations from this data
+
+expected ## count or array of string
+api.metasync.collect
+- returns: collector functor
+
+expected, ## number of collect() calls expected
+api.metasync.DataCollector
+- timeout collect timeout (optional)
+- returns: instance of DataCollector
+
+## Key Collector
+api.metasync.KeyCollector
+- keys, array of keys, example: ['config', 'users', 'cities']
+- timeout collect timeout (optional)
+- returns: instance of DataCollector
+
+## ConcurrentQueue
+api.metasync.ConcurrentQueue
+- concurrency, number of simultaneous and asynchronously executing tasks
+- timeout process timeout (optional), for single item
+
+## Function throttling
+api.metasync.throttle
+- timeout, time interval
+- fn, function to be executed once per timeout
+- args arguments array for fn (optional)
+
+timeout, ## msec
+api.metasync.debounce
+- fn, function to be wrapped
+- args = [] function arguments
+
+## Set timeout for function execution
+api.metasync.timeout
+- timeout, time interval
+- fn, async function to be executed
+- done - callback function
+- done callback function on done
+
+
+api.metasync.monad
+

@@ -255,9 +255,7 @@ function filterTest(end) {
     console.log('checking value: ' + item);
     let i;
     for (i = 0; i < item.length; ++i) {
-      if (letters.includes(item[i].toLowerCase())) {
-        break;
-      }
+      if (letters.includes(item[i].toLowerCase())) break;
       letters.push(item[i].toLowerCase());
     }
 
