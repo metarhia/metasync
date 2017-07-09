@@ -21,7 +21,7 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/all && tap test/*.js && npm run lint",
+    "test": "node tests/all && tap test/*.js && npm run lint && tests/load/run.sh",
     "code-coverage": "tap test/*.js --100",
     "code-coverage-report": "tap test/*.js --coverage-report=html",
     "lint": "eslint ."
