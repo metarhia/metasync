@@ -19,9 +19,9 @@ tap.test('data collector', (test) => {
     })
     .timeout(1000);
 
-  dc('key1', null, 1);
-  dc('key2', null, 2);
-  dc('key3', null, 3);
+  dc.collect('key1', null, 1);
+  dc.collect('key2', null, 2);
+  dc.collect('key3', null, 3);
 });
 
 tap.test('data collector', (test) => {
@@ -40,9 +40,9 @@ tap.test('data collector', (test) => {
     })
     .timeout();
 
-  kc('key1', null, 1);
-  kc('key2', null, 2);
-  kc('key3', null, 3);
+  kc.collect('key1', null, 1);
+  kc.collect('key2', null, 2);
+  kc.collect('key3', null, 3);
 });
 
 tap.test('distinct data collector', (test) => {
@@ -90,51 +90,31 @@ tap.test('distinct key collector', (test) => {
 });
 
 tap.test('data collector with repeated keys', (test) => {
-  const expectedResult = {
-    key1: 2,
-    key2: 2
-  };
-
   const dc = metasync
     .collect(3)
-    .done((err, result) => {
-      test.error(err);
-      test.strictSame(result, expectedResult);
+    .timeout(100)
+    .done((err) => {
+      test.assert(err);
       test.end();
     });
 
-  dc('key1', null, 1);
-  dc('key1', null, 2);
-  dc('key2', null, 2);
+  dc.collect('key1', null, 1);
+  dc.collect('key1', null, 2);
+  dc.collect('key2', null, 2);
 });
 
 tap.test('key collector with repeated keys', (test) => {
-  const expectedResult = {
-    key1: 2,
-    key2: 2
-  };
-
   const kc = metasync
     .collect(['key1', 'key2', 'key3'])
-    .done((err, result) => {
-      test.error(err);
-      test.strictSame(result, expectedResult);
+    .timeout(100)
+    .done((err) => {
+      test.assert(err);
       test.end();
     });
 
-  kc('key1', null, 1);
-  kc('key1', null, 2);
-  kc('key2', null, 2);
-});
-
-tap.test('collect with string argument', (test) => {
-  const typeError = new TypeError('Unexpected type');
-  try {
-    metasync.collect('123');
-  } catch (e) {
-    test.strictSame(e, typeError);
-    test.end();
-  }
+  kc.collect('key1', null, 1);
+  kc.collect('key1', null, 2);
+  kc.collect('key2', null, 2);
 });
 
 tap.test('collect with error', (test) => {
@@ -163,7 +143,17 @@ tap.test('keys collector receives wrong key', (test) => {
   const col = metasync.collect(['rightKey']);
   col.done((err, res) => {
     test.error(err);
-    test.strictSame(res, { rightKey: 'someVal' });
+    test.strictSame(res, { wrongKey: 'someVal', rightKey: 'someVal' });
+    test.end();
+  });
+  col.pick('wrongKey', 'someVal');
+  col.pick('rightKey', 'someVal');
+});
+
+tap.test('distinct keys collector receives wrong key', (test) => {
+  const col = metasync.collect(['rightKey']).distinct();
+  col.done((err) => {
+    test.assert(err);
     test.end();
   });
   col.pick('wrongKey', 'someVal');

@@ -39,10 +39,10 @@ kc.pick('key3', 3);
       assert.strictEqual(Object.keys(result).length, 3);
     });
 
-  dc('key1', null, 1);
-  dc('key1', null, 2);
-  dc('key2', null, 2);
-  dc('key3', null, 3);
+  dc.collect('key1', null, 1);
+  dc.collect('key1', null, 2);
+  dc.collect('key2', null, 2);
+  dc.collect('key3', null, 3);
 }
 
 {
@@ -55,10 +55,10 @@ kc.pick('key3', 3);
       assert.strictEqual(Object.keys(result).length, 3);
     });
 
-  kc('key1', null, 1);
-  kc('key1', null, 2);
-  kc('key2', null, 2);
-  kc('key3', null, 3);
+  kc.collect('key1', null, 1);
+  kc.collect('key1', null, 2);
+  kc.collect('key2', null, 2);
+  kc.collect('key3', null, 3);
 }
 
 {
@@ -70,9 +70,9 @@ kc.pick('key3', 3);
       assert.strictEqual(Object.keys(result).length, 2);
     });
 
-  dc('key1', null, 1);
-  dc('key1', null, 2);
-  dc('key2', null, 2);
+  dc.collect('key1', null, 1);
+  dc.collect('key1', null, 2);
+  dc.collect('key2', null, 2);
 }
 
 {
@@ -84,9 +84,9 @@ kc.pick('key3', 3);
       assert.strictEqual(Object.keys(result).length, 2);
     });
 
-  kc('key1', null, 1);
-  kc('key1', null, 2);
-  kc('key2', null, 2);
+  kc.collect('key1', null, 1);
+  kc.collect('key1', null, 2);
+  kc.collect('key2', null, 2);
 }
 
 {
@@ -102,7 +102,7 @@ kc.pick('key3', 3);
   const asyncReturn = (x, cb) => setTimeout(cb, 0, null, x);
 
   dc.pick('key1', 1);
-  dc('key2', null, 2);
+  dc.collect('key2', null, 2);
   dc.take('key3', asyncReturn, 3);
   dc.take('key4', asyncReturn, 5);
 }

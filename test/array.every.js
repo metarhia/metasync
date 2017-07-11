@@ -17,11 +17,12 @@ function strictSameResult(input, expectedResult, test, done) {
 }
 
 function fewStrictSameResult(inOutPairs, test) {
-  const testsEnd = new metasync.DataCollector(inOutPairs.length);
-  testsEnd.on('done', () =>  test.end());
-
+  let i = 0;
+  const testsEnd = metasync.collect(inOutPairs.length);
+  testsEnd.done(() =>  test.end());
+  const cb = () => testsEnd.pick('item' + i++);
   for (const [input, output] of inOutPairs) {
-    strictSameResult(input, output, test, () => testsEnd.collect());
+    strictSameResult(input, output, test, cb);
   }
 }
 
