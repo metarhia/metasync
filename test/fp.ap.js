@@ -15,7 +15,7 @@ const asyncErrorCb = (callback) => (
 );
 
 tap.test('two successful functions', (test) => {
-  metasync.monad.ap(asyncArgs, functionInCallback)((err, res) => {
+  metasync.ap(asyncArgs, functionInCallback)((err, res) => {
     test.error(err);
     test.strictSame(res, 9);
     test.end();
@@ -23,7 +23,7 @@ tap.test('two successful functions', (test) => {
 });
 
 tap.test('first function with error', (test) => {
-  metasync.monad.ap(asyncErrorCb, functionInCallback)((err, res) => {
+  metasync.ap(asyncErrorCb, functionInCallback)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
@@ -31,7 +31,7 @@ tap.test('first function with error', (test) => {
 });
 
 tap.test('second function with error', (test) => {
-  metasync.monad.ap(asyncArgs, asyncErrorCb)((err, res) => {
+  metasync.ap(asyncArgs, asyncErrorCb)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();

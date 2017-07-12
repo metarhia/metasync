@@ -19,7 +19,7 @@ const asyncTransformErrorCb = (str, callback) => (
 );
 
 tap.test('two successful functions', (test) => {
-  metasync.monad.concat(asyncDataCb, asyncTwice)((err, res) => {
+  metasync.concat(asyncDataCb, asyncTwice)((err, res) => {
     test.error(err);
     test.strictSame(res, 'datadata');
     test.end();
@@ -27,7 +27,7 @@ tap.test('two successful functions', (test) => {
 });
 
 tap.test('first function error', (test) => {
-  metasync.monad.concat(asyncErrorCb, asyncTwice)((err, res) => {
+  metasync.concat(asyncErrorCb, asyncTwice)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
@@ -35,7 +35,7 @@ tap.test('first function error', (test) => {
 });
 
 tap.test('second function error', (test) => {
-  metasync.monad.concat(asyncDataCb, asyncTransformErrorCb)((err, res) => {
+  metasync.concat(asyncDataCb, asyncTransformErrorCb)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();

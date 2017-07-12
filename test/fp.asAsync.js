@@ -14,7 +14,7 @@ const asyncMultBy11 = (x, callback) => (
 );
 
 tap.test('asAsync all functions test', (test) => {
-  metasync.monad.asAsync(asyncSum, 3, 5)
+  metasync.asAsync(asyncSum, 3, 5)
     .fmap(x => (x * 7))
     .ap(tripleFnInCb)
     .concat(asyncMultBy11)((err, res) => {
