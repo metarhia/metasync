@@ -18,7 +18,7 @@ const twiceAndColon = (str) => appendColon(repeatStringTwice(str));
 
 tap.test('Result transformation', (test) => {
   const expected = 'data:';
-  metasync.monad.fmap(asyncDataCb, appendColon)((err, res) => {
+  metasync.fmap(asyncDataCb, appendColon)((err, res) => {
     test.error(err);
     test.strictSame(expected, res);
     test.end();
@@ -26,7 +26,7 @@ tap.test('Result transformation', (test) => {
 });
 
 tap.test('Getting asynchronous error', (test) => {
-  metasync.monad.fmap(asyncErrorCb, appendColon)((err, res) => {
+  metasync.fmap(asyncErrorCb, appendColon)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
@@ -35,7 +35,7 @@ tap.test('Getting asynchronous error', (test) => {
 
 tap.test('Getting error with no second argument execution', (test) => {
   let executed = false;
-  metasync.monad.fmap(asyncErrorCb, (str) => {
+  metasync.fmap(asyncErrorCb, (str) => {
     executed = true;
     return appendColon(str);
   })(() => {
@@ -46,7 +46,7 @@ tap.test('Getting error with no second argument execution', (test) => {
 
 
 tap.test('functor law I', (test) => {
-  metasync.monad.fmap(asyncDataCb, identity)((err, res) => {
+  metasync.fmap(asyncDataCb, identity)((err, res) => {
     test.error(err);
     test.strictSame(asyncData, res);
     test.end();
@@ -54,7 +54,7 @@ tap.test('functor law I', (test) => {
 });
 
 tap.test('functor law II', (test) => {
-  const fmap = metasync.monad.fmap;
+  const fmap = metasync.fmap;
   const asyncTwice = fmap(asyncDataCb, repeatStringTwice);
   const asyncTwiceAndColon = fmap(asyncTwice, appendColon);
 
