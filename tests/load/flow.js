@@ -3,7 +3,7 @@
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-function useFlow(done) {
+function Flow(done) {
   let i = 0;
   const p1 = (callback) => {
     setImmediate(() => callback(null, ++i * 2));
@@ -28,4 +28,4 @@ function useFlow(done) {
   f1({}, (err, result) => done(result));
 }
 
-benchmark.do(1000000, [useFlow]);
+benchmark.do(1000000, [Flow]);

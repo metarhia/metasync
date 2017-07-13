@@ -1,18 +1,30 @@
 {
   "name": "metasync",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
-  "description": "Library of Asynchronous Programming Abstractions",
+  "description": "Asynchronous Programming Library",
   "license": "MIT",
   "keywords": [
+    "flow",
+    "collector",
+    "parallel",
+    "sequential",
+    "asyncronous",
     "async",
     "callback",
+    "errback",
+    "err-first",
+    "error-first",
+    "callback-last",
+    "thrattle",
     "impress",
     "utility",
     "utilities",
     "datacollector",
+    "keycollector",
     "composition",
-    "metasync"
+    "metasync",
+    "metarhia"
   ],
   "repository": {
     "type": "git",
@@ -21,9 +33,10 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node tests/all && tap test/*.js && npm run lint && tests/load/run.sh",
+    "test": "npm run lint && node tests/all && tap test/*.js",
     "code-coverage": "tap test/*.js --100",
     "code-coverage-report": "tap test/*.js --coverage-report=html",
+    "perf": "tests/load/run.sh",
     "lint": "eslint ."
   },
   "engines": {
@@ -33,7 +46,7 @@
     "metarhia-common": "^0.0.13"
   },
   "devDependencies": {
-    "eslint": "^4.1.1",
+    "eslint": "^4.2.0",
     "tap": "^10.7.0"
   },
   "jshintConfig": {

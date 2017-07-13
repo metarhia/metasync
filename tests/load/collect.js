@@ -3,7 +3,7 @@
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-function useCollect(done) {
+function Collect(done) {
   const dc = metasync.collect(6);
   dc.done((err, result) => done(result));
   let i = 0;
@@ -15,4 +15,4 @@ function useCollect(done) {
   setImmediate(() => dc.pick('6th', 'key' + ++i * 2));
 }
 
-benchmark.do(1000000, [useCollect]);
+benchmark.do(1000000, [Collect]);

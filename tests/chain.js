@@ -9,8 +9,6 @@ const metasync = require('..');
 // methods work properly, all of its methods should do too), extra tests are
 // never superfluous.
 
-console.log('Chaining tests');
-
 metasync
   .for([1, 2, 3, 4])
   .filter((item, cb) => cb(null, item % 2 === 0))
@@ -22,7 +20,6 @@ metasync
       console.error(description);
       process.exit(1);
     } else {
-      console.log('Chaining test #1 done: ' + result);
       assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
     }
   });
@@ -33,9 +30,7 @@ metasync
   .map((item, cb) => cb(new Error('Something happens')))
   .reduce((a, b, cb) => cb(null, a + b))
   .fetch((error) => {
-    if (error) {
-      console.log('Chaining test #2 done: catch works');
-    } else {
+    if (!error) {
       console.log('Chaining test fails');
       process.exit(1);
     }
@@ -52,7 +47,6 @@ metasync
       console.error(description);
       process.exit(1);
     } else {
-      console.log('Chaining test #3 done: ' + result);
       assert.strictEqual(result, 12); // 2 * 2 + 4 * 2
     }
   });
@@ -62,7 +56,6 @@ metasync
   .map((item, cb) => cb(null, item * item))
   .filter((item, cb) => cb(null, item > 5))
   .fetch((error, result, resume) => {
-    console.log('Chaining test #4a result: ', result);
     assert.strictEqual(result.length, 2);
     assert.strictEqual(result[0], 9);
     assert.strictEqual(result[1], 16);
@@ -75,7 +68,6 @@ metasync
     cb(null, --item);
   })
   .fetch((error, result) => {
-    console.log('Chaining test #4b result: ', result);
     assert.strictEqual(result.length, 1);
     assert.strictEqual(result[0], 15);
   });
@@ -100,19 +92,16 @@ metasync
   .pop()
   .push(11)
   .fetch((error, result, resume) => {
-    console.log('Chaining test #5a result: ', result);
     const expected = [10, 7, 6, 4, 3, 11];
     assert.strictEqual(arrayEqual(result, expected), true);
     resume(null, result);
   })
   .includes(6)
   .fetch((error, result, resume) => {
-    console.log('Chaining test #5b result: ', result);
     assert.strictEqual(result, true);
     resume(null, [6, 8]);
   })
   .includes(7)
   .fetch((error, result) => {
-    console.log('Chaining test #5c result: ', result);
     assert.strictEqual(result, false);
   });

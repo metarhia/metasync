@@ -8,6 +8,8 @@
     }
   },
   "test": [
-    "tests/**"
+    "tests/**",
+    "test/**",
+    "doc/**"
   ]
 }

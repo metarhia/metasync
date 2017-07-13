@@ -1,4 +1,4 @@
-# Library of Asynchronous Programming Abstractions
+# Asynchronous Programming Library
 
 [![TravisCI](https://travis-ci.org/metarhia/metasync.svg?branch=master)](https://travis-ci.org/metarhia/metasync)
 [![bitHound](https://www.bithound.io/github/metarhia/metasync/badges/score.svg)](https://www.bithound.io/github/metarhia/metasync)
@@ -62,7 +62,9 @@ const fs = require('fs');
 const dc = metasync.collect(4);
 
 dc.pick('user', { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md', (err, data) => dc.collect('history', err, data));
+fs.readFile('HISTORY.md',
+  (err, data) => dc.collect('history', err, data)
+);
 dc.take('readme', fs.readFile, 'README.md');
 setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
 

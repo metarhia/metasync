@@ -2,7 +2,7 @@
 
 const benchmark = require('./benchmark.js');
 
-function usePromiseAll(done) {
+function PromiseAll(done) {
   let i = 0;
   const p1 = new Promise((resolve) => {
     setImmediate(() => resolve({ p1: ++i * 2 }));
@@ -28,4 +28,4 @@ function usePromiseAll(done) {
   });
 }
 
-benchmark.do(1000000, [usePromiseAll]);
+benchmark.do(1000000, [PromiseAll]);
