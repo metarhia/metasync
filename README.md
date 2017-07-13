@@ -15,10 +15,10 @@ $ npm install metasync
 
 ## Create a composed function from flow syntax
 `metasync.flow(fns)(data, done)`
-- `fns` - array of errback functions
+- `fns` - array of callback-last functions and err-first callback
 - `data` - input data
-- `done` - errback don callback
-- returns: composed errback function
+- `done` - err-first callback
+- returns: composed asynchronous function
 
 ![composition](https://cloud.githubusercontent.com/assets/4405297/16968374/1b81f160-4e17-11e6-96fa-9d7e2b422396.png)
 
@@ -31,18 +31,26 @@ const f = metasync.flow(
 - Array of functions gives sequential execution: `[f1, f2, f3]`
 - Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
 
+### Flow methods:
+- `flow(data, callback)` - composed flow, callback-last and err-first contracts
+- `flow.timeout(msec)` - set flow timeout
+- `flow.cancel()` - calcel flow
+- `flow.clone()` - clone flow
+- `flow.pause()` - pause flow
+- `flow.resume()` - resume flow
+
 ## Collector
 `metasync.collect(expected)(key, error, value)`
 - expected - count or array of string
-- returns: collector functor
+- returns: collector instance
 
-### Collector functor methods:
-- `collector(key, error, value)` - pick or fail
+### Collector methods:
+- `collector.collect(key, error, value)` - pick or fail
 - `collector.pick(key, value)` - pick a key
 - `collector.fail(key, error)` - fail a key
 - `collector.take(key, method, ...arguments)` - take method result
 - `collector.timeout(msec)` - set timeout
-- `collector.done(callback)` - set done listener (errback)
+- `collector.done(callback)` - set done listener with err-first contract
 - `collector.distinct(true/false)` - deny unlisted keys
 
 Example:
@@ -53,8 +61,8 @@ const fs = require('fs');
 // Data collector (collect keys by count)
 const dc = metasync.collect(4);
 
-dc('user', null, { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md', (err, data) => dc('history', err, data));
+dc.pick('user', { name: 'Marcus Aurelius' });
+fs.readFile('HISTORY.md', (err, data) => dc.collect('history', err, data));
 dc.take('readme', fs.readFile, 'README.md');
 setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
 
@@ -71,46 +79,10 @@ kc.take('readme', fs.readFile, 'README.md');
 setTimeout(() => kc.pick('timer', { date: new Date() }), 1000);
 ```
 
-## Data Collector
-`metasync.DataCollector()`
-- `expected` - number of `collect()` calls expected
-- `timeout` - collect timeout (optional)
-- returns: instance of `DataCollector`
-
-Example:
-```JavaScript
-const metasync = require('metasync');
-const fs = require('fs');
-
-const dataCollector = new metasync.DataCollector(4, (data) => {
-  console.dir(Object.keys(data));
-});
-
-dataCollector.collect('user', { name: 'Marcus Aurelius' });
-
-fs.readFile('HISTORY.md', (err, data) => {
-  dataCollector.collect('history', data);
-});
-
-fs.readFile('README.md', (err, data) => {
-  dataCollector.collect('readme', data);
-});
-
-setTimeout(() => {
-  dataCollector.collect('timer', { date: new Date() });
-}, 1000);
-```
-
-## Key Collector
-`new metasync.KeyCollector(keys, timeout)`
-- `keys` - array of keys, example: `['config', 'users', 'cities']`
-- `timeout` - collect timeout (optional)
-- returns: instance of `DataCollector`
-
 ## Parallel execution
 `metasync.parallel(fns)`
-- `fns` - array of errback functions
-- `done` - errback on done
+- `fns` - array of callback-last functions and err-first callback
+- `done` - err-first callback
 - `data` - incoming data
 
 Example:
@@ -118,8 +90,8 @@ Example:
 
 ## Sequential execution
 `metasync.sequential(fns, done, data)`
-- `fns` - array of errback functions
-- `done` - errback on done
+- `fns` - array of callback-last functions and err-first callback
+- `done` - err-first callback
 - `data` - incoming data
 
 Example:
@@ -129,17 +101,17 @@ metasync.sequential([f1, f2, f3], (err, data) => {});
 
 ## Executes all asynchronous functions and pass first result to callback
 `metasync.firstOf(fns, done)`
-- `fns` - array of errback functions
-- `done` - errback on done
+- `fns` - array of callback-last functions and err-first callback
+- `done` - err-first callback
 
 ## Asynchronous map (iterate parallel)
 `metasync.map(items, fn, done)`
 - `items` - incoming array
-- `fn` - errback `(current, callback) => callback(err, value)`
+- `fn` - callback-last `(current, callback) => callback(err, value)`
   - to be executed for each value in the array
   - `current` - current element being processed in the array
-  - `callback` - errback rerurn
-- `done` - optional done errback function
+  - `callback` - err-first
+- `done` - optional err-first callback
 
 ## Asynchrous filter (iterate parallel)
 `metasync.filter(items)`
@@ -169,7 +141,7 @@ metasync.filter(
 ## Asynchronous each (iterate in parallel)
 `metasync.each(items, fn, done)`
 - `items` - incoming array
-- `fn` - errback `(value, callback) => callback(err)`
+- `fn` - callback-last `(value, callback) => callback(err)`
   - `value` - item from items array
   - `callback` - callback `function(err)`
 - `done` - optional on done callback `function(err)`
@@ -189,7 +161,7 @@ metasync.each(
 ## Asynchronous series
 `metasync.series(items, fn, done)`
 - `items` - incoming array
-- `fn` - errback `(value, callback) => callback(err)`
+- `fn` - callback-last `(value, callback) => callback(err)`
   - `value` - item from items array
   - `callback` - callback `(err)`
 - `done` optional on done callback `function(err)`
@@ -211,7 +183,7 @@ metasync.series(
 ## Asynchronous find (iterate in series)
 `metasync.find(items, fn, done)`
 - `items` - incoming array
-- `fn` - errback `(value, callback) => callback(err, accepted)`
+- `fn` - callback-last `(value, callback) => callback(err, accepted)`
   - `value` - item from items array
   - `callback` - callback function `(err, accepted)`
 - `done` - optional on done callback `function(err, result)`
@@ -232,7 +204,7 @@ metasync.find(
 ## Asynchronous every
 `metasync.every(items, fn, done)`
 - `items` - incoming array
-- `fn` - errback `(value, callback) => callback(err, fits)`
+- `fn` - callback-last `(value, callback) => callback(err, fits)`
   - `value` - item from items array
   - `callback` - callback function `(err, fits)`
 - `done` - optional on done callback `function(err, result)`
