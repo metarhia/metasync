@@ -195,3 +195,30 @@ tap.test('collect with take calls bigger than expected', (test) => {
   col.take('someKey', af, 'someVal');
   col.take('someKey2', af, 'someVal2');
 });
+
+tap.test('collect then success', (test) => {
+  const col = metasync.collect(1).then(
+    (result) => {
+      test.assert(result);
+      test.end();
+    },
+    (err) => {
+      test.error(err);
+      test.end();
+    }
+  );
+  col.pick('Key', 'value');
+});
+
+tap.test('collect then fail', (test) => {
+  metasync.collect(5).timeout(10).then(
+    (result) => {
+      test.error(result);
+      test.end();
+    },
+    (err) => {
+      test.assert(err);
+      test.end();
+    }
+  );
+});
