@@ -195,3 +195,27 @@ tap.test('collect with take calls bigger than expected', (test) => {
   col.take('someKey', af, 'someVal');
   col.take('someKey2', af, 'someVal2');
 });
+
+tap.test('cancel data collector', (test) => {
+  const dc = metasync
+    .collect(3)
+    .done((err) => {
+      test.assert(err);
+      test.end();
+    });
+
+  dc.pick('key', 'value');
+  dc.cancel();
+});
+
+tap.test('cancel key collector', (test) => {
+  const dc = metasync
+    .collect(['uno', 'due'])
+    .done((err) => {
+      test.assert(err);
+      test.end();
+    });
+
+  dc.pick('key', 'value');
+  dc.cancel();
+});
