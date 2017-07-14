@@ -15,7 +15,7 @@ tap.test('flow with parallel flow', (test) => {
     process.nextTick(() => cb(null, 'data 2'));
   }
 
-  const fc = metasync.flow([[fn1, fn2 ]]);
+  const fc = metasync.flow([[fn1, fn2]]);
   fc(data, (err, data) => {
     test.error(err);
     test.strictSame(data, expectedData);
@@ -34,7 +34,7 @@ tap.test('parallel with error', (test) => {
     process.nextTick(() => cb(parallelError));
   }
 
-  metasync.parallel([fn1, fn2 ], (err, res) => {
+  metasync.parallel([fn1, fn2], (err, res) => {
     test.strictSame(err, parallelError);
     test.strictSame(res, undefined);
     test.end();
