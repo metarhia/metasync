@@ -36,7 +36,10 @@ tap.test('map with error', (test) => {
 
   metasync.map(arr, (x, callback) => process.nextTick(() => {
     count++;
-    if (count === 2) return callback(mapError);
+    if (count === 2) {
+      callback(mapError);
+      return;
+    }
     callback(null, x * x);
   }), (err, res) => {
     test.strictSame(err, mapError);

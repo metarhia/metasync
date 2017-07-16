@@ -45,7 +45,10 @@ tap.test('successful filter', (test) => {
   const filterError = new Error('Filter error');
 
   metasync.filter(arr, (str, callback) => process.nextTick(() => {
-    if (str.length === 2) return callback(filterError);
+    if (str.length === 2) {
+      callback(filterError);
+      return;
+    }
     callback(null, str.length < 6);
   }), (err, res) => {
     test.strictSame(err, filterError);

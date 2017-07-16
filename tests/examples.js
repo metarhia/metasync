@@ -488,7 +488,8 @@ function chainTest(end) {
 function printCallbackArgs(end) {
   return (err, ...args) => {
     if (err) {
-      return console.log('Error: ' + err);
+      console.log('Error: ' + err);
+      return;
     }
     console.log(...args);
     console.log('done');

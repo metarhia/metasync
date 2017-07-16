@@ -78,7 +78,10 @@ tap.test('with error', (test) => {
 
   metasync.reduce(arr, (prev, cur, callback) => process.nextTick(() => {
     const digit = +cur;
-    if (digit > 1) return callback(reduceError);
+    if (digit > 1) {
+      callback(reduceError);
+      return;
+    }
     callback(null, prev * 2 + digit);
   }), (err, res) => {
     test.strictSame(err, reduceError);
