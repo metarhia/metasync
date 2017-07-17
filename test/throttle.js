@@ -69,20 +69,23 @@ tap.test('debounce without arguments for function', (test) => {
 
 tap.test('timeout with sync function', (test) => {
   const syncFn = (callback) => callback(null, 'someVal');
-  metasync.timeout(1, syncFn, (err, res, ...otherArgs) => {
+  metasync.timeout(1, syncFn, (err, res, ...args) => {
     test.error(err);
     test.strictSame(res, 'someVal');
-    test.strictSame(otherArgs, []);
+    test.strictSame(args, []);
     test.end();
   });
 });
 
 tap.test('timeout', (test) => {
-  metasync.timeout(1, (callback) => (
-    setTimeout(() => callback(null, 'someVal'))
-  ), (err, ...otherArgs) => {
+  metasync.timeout(10, (callback) => {
+    setTimeout(() => {
+      callback(null, 'someVal');
+    }, 0);
+  }, (err, res, ...args) => {
     test.error(err);
-    test.strictSame(otherArgs, []);
+    test.strictSame(res, 'someVal');
+    test.strictSame(args, []);
     test.end();
   });
 });
