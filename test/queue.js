@@ -26,7 +26,7 @@ tap.test('queue add', (test) => {
 });
 
 
-tap.test('queue pause resume stop', (test) => {
+tap.test('queue pause resume clear', (test) => {
   const queue = metasync.queue(3);
   queue.pause();
   queue.add({ id: 1 });
@@ -38,13 +38,13 @@ tap.test('queue pause resume stop', (test) => {
     callback(null);
   });
 
-  queue.next({ id: 2 });
+  queue.add({ id: 2 });
   test.strictSame(itemIsProcessed, false);
 
   queue.resume();
   test.strictSame(queue.paused, false);
 
-  queue.stop();
+  queue.clear();
   test.strictSame(queue.count, 0);
   test.end();
 });
