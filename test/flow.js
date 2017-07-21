@@ -245,3 +245,36 @@ tap.test('flow cancel after end', (test) => {
   }, 100);
 
 });
+
+tap.test('flow to array', (test) => {
+
+  let count = 0;
+
+  function fn1(data, cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 1'));
+  }
+
+  function fn2(data, cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 2'));
+  }
+
+  function fn3(cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 3'));
+  }
+
+  function fn4(cb) {
+    count++;
+    process.nextTick(() => cb(null, 'data 4'));
+  }
+
+  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  fc(['data 0'], (err, data) => {
+    test.strictSame(data, ['data 0', 'data 1', 'data 2', 'data 3', 'data 4']);
+    test.strictSame(count, 4);
+    test.end();
+  });
+
+});
