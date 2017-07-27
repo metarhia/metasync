@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Asynchronous Programming Library",
   "license": "MIT",
@@ -46,14 +46,7 @@
     "metarhia-common": "^0.0.15"
   },
   "devDependencies": {
-    "eslint": "^4.2.0",
+    "eslint": "^4.3.0",
     "tap": "^10.7.0"
-  },
-  "jshintConfig": {
-    "esversion": 6,
-    "predef": [],
-    "node": true,
-    "indent": 2,
-    "maxcomplexity": 7
   }
 }
