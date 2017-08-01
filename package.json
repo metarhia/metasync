@@ -37,7 +37,8 @@
     "code-coverage": "tap test/*.js --100",
     "code-coverage-report": "tap test/*.js --coverage-report=html",
     "perf": "tests/load/run.sh",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "docs": "metaschema ./metasync.js"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -46,6 +47,7 @@
     "metarhia-common": "^0.0.15"
   },
   "devDependencies": {
+    "metaschema": "^0.0.3",
     "eslint": "^4.3.0",
     "tap": "^10.7.0"
   }

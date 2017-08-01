@@ -15,10 +15,10 @@ $ npm install metasync
 
 ## Create a composed function from flow syntax
 `metasync.flow(fns)(data, done)`
-- `fns` - array of callback-last functions and err-first callback
+- `fns` - array of callback-last functions, callback contranct err-first
 - `data` - input data
 - `done` - err-first callback
-- returns: composed asynchronous function
+- returns: composed callback-last / err-first function
 
 ![composition](https://cloud.githubusercontent.com/assets/4405297/16968374/1b81f160-4e17-11e6-96fa-9d7e2b422396.png)
 
@@ -82,19 +82,19 @@ setTimeout(() => kc.pick('timer', { date: new Date() }), 1000);
 ```
 
 ## Parallel execution
-`metasync.parallel(fns)`
-- `fns` - array of callback-last functions and err-first callback
-- `done` - err-first callback
-- `data` - incoming data
+`metasync.parallel(fns, data, callback)`
+- `fns` - array of callback-last functions, callback contranct err-first
+- `data` - incoming data (optional)
+- `callback` - err-first function on done
 
 Example:
 `metasync.parallel([f1, f2, f3], (err, data) => {});`
 
 ## Sequential execution
-`metasync.sequential(fns, done, data)`
-- `fns` - array of callback-last functions and err-first callback
-- `done` - err-first callback
-- `data` - incoming data
+`metasync.sequential(fns, data, callback)`
+- `fns` - array of callback-last functions, callback contranct err-first
+- `data` - incoming data (optional)
+- `callback` - err-first function on done
 
 Example:
 ```JavaScript
@@ -102,9 +102,9 @@ metasync.sequential([f1, f2, f3], (err, data) => {});
 ```
 
 ## Executes all asynchronous functions and pass first result to callback
-`metasync.firstOf(fns, done)`
-- `fns` - array of callback-last functions and err-first callback
-- `done` - err-first callback
+`metasync.firstOf(fns, callback)`
+- `fns` - array of callback-last functions, callback contranct err-first
+- `callback` - err-first function on done
 
 ## Asynchronous map (iterate parallel)
 `metasync.map(items, fn, done)`
@@ -219,29 +219,44 @@ metasync.find(
 `metasync.for(array)`
 - `array` - start mutations from this data
 
-
 ## ConcurrentQueue
 `new metasync.ConcurrentQueue(concurrency, timeout)`
 - `concurrency` - number of simultaneous and asynchronously executing tasks
 - `timeout` - process timeout (optional), for single item
 
-## Function throttling
-`metasync.throttle`
-- `timeout` - time interval
-- `fn` - function to be executed once per timeout
+## Function throttling, executed once per interval
+`metasync.throttle(timeout, fn, args)`
+- `timeout` - msec interval
+- `fn` - function to be throttled
 - `args` - arguments array for fn (optional)
 
-## Debounce wrapper
-`metasync.debounce`
-- `timeout` - msec timeout
-- `fn` - function to be wrapped
-- `args` - function arguments
+## Debounce function, delayed execution
+`metasync.debounce(timeout, fn, args)`
+- `timeout` - msec
+- `fn` - function to be debounced
+- `args` - arguments array for fn (optional)
 
-## Set timeout for function execution
-`metasync.timeout`
+## Set timeout for asynchronous function execution
+`metasync.timeout(timeout, fn, callback)`
 - `timeout` - time interval
 - `fn` - async function to be executed
-- `done` - callback function
+- `callback` - callback function on done
+
+## Queue instantiation
+`metasync.queue(concurrency)`
+- `concurrency` - number of simultaneous and asynchronously executing tasks
+
+## Transforms function with args arguments and callback
+to function with args as separate values and callback
+`metasync.toAsync(fn)`
+- `fn` - function contract callback-last, callback contranct err-first
+- Returns: function with arguments gathered from args as separate values
+and callback
+
+## async function
+`metasync.asAsync(fn, ...args)`
+- `fn` - function
+- `...args` - its argumants
 
 ## Contributors
 
