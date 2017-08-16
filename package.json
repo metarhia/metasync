@@ -44,11 +44,11 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "metarhia-common": "^0.0.19"
+    "metarhia-common": "^0.0.22"
   },
   "devDependencies": {
-    "metaschema": "^0.0.3",
-    "eslint": "^4.3.0",
+    "metaschema": "^0.0.5",
+    "eslint": "^4.4.0",
     "tap": "^10.7.0"
   }
 }
