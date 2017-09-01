@@ -3,7 +3,7 @@
 const metasync = require('..');
 
 const q = metasync.queue(3)
-  .factor()
+  .roundRobin()
   .process((item, cb) => {
     console.dir(item);
     setTimeout(cb, 100);
