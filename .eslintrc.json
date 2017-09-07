@@ -1,0 +1,8 @@
+{
+  "extends": "metarhia",
+  "rules": {
+    "arrow-parens": "off",
+    "comma-dangle": "off",
+    "handle-callback-err": "off"
+  }
+}

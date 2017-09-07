@@ -480,8 +480,8 @@ function chainTest(end) {
   // Just to make sure we don't forget to merge the tests. There's some bug in
   // metasync.composition so part of tests, including this one, are not run.
   // As a temporary workaround, you can run it via
-  //   $ node chain-example
-  require('./chain-example');
+  //   $ node ./tests/chain
+  require('./chain');
   end();
 }
 

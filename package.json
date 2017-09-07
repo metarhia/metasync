@@ -47,8 +47,10 @@
     "metarhia-common": "^0.0.22"
   },
   "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-metarhia": "^1.0.0",
+    "eslint-plugin-import": "^2.7.0",
     "metaschema": "^0.0.5",
-    "eslint": "^4.4.0",
     "tap": "^10.7.0"
   }
 }
