@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Asynchronous Programming Library",
   "license": "MIT",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "metaschema": "^0.0.5",
-    "eslint": "^4.4.0",
-    "tap": "^10.7.0"
+    "eslint": "^4.7.1",
+    "tap": "^10.7.2"
   }
 }
