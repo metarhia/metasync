@@ -8,6 +8,7 @@ const submodules = [
   'queue', // Concurrency
   'throttle', // Throttling
   'fp', // Async utils for functional programming
+  'polyfill', // Polyfills: promisify and callbackify
 ].map(path => './lib/' + path).map(require);
 
 module.exports = Object.assign({}, ...submodules);
