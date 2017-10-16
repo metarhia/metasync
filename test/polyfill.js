@@ -15,3 +15,23 @@ tap.test('callbackify', (test) => {
   });
 
 });
+
+tap.test('promisify', (test) => {
+
+  const id = 100;
+  const data = { key: 'value' };
+
+  const getDataAsync = (dataId, callback) => {
+    test.strictSame(dataId, id);
+    callback(null, data);
+  };
+
+  const getDataPromise = metasync.promisify(getDataAsync);
+  getDataPromise(id).then(result => {
+    test.strictSame(result, data);
+    test.end();
+  }).catch(err => {
+    throw err;
+  });
+
+});
