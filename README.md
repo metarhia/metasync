@@ -18,7 +18,7 @@ $ npm install metasync
 - `fns` - array of callback-last functions, callback contranct err-first
 - `data` - input data
 - `done` - err-first callback
-- returns: composed callback-last / err-first function
+- Returns: composed callback-last / err-first function
 
 ![composition](https://cloud.githubusercontent.com/assets/4405297/16968374/1b81f160-4e17-11e6-96fa-9d7e2b422396.png)
 
@@ -42,7 +42,7 @@ const f = metasync.flow(
 ## Collector
 `metasync.collect(expected)(key, error, value)`
 - expected - count or array of string
-- returns: collector instance
+- Returns: collector instance
 
 ### Collector methods:
 - `collector.collect(key, error, value)` - pick or fail
@@ -253,10 +253,25 @@ to function with args as separate values and callback
 - Returns: function with arguments gathered from args as separate values
 and callback
 
-## async function
+## Async function
 `metasync.asAsync(fn, ...args)`
 - `fn` - function
 - `...args` - its argumants
+
+## Convert source to callback-last contract
+`metasync.callbackify(source)`
+- `source` - promise or regular synchronous function
+- Returns: callback, function
+
+## Convert async function to Promise object
+`metasync.promisify(func)`
+- `func:function` - callback-last function
+- Returns: object, Promise instance
+
+## Convert sync function to Promise object
+`metasync.promisifySync(func)`
+- `func:function` - regular synchronous function
+- Returns: object, Promise instance
 
 ## Contributors
 
