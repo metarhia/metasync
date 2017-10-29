@@ -3,7 +3,7 @@
 const tap = require('tap');
 const metasync = require('..');
 
-tap.test('callbackify: promise to callback-last', (test) => {
+tap.test('callbackify: Promise to callback-last', (test) => {
 
   const promise = Promise.resolve('result');
   const callback = metasync.callbackify(promise);
@@ -16,7 +16,7 @@ tap.test('callbackify: promise to callback-last', (test) => {
 
 });
 
-tap.test('callbackify: sync to callback-last', (test) => {
+tap.test('callbackify: sync function to callback-last', (test) => {
 
   const source = par => par;
   const callback = metasync.callbackify(source);
@@ -29,7 +29,7 @@ tap.test('callbackify: sync to callback-last', (test) => {
 
 });
 
-tap.test('promisify', (test) => {
+tap.test('promisify: callback-last to Promise', (test) => {
 
   const id = 100;
   const data = { key: 'value' };
@@ -40,6 +40,26 @@ tap.test('promisify', (test) => {
   };
 
   const getDataPromise = metasync.promisify(getDataAsync);
+  getDataPromise(id).then(result => {
+    test.strictSame(result, data);
+    test.end();
+  }).catch(err => {
+    throw err;
+  });
+
+});
+
+tap.test('promisify: sync function to Promise', (test) => {
+
+  const id = 100;
+  const data = { key: 'value' };
+
+  const getDataSync = (dataId) => {
+    test.strictSame(dataId, id);
+    return data;
+  };
+
+  const getDataPromise = metasync.promisifySync(getDataSync);
   getDataPromise(id).then(result => {
     test.strictSame(result, data);
     test.end();
