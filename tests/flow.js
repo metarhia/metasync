@@ -29,7 +29,7 @@ const fn4 = (data, cb) => {
   cb(null, { data });
 };
 
-const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+const fc = metasync([fn1, [[fn2, fn3]], fn4]);
 
 fc({ test: 'data' }, (err, data) => {
   assert(data);

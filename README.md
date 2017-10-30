@@ -14,7 +14,7 @@ $ npm install metasync
 ```
 
 ## Create a composed function from flow syntax
-`metasync.flow(fns)(data, done)`
+`metasync(fns)(data, done)` or `metasync.flow(fns)(data, done)`
 - `fns` - array of callback-last functions, callback contranct err-first
 - `data` - input data
 - `done` - err-first callback
@@ -23,7 +23,7 @@ $ npm install metasync
 ![composition](https://cloud.githubusercontent.com/assets/4405297/16968374/1b81f160-4e17-11e6-96fa-9d7e2b422396.png)
 
 ```JavaScript
-const f = metasync.flow(
+const flow = metasync(
   [f1, f2, f3, [[f4, f5, [f6, f7], f8]], f9]
 );
 ```

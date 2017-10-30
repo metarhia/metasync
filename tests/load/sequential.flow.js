@@ -3,7 +3,7 @@
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-function FlowSequential(done) {
+function flowSequential(done) {
   let i = 0;
   const p1 = (callback) => {
     setImmediate(() => callback(null, ++i * 2));
@@ -24,8 +24,8 @@ function FlowSequential(done) {
     setImmediate(() => callback(null, 'key' + ++i * 2));
   };
 
-  const f1 = metasync.flow([p1, p2, p3, p4, p5, p6]);
+  const f1 = metasync([p1, p2, p3, p4, p5, p6]);
   f1({}, (err, result) => done(result));
 }
 
-benchmark.do(100000, [FlowSequential]);
+benchmark.do(100000, [flowSequential]);
