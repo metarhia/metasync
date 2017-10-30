@@ -15,7 +15,7 @@ tap.test('flow with parallel flow', (test) => {
     process.nextTick(() => cb(null, 'data 2'));
   }
 
-  const fc = metasync.flow([[fn1, fn2]]);
+  const fc = metasync([[fn1, fn2]]);
   fc(data, (err, data) => {
     test.error(err);
     test.strictSame(data, expectedData);
@@ -110,7 +110,7 @@ tap.test('flow with complex flow', (test) => {
     });
   }
 
-  const fc = metasync.flow([fn1, fn2, [[fn3, [fn4, fn5] ]], [], [[ ]] ]);
+  const fc = metasync([fn1, fn2, [[fn3, [fn4, fn5] ]], [], [[ ]] ]);
   fc(data, (err, data) => {
     test.error(err);
     test.strictSame(data, expectedDataInRes);
@@ -143,7 +143,7 @@ tap.test('flow cancel before start', (test) => {
     process.nextTick(() => cb(null, 'data 4'));
   }
 
-  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc.cancel();
   fc({}, (err, data) => {
     test.strictSame(data, undefined);
@@ -190,7 +190,7 @@ tap.test('flow cancel in the middle', (test) => {
     }, 200);
   }
 
-  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
     test.strictSame(data, undefined);
     test.strictSame(count, 3);
@@ -228,7 +228,7 @@ tap.test('flow cancel after end', (test) => {
     process.nextTick(() => cb(null, 'data 4'));
   }
 
-  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
     test.strictSame(data, {
       fn1: 'data 1',
@@ -270,7 +270,7 @@ tap.test('flow to array', (test) => {
     process.nextTick(() => cb(null, 'data 4'));
   }
 
-  const fc = metasync.flow([fn1, [[fn2, fn3]], fn4]);
+  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc(['data 0'], (err, data) => {
     test.strictSame(data, ['data 0', 'data 1', 'data 2', 'data 3', 'data 4']);
     test.strictSame(count, 4);

@@ -15,7 +15,7 @@ tap.test('flow clone', (test) => {
     process.nextTick(() => cb(null, 'data 2'));
   }
 
-  const fc1 = metasync.flow([[fn1, fn2]]);
+  const fc1 = metasync([[fn1, fn2]]);
   const fc2 = fc1.clone();
 
   fc1(data, (err, data) => {

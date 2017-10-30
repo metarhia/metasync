@@ -43,7 +43,7 @@ tap.test('successfull then', (test) => {
       callback(null, res4);
     });
   }
-  const faf1 = metasync.flow([af1, [[af2, af3]], af4]);
+  const faf1 = metasync([af1, [[af2, af3]], af4]);
   faf1.then((res) => {
     test.strictSame(res, { af1: res1, af2: res2, af3: res3, af4: res4 });
     test.strictSame(finishedFuncsCount, 4);

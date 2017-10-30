@@ -562,7 +562,7 @@ function cbTest(end) {
 
 // Run tests
 
-metasync.flow([
+metasync([
   cbTest,
   dataCollectorTest,
   dataCollectorTimeoutTest,

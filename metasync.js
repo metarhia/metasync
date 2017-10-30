@@ -9,6 +9,7 @@ const submodules = [
   'throttle', // Throttling
   'fp', // Async utils for functional programming
   'adapters', // adapters to convert different async contracts
-].map(path => './lib/' + path).map(require);
+].map(path => require('./lib/' + path));
 
-module.exports = Object.assign({}, ...submodules);
+const flow = submodules[0].flow;
+module.exports = Object.assign(flow, ...submodules);
