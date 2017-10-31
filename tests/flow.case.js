@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const assert = require('assert');
 const metasync = require('..');
 
 const getPerson = (data, cb) => {
@@ -8,26 +9,31 @@ const getPerson = (data, cb) => {
     { name: 'Marcus Aurelius', city: 'Rome', born: 121 },
     { name: 'Mao Zedong', city: 'Shaoshan', born: 1893 },
   ];
-  data.person = persons.find(p => p.name === data.name);
-  cb();
+  const person = persons.find(p => p.name === data.name);
+  cb(null, { person });
 };
 
 const lookupCountry = (data, cb) => {
-  const dictionary = [
-    { name: 'Rome', country: 'Roman Empire' },
-    { name: 'Shaoshan', country: 'Quin Empire' },
-  ];
-  data.country = dictionary[data.person.name];
-  cb();
+  const dictionary = {
+    Rome: 'Roman Empire',
+    Shaoshan: 'Quin Empire',
+  };
+  const country = dictionary[data.person.city];
+  cb(null, { country });
 };
 
 const readFile = (data, cb) => {
-  fs.readFile(data.file, cb);
+  fs.readFile(data.file, (err, buffer) => {
+    cb(null, { buffer });
+  });
 };
 
 const prepareResult = (data, cb) => {
-  data.result = {};
-  cb();
+  const result = Object.assign({}, data.person, {
+    country: data.country,
+    length: data.buffer.length
+  });
+  cb(null, { result });
 };
 
 const fc = metasync([
@@ -36,7 +42,14 @@ const fc = metasync([
 
 fc({
   name: 'Mao Zedong',
-  file: '../AUTHORS'
+  file: './AUTHORS'
 }, (err, data) => {
-  console.log(data);
+  const expected = {
+    name: 'Mao Zedong',
+    city: 'Shaoshan',
+    born: 1893,
+    country: 'Quin Empire',
+    length: 318
+  };
+  assert.deepEqual(data.result, expected);
 });
