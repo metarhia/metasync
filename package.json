@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Asynchronous Programming Library",
   "license": "MIT",
