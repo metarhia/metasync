@@ -1,8 +1,8 @@
 'use strict';
 
 const submodules = [
-  'flow', // Control flow
-  'utilities', // Miscellaneous utilities
+  'flow', // Unified abstraction
+  'control', // Control flow utilities
   'fp', // Async utils for functional programming
   'adapters', // Adapters to convert different async contracts
   'throttle', // Throttling utilities
