@@ -5,14 +5,18 @@ const metasync = require('..');
 
 tap.test('flow with parallel flow', (test) => {
   const data = { test: 'data' };
-  const expectedData = { test: 'data', fn1: 'data 1', fn2: 'data 2' };
+  const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
   function fn1(data, cb) {
-    process.nextTick(() => cb(null, 'data 1'));
+    process.nextTick(() => {
+      cb(null, { data1: 'data 1' });
+    });
   }
 
   function fn2(data, cb) {
-    process.nextTick(() => cb(null, 'data 2'));
+    process.nextTick(() => {
+      cb(null, { data2: 'data 2' });
+    });
   }
 
   const fc = metasync([[fn1, fn2]]);
@@ -27,11 +31,15 @@ tap.test('parallel with error', (test) => {
   const parallelError = new Error('Parallel error');
 
   function fn1(data, cb) {
-    process.nextTick(() => cb(null, 'data 1'));
+    process.nextTick(() => {
+      cb(null, { data1: 'data 1' });
+    });
   }
 
   function fn2(data, cb) {
-    process.nextTick(() => cb(parallelError));
+    process.nextTick(() => {
+      cb(parallelError);
+    });
   }
 
   metasync.parallel([fn1, fn2], (err, res) => {
@@ -43,10 +51,12 @@ tap.test('parallel with error', (test) => {
 
 tap.test('sequential with error', (test) => {
   const sequentialError = new Error('Sequential error');
-  const expectedDataInFn2 = { fn1: 'data 1' };
+  const expectedDataInFn2 = { data1: 'data 1' };
 
   function fn1(data, cb) {
-    process.nextTick(() => cb(null, 'data 1'));
+    process.nextTick(() => {
+      cb(null, { data1: 'data 1' });
+    });
   }
 
   function fn2(data, cb) {
@@ -67,46 +77,47 @@ tap.test('flow with complex flow', (test) => {
 
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
-  const expectedDataInFn2 = { test: 'data', fn1: 'data 1' };
+  const expectedDataInFn2 = { test: 'data', data1: 'data 1' };
   const expectedDataInRes = { test: 'data' };
 
   let i;
   for (i = 1; i < 6; i++) {
-    expectedDataInRes['fn' + i] = 'data ' + i;
+    expectedDataInRes['data' + i] = 'data ' + i;
   }
 
   function fn1(data, cb) {
     process.nextTick(() => {
       tap.strictSame(data, expectedDataInFn1);
-      cb(null, 'data 1');
+      cb(null, { data1: 'data 1' });
     });
   }
 
   function fn2(data, cb) {
     process.nextTick(() => {
       test.strictSame(data, expectedDataInFn2);
-      cb(null, 'data 2');
+      cb(null, { data2: 'data 2' });
     });
   }
 
   function fn3(cb) {
     process.nextTick(() => {
-      cb(null, 'data 3');
+      cb(null, { data3: 'data 3' });
     });
   }
 
   function fn4(cb) {
     process.nextTick(() => {
-      cb(null, 'data 4');
+      cb(null, { data4: 'data 4' });
     });
   }
 
   function fn5(data, cb) {
     process.nextTick(() => {
-      test.strictSame(data.fn1, 'data 1');
-      test.strictSame(data.fn2, 'data 2');
-      test.strictSame(data.fn4, 'data 4');
-      cb(null, 'data 5');
+      test.strictSame(data.data1, 'data 1');
+      test.strictSame(data.data2, 'data 2');
+      test.strictSame(data.data3, 'data 3');
+      test.strictSame(data.data4, 'data 4');
+      cb(null, { data5: 'data 5' });
     });
   }
 
@@ -210,31 +221,39 @@ tap.test('flow cancel after end', (test) => {
 
   function fn1(data, cb) {
     count++;
-    process.nextTick(() => cb(null, 'data 1'));
+    process.nextTick(() => {
+      cb(null, { data1: 'data 1' });
+    });
   }
 
   function fn2(data, cb) {
     count++;
-    process.nextTick(() => cb(null, 'data 2'));
+    process.nextTick(() => {
+      cb(null, { data2: 'data 2' });
+    });
   }
 
   function fn3(cb) {
     count++;
-    process.nextTick(() => cb(null, 'data 3'));
+    process.nextTick(() => {
+      cb(null, { data3: 'data 3' });
+    });
   }
 
   function fn4(cb) {
     count++;
-    process.nextTick(() => cb(null, 'data 4'));
+    process.nextTick(() => {
+      cb(null, { data4: 'data 4' });
+    });
   }
 
   const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
     test.strictSame(data, {
-      fn1: 'data 1',
-      fn2: 'data 2',
-      fn3: 'data 3',
-      fn4: 'data 4'
+      data1: 'data 1',
+      data2: 'data 2',
+      data3: 'data 3',
+      data4: 'data 4'
     });
     test.strictSame(count, 4);
     test.end();

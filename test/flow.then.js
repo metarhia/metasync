@@ -11,16 +11,16 @@ tap.test('successfull then', (test) => {
       test.strictSame(data, {});
       test.strictSame(finishedFuncsCount, 0);
       finishedFuncsCount++;
-      callback(null, res1);
+      callback(null, { res1 });
     });
   }
   const res2 = 'res2';
   function af2(data, callback) {
     return process.nextTick(() => {
-      test.strictSame(data, { af1: res1 });
+      test.strictSame(data, { res1 });
       test.strictSame(finishedFuncsCount, 1);
       finishedFuncsCount++;
-      callback(null, res2);
+      callback(null, { res2 });
     });
   }
   const res3 = 'res3';
@@ -30,7 +30,7 @@ tap.test('successfull then', (test) => {
       test.ok(keysCount >= 2 && keysCount < 4);
       test.ok(finishedFuncsCount >= 2 && finishedFuncsCount < 4);
       finishedFuncsCount++;
-      callback(null, res3);
+      callback(null, { res3 });
     });
   }
   const res4 = 'res4';
@@ -40,16 +40,16 @@ tap.test('successfull then', (test) => {
       test.ok(keysCount >= 2 && keysCount < 4);
       test.ok(finishedFuncsCount >= 2 && finishedFuncsCount < 4);
       finishedFuncsCount++;
-      callback(null, res4);
+      callback(null, { res4 });
     });
   }
   const faf1 = metasync([af1, [[af2, af3]], af4]);
   faf1.then((res) => {
     test.strictSame(res, {
-      af1: 'res1',
-      af2: 'res2',
-      af3: 'res3',
-      af4: 'res4'
+      res1: 'res1',
+      res2: 'res2',
+      res3: 'res3',
+      res4: 'res4',
     });
     test.strictSame(finishedFuncsCount, 4);
     test.end();
