@@ -5,22 +5,22 @@ const metasync = require('../..');
 
 function flowSequential(done) {
   let i = 0;
-  const p1 = (callback) => {
+  const p1 = (context, callback) => {
     setImmediate(() => callback(null, ++i * 2));
   };
-  const p2 = (callback) => {
+  const p2 = (context, callback) => {
     setImmediate(() => callback(null, ++i * 3));
   };
-  const p3 = (callback) => {
+  const p3 = (context, callback) => {
     setImmediate(() => callback(null, ++i * 5));
   };
-  const p4 = (callback) => {
+  const p4 = (context, callback) => {
     setImmediate(() => callback(null, 'key ' + ++i));
   };
-  const p5 = (callback) => {
+  const p5 = (context, callback) => {
     setImmediate(() => callback(null, ++i === 5));
   };
-  const p6 = (callback) => {
+  const p6 = (context, callback) => {
     setImmediate(() => callback(null, 'key' + ++i * 2));
   };
 

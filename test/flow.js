@@ -53,13 +53,13 @@ tap.test('flow with complex flow', (test) => {
     });
   }
 
-  function fn3(cb) {
+  function fn3(data, cb) {
     process.nextTick(() => {
       cb(null, { data3: 'data 3' });
     });
   }
 
-  function fn4(cb) {
+  function fn4(data, cb) {
     process.nextTick(() => {
       cb(null, { data4: 'data 4' });
     });
@@ -98,12 +98,12 @@ tap.test('flow cancel before start', (test) => {
     process.nextTick(() => cb(null, 'data 2'));
   }
 
-  function fn3(cb) {
+  function fn3(data, cb) {
     count++;
     process.nextTick(() => cb(null, 'data 3'));
   }
 
-  function fn4(cb) {
+  function fn4(data, cb) {
     count++;
     process.nextTick(() => cb(null, 'data 4'));
   }
@@ -139,7 +139,7 @@ tap.test('flow cancel in the middle', (test) => {
     }, 200);
   }
 
-  function fn3(cb) {
+  function fn3(data, cb) {
     count++;
     setTimeout(() => {
       finished++;
@@ -147,7 +147,7 @@ tap.test('flow cancel in the middle', (test) => {
     }, 200);
   }
 
-  function fn4(cb) {
+  function fn4(data, cb) {
     count++;
     setTimeout(() => {
       finished++;
@@ -187,14 +187,14 @@ tap.test('flow cancel after end', (test) => {
     });
   }
 
-  function fn3(cb) {
+  function fn3(data, cb) {
     count++;
     process.nextTick(() => {
       cb(null, { data3: 'data 3' });
     });
   }
 
-  function fn4(cb) {
+  function fn4(data, cb) {
     count++;
     process.nextTick(() => {
       cb(null, { data4: 'data 4' });
@@ -233,12 +233,12 @@ tap.test('flow to array', (test) => {
     process.nextTick(() => cb(null, 'data 2'));
   }
 
-  function fn3(cb) {
+  function fn3(data, cb) {
     count++;
     process.nextTick(() => cb(null, 'data 3'));
   }
 
-  function fn4(cb) {
+  function fn4(data, cb) {
     count++;
     process.nextTick(() => cb(null, 'data 4'));
   }
