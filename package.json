@@ -1,25 +1,25 @@
 {
   "name": "metasync",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Asynchronous Programming Library",
   "license": "MIT",
   "keywords": [
     "metasync",
-    "metarhia",
+    "callback",
     "promise",
+    "async",
+    "asyncronous",
     "parallel",
     "sequential",
-    "asyncronous",
-    "async",
-    "callback",
+    "metarhia",
     "flow",
     "collector",
     "errback",
     "err-first",
     "error-first",
     "callback-last",
-    "thrattle",
+    "throttle",
     "impress",
     "datacollector",
     "keycollector",
@@ -46,8 +46,8 @@
     "metarhia-common": "^0.0.23"
   },
   "devDependencies": {
+    "eslint": "^4.11.0",
     "metaschema": "^0.0.5",
-    "eslint": "^4.9.0",
-    "tap": "^10.7.2"
+    "tap": "^10.7.3"
   }
 }
