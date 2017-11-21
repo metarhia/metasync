@@ -69,13 +69,16 @@ tap.test('throttle without arguments for function', (test) => {
 
 tap.test('debounce', (test) => {
   let count = 0;
-  const debouncedFn = metasync.debounce(1, (arg1, arg2, ...otherArgs) => {
+
+  const fn = (arg1, arg2, ...otherArgs) => {
     test.strictSame(arg1, 'someVal');
     test.strictSame(arg2, 4);
     test.strictSame(otherArgs, []);
     count++;
     test.end();
-  }, ['someVal', 4]);
+  };
+
+  const debouncedFn = metasync.debounce(1, fn, 'someVal', 4);
 
   debouncedFn();
   debouncedFn();
@@ -84,11 +87,14 @@ tap.test('debounce', (test) => {
 
 tap.test('debounce without arguments for function', (test) => {
   let count = 0;
-  const debouncedFn = metasync.debounce(1, (...args) => {
+
+  const fn = (...args) => {
     test.strictSame(args, []);
     count++;
     test.end();
-  });
+  };
+
+  const debouncedFn = metasync.debounce(1, fn);
 
   debouncedFn();
   debouncedFn();
