@@ -5,7 +5,8 @@ const metasync = require('..');
 
 tap.test('throttle', (test) => {
   let callCount = 0;
-  const throttledFn = metasync.throttle(1, (arg1, arg2, ...otherArgs) => {
+
+  const fn = (arg1, arg2, ...otherArgs) => {
     test.strictSame(arg1, 'someVal');
     test.strictSame(arg2, 4);
     test.strictSame(otherArgs, []);
@@ -13,7 +14,9 @@ tap.test('throttle', (test) => {
     if (callCount === 2) {
       test.end();
     }
-  }, ['someVal', 4]);
+  };
+
+  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -35,7 +38,7 @@ tap.test('throttle merge args', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn, ['someVal', 4]);
+  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
 
   throttledFn('str');
   test.strictSame(callCount, 1);
@@ -46,13 +49,16 @@ tap.test('throttle merge args', (test) => {
 
 tap.test('throttle without arguments for function', (test) => {
   let callCount = 0;
-  const throttledFn = metasync.throttle(1, (...args) => {
+
+  const fn = (...args) => {
     test.strictSame(args, []);
     callCount++;
     if (callCount === 2) {
       test.end();
     }
-  });
+  };
+
+  const throttledFn = metasync.throttle(1, fn);
 
   throttledFn();
   test.strictSame(callCount, 1);
