@@ -225,16 +225,16 @@ metasync.find(
 - `timeout` - process timeout (optional), for single item
 
 ## Function throttling, executed once per interval
-`metasync.throttle(timeout, fn, args)`
+`metasync.throttle(timeout, fn, ...args)`
 - `timeout` - msec interval
 - `fn` - function to be throttled
-- `args` - arguments array for fn (optional)
+- `...args` - arguments for fn (optional)
 
 ## Debounce function, delayed execution
-`metasync.debounce(timeout, fn, args)`
+`metasync.debounce(timeout, fn, ...args)`
 - `timeout` - msec
 - `fn` - function to be debounced
-- `args` - arguments array for fn (optional)
+- `...args` - arguments for fn (optional)
 
 ## Set timeout for asynchronous function execution
 `metasync.timeout(timeout, fn, callback)`
