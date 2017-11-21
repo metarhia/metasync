@@ -9,7 +9,8 @@ const submodules = [
   'array', // Array utilities
   'chain', // Process arrays sync and async array in chain
   'collector', // DataCollector and KeyCollector
-  'queue', // Concurrency
+  'queue', // Concurrent queue
+  'memoize', // Async memoization
 ].map(path => require('./lib/' + path));
 
 const flow = submodules[0].flow;
