@@ -11,6 +11,7 @@ const submodules = [
   'collector', // DataCollector and KeyCollector
   'queue', // Concurrent queue
   'memoize', // Async memoization
+  'do', // Simple chain/do
 ].map(path => require('./lib/' + path));
 
 const flow = submodules[0].flow;
