@@ -39,7 +39,7 @@ tap.test('simple chain/do', (test) => {
     });
   };
 
-  const c1 = metasync.chain()
+  const c1 = metasync
     .do(readConfig, 'myConfig')
     .do(selectFromDb, 'select * from cities')
     .do(getHttpPage, 'http://kpi.ua')
