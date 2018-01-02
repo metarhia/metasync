@@ -19,6 +19,11 @@ tap.test('memoize', (test) => {
 
   const memoizedGetData = metasync.memoize(getData);
 
+  const keys = [];
+  memoizedGetData.on('memoize', (key) => {
+    keys.push(key);
+  });
+
   memoizedGetData('file1', (err, data) => {
     test.error(err);
     test.strictSame(data, storage.file1);
@@ -31,6 +36,7 @@ tap.test('memoize', (test) => {
         memoizedGetData('file2', (err, data) => {
           test.error(err);
           test.strictSame(data, storage.file2);
+          test.strictSame(keys, ['file1', 'file2']);
           test.end();
         });
       });
