@@ -53,6 +53,11 @@ tap.test('memoize clear cache', (test) => {
 
   const memoizedGetData = metasync.memoize(getData);
 
+  let onClear = false;
+  memoizedGetData.on('clear', () => {
+    onClear = true;
+  });
+
   memoizedGetData('file1', (err, data) => {
     test.error(err);
     test.strictSame(data, storage.file1);
@@ -61,6 +66,7 @@ tap.test('memoize clear cache', (test) => {
     memoizedGetData('file1', (err, data) => {
       test.error(err);
       test.strictSame(data, Buffer.from('changed'));
+      test.strictSame(onClear, true);
       test.end();
     });
   });
@@ -81,6 +87,11 @@ tap.test('memoize cache del', (test) => {
 
   const memoizedGetData = metasync.memoize(getData);
 
+  let onDel = false;
+  memoizedGetData.on('del', () => {
+    onDel = true;
+  });
+
   memoizedGetData('file1', (err, data) => {
     test.error(err);
     test.strictSame(data, storage.file1);
@@ -89,6 +100,7 @@ tap.test('memoize cache del', (test) => {
     memoizedGetData('file1', (err, data) => {
       test.error(err);
       test.strictSame(data, Buffer.from('changed'));
+      test.strictSame(onDel, true);
       test.end();
     });
   });
@@ -104,11 +116,17 @@ tap.test('memoize cache add', (test) => {
 
   const memoizedGetData = metasync.memoize(getData);
 
+  let onAdd = false;
+  memoizedGetData.on('add', () => {
+    onAdd = true;
+  });
+
   const file1 = Buffer.from('added');
   memoizedGetData.add('file1', null, file1);
   memoizedGetData('file1', (err, data) => {
     test.error(err);
     test.strictSame(data, Buffer.from('added'));
+    test.strictSame(onAdd, true);
     test.end();
   });
 });
