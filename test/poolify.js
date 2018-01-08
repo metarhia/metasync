@@ -3,7 +3,7 @@
 const tap = require('tap');
 const metasync = require('..');
 
-tap.test('simple poolify', (test) => {
+tap.test('poolify simple', (test) => {
 
   const buffer = () => new Uint32Array(128);
 
@@ -24,7 +24,7 @@ tap.test('simple poolify', (test) => {
 
 });
 
-tap.test('simple poolify', (test) => {
+tap.test('poolify loop', (test) => {
 
   const buffer = () => new Uint32Array(128);
 
@@ -37,6 +37,25 @@ tap.test('simple poolify', (test) => {
         test.strictSame(item.length, 128);
         test.end();
       }
+    });
+  }
+
+});
+
+tap.test('poolify max', (test) => {
+
+  const buffer = () => new Uint32Array(128);
+
+  const pool = metasync.poolify(buffer, 5, 7, 10);
+
+  for (let i = 0; i < 15; i++) {
+    pool(item => {
+      setTimeout(() => {
+        pool(item);
+        if (i === 14) {
+          test.end();
+        }
+      }, 100);
     });
   }
 
