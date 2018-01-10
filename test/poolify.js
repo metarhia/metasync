@@ -90,3 +90,22 @@ tap.test('poolify delayed order', (test) => {
   });
 
 });
+
+tap.test('poolify functor', (test) => {
+
+  const adder = a => b => adder(a + b);
+
+  const pool = metasync.poolify(adder, 1, 2, 3);
+
+  pool(item1 => {
+    test.strictSame(pool.items.length, 1);
+    pool(item2 => {
+      test.strictSame(pool.items.length, 0);
+      pool(item1);
+      pool(item2);
+      test.strictSame(pool.items.length, 2);
+      test.end();
+    });
+  });
+
+});
