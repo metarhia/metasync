@@ -60,3 +60,33 @@ tap.test('poolify max', (test) => {
   }
 
 });
+
+tap.test('poolify delayed order', (test) => {
+
+  const buffer = () => new Uint32Array(128);
+
+  const pool = metasync.poolify(buffer, 0, 2, 2);
+
+  let get3 = false;
+  pool(item1 => {
+    test.strictSame(pool.items.length, 1);
+    pool(item2 => {
+      test.strictSame(pool.items.length, 0);
+      pool(item3 => {
+        test.strictSame(pool.items.length, 0);
+        test.strictSame(get3, false);
+        get3 = true;
+        pool(item3);
+      });
+      pool(item4 => {
+        test.strictSame(pool.items.length, 0);
+        test.strictSame(get3, true);
+        pool(item4);
+        test.end();
+      });
+      pool(item1);
+      pool(item2);
+    });
+  });
+
+});
