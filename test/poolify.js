@@ -79,7 +79,7 @@ tap.test('poolify delayed order', (test) => {
         pool(item3);
       });
       pool(item4 => {
-        test.strictSame(pool.items.length, 0);
+        test.strictSame(pool.items.length, 1);
         test.strictSame(get3, true);
         pool(item4);
         test.end();
