@@ -109,3 +109,26 @@ tap.test('poolify functor', (test) => {
   });
 
 });
+
+tap.test('poolify get sync', (test) => {
+
+  const adder = a => b => adder(a + b);
+
+  const pool = metasync.poolify(adder, 1, 2, 3);
+
+  const item1 = pool();
+  test.strictSame(pool.items.length, 1);
+  const item2 = pool();
+  test.strictSame(pool.items.length, 0);
+  const item3 = pool();
+  test.strictSame(pool.items.length, 0);
+  const item4 = pool();
+  test.strictSame(item4, undefined);
+  test.strictSame(pool.items.length, 0);
+  pool(item1);
+  pool(item2);
+  pool(item3);
+  test.strictSame(pool.items.length, 3);
+  test.end();
+
+});
