@@ -7,7 +7,7 @@ const wrapAsync = (
   // Emulate Asynchronous calls
   callback // function
 ) => {
-  setTimeout(callback, Math.floor((Math.random() * 1000)));
+  setTimeout(callback, Math.floor((Math.random() * 500)));
 };
 
 tap.test('simple chain/do', (test) => {
