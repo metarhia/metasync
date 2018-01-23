@@ -1,7 +1,7 @@
 'use strict';
 
 const benchmark = require('./benchmark.js');
-const metasync = require('../../lib/poolify.array.js');
+const metasync = require('../../lib/poolify.js');
 
 function poolifyArray(done) {
 
