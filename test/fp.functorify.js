@@ -10,14 +10,15 @@ const tripleFnInCb = callback =>
 const asyncMultBy11 = (x, callback) =>
   process.nextTick(() => callback(null, x * 11));
 
-metatests.test('asAsync all functions test', test => {
+metatests.test('functorify all methods test', test => {
+  // prettier-ignore
   metasync
-    .asAsync(asyncSum, 3, 5)
-    .fmap(x => x * 7)
-    .ap(tripleFnInCb)
-    .concat(asyncMultBy11)((err, res) => {
-    test.error(err);
-    test.strictSame(res, 1848);
-    test.end();
-  });
+    .functorify(asyncSum, 3, 5)
+    .concat(asyncMultBy11)
+    .map(x => x * 7)
+    .ap(tripleFnInCb)((err, res) => {
+      test.error(err);
+      test.strictSame(res, (3 + 5) * 7 * 3 * 11);
+      test.end();
+    });
 });
