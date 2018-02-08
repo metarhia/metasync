@@ -7,6 +7,7 @@ echo Sequential execution: concurrency 10 x 100k
 node tests/load/sequential.promise.js
 node tests/load/sequential.flow.js
 echo
-echo Poolify: symbol vs array
-node tests/load/poolify.symbol.js
+echo Poolify: array vs symbol
 node tests/load/poolify.array.js
+node tests/load/poolify.symbol.js
+node tests/load/poolify.opt.js
