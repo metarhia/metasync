@@ -49,6 +49,26 @@ tap.test('promisify: callback-last to Promise', (test) => {
 
 });
 
+tap.test('promisify: callback-last to Promise throw', (test) => {
+
+  const id = 100;
+
+  const getDataAsync = (dataId, callback) => {
+    test.strictSame(dataId, id);
+    callback(new Error('Data not found'));
+  };
+
+  const getDataPromise = metasync.promisify(getDataAsync);
+  getDataPromise(id).then(result => {
+    test.notOk(result);
+  }).catch(err => {
+    test.ok(err);
+    test.end();
+  });
+
+});
+
+
 tap.test('promisify: sync function to Promise', (test) => {
 
   const id = 100;
@@ -65,6 +85,25 @@ tap.test('promisify: sync function to Promise', (test) => {
     test.end();
   }).catch(err => {
     throw err;
+  });
+
+});
+
+tap.test('promisify: sync to Promise throw', (test) => {
+
+  const id = 100;
+
+  const getDataSync = (dataId) => {
+    test.strictSame(dataId, id);
+    return new Error('Data not found');
+  };
+
+  const getDataPromise = metasync.promisifySync(getDataSync);
+  getDataPromise(id).then(result => {
+    test.notOk(result);
+  }).catch(err => {
+    test.ok(err);
+    test.end();
   });
 
 });
