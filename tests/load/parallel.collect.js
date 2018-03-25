@@ -1,9 +1,11 @@
 'use strict';
 
+const COUNT = 1000000;
+
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-function Collect(done) {
+const Collect = (done) => {
   const dc = metasync.collect(6);
   dc.done((err, result) => done(result));
   let i = 0;
@@ -13,6 +15,6 @@ function Collect(done) {
   setImmediate(() => dc.pick('4th', 'key' + ++i));
   setImmediate(() => dc.pick('5th', ++i === 5));
   setImmediate(() => dc.pick('6th', 'key' + ++i * 2));
-}
+};
 
-benchmark.do(1000000, [Collect]);
+benchmark.do(COUNT, [Collect]);

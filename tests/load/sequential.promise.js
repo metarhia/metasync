@@ -1,8 +1,10 @@
 'use strict';
 
+const count = 100000;
+
 const benchmark = require('./benchmark.js');
 
-function PromiseThen(done) {
+const PromiseThen = (done) => {
   let i = 0;
   const p1 = new Promise((resolve) => {
     setImmediate(() => resolve({ p1: ++i * 2 }));
@@ -29,12 +31,8 @@ function PromiseThen(done) {
     .then(p4)
     .then(p5)
     .then(p6)
-    .then((result) => {
-      //const res = Object.assign(...result);
-      done(result);
-    }).catch((err) => {
-      console.error(err);
-    });
-}
+    .then(done)
+    .catch(console.error);
+};
 
-benchmark.do(100000, [PromiseThen]);
+benchmark.do(count, [PromiseThen]);

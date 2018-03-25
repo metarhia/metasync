@@ -1,25 +1,25 @@
 'use strict';
 
+const COUNT = 10000;
+const GETS = 300;
+
 const benchmark = require('./benchmark.js');
 const metasync = require('../../lib/poolify.js');
 
-function poolifyArray(done) {
+const poolifyArray = (done) => {
 
   const buffer = () => new Uint32Array(128);
-
   const pool = metasync.poolify(buffer, 10, 100, 200);
 
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < GETS; i++) {
     pool(item => {
       setImmediate(() => {
         pool([item]);
-        if (i === 300 - 1) {
-          done();
-        }
+        if (i === GETS - 1) done();
       });
     });
   }
 
-}
+};
 
-benchmark.do(10000, [poolifyArray]);
+benchmark.do(COUNT, [poolifyArray]);
