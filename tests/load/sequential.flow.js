@@ -1,9 +1,11 @@
 'use strict';
 
+const count = 100000;
+
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-function flowSequential(done) {
+const flowSequential = (done) => {
   let i = 0;
   const p1 = (context, callback) => {
     setImmediate(() => callback(null, ++i * 2));
@@ -26,6 +28,6 @@ function flowSequential(done) {
 
   const f1 = metasync([p1, p2, p3, p4, p5, p6]);
   f1({}, (err, result) => done(result));
-}
+};
 
-benchmark.do(100000, [flowSequential]);
+benchmark.do(count, [flowSequential]);

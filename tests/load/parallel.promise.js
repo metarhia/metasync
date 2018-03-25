@@ -1,8 +1,10 @@
 'use strict';
 
+const COUNT = 1000000;
+
 const benchmark = require('./benchmark.js');
 
-function PromiseAll(done) {
+const PromiseAll = (done) => {
   let i = 0;
   const p1 = new Promise((resolve) => {
     setImmediate(() => resolve({ p1: ++i * 2 }));
@@ -22,10 +24,8 @@ function PromiseAll(done) {
   const p6 = new Promise((resolve) => {
     setImmediate(() => resolve({ p6: 'key' + ++i * 2 }));
   });
-  Promise.all([p1, p2, p3, p4, p5, p6]).then((result) => {
-    const res = Object.assign(...result);
-    done(res);
-  });
-}
 
-benchmark.do(1000000, [PromiseAll]);
+  Promise.all([p1, p2, p3, p4, p5, p6]).then(done);
+};
+
+benchmark.do(COUNT, [PromiseAll]);
