@@ -31,7 +31,7 @@ const PromiseThen = (done) => {
     .then(p4)
     .then(p5)
     .then(p6)
-    .then(done)
+    .then((res) => done(null, res))
     .catch(console.error);
 };
 
