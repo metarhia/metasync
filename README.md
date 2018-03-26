@@ -13,17 +13,17 @@
 $ npm install metasync
 ```
 
-## Create a composed function from flow syntax
-`metasync(fns)(data, done)` or `metasync.flow(fns)(data, done)`
+## Asynchronous functions composition
+`metasync(fns)([data], done)`
 - `fns` - array of callback-last functions, callback contranct err-first
-- `data` - input data
+- `[data]` - input data (optional)
 - `done` - err-first callback
 - Returns: composed callback-last / err-first function
 
 ![composition](https://cloud.githubusercontent.com/assets/4405297/16968374/1b81f160-4e17-11e6-96fa-9d7e2b422396.png)
 
 ```JavaScript
-const flow = metasync(
+const composed = metasync(
   [f1, f2, f3, [[f4, f5, [f6, f7], f8]], f9]
 );
 ```
@@ -31,13 +31,13 @@ const flow = metasync(
 - Array of functions gives sequential execution: `[f1, f2, f3]`
 - Double brackets array of functions gives parallel execution: `[[f1, f2, f3]]`
 
-### Flow methods:
-- `flow(data, callback)` - composed flow, callback-last and err-first contracts
-- `flow.timeout(msec)` - set flow timeout
-- `flow.cancel()` - calcel flow
-- `flow.clone()` - clone flow
-- `flow.pause()` - pause flow
-- `flow.resume()` - resume flow
+### Composed methods:
+- `composed([data], callback)` - async composed, callback-last and err-first contracts
+- `composed.timeout(msec)` - set timeout
+- `composed.cancel()` - calcel execution where possible
+- `composed.clone()` - clone composed
+- `composed.pause()` - pause execution
+- `composed.resume()` - resume execution
 
 ## Collector
 `metasync.collect(expected)(key, error, value)`

@@ -3,7 +3,7 @@
 const tap = require('tap');
 const metasync = require('..');
 
-tap.test('flow clone', (test) => {
+tap.test('async functions composition clone', (test) => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
