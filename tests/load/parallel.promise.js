@@ -25,7 +25,7 @@ const PromiseAll = (done) => {
     setImmediate(() => resolve({ p6: 'key' + ++i * 2 }));
   });
 
-  Promise.all([p1, p2, p3, p4, p5, p6]).then(done);
+  Promise.all([p1, p2, p3, p4, p5, p6]).then((res) => done(null, res));
 };
 
 benchmark.do(COUNT, [PromiseAll]);

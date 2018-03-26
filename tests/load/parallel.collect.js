@@ -7,7 +7,7 @@ const metasync = require('../..');
 
 const Collect = (done) => {
   const dc = metasync.collect(6);
-  dc.done((err, result) => done(result));
+  dc.done(done);
   let i = 0;
   setImmediate(() => dc.pick('uno', ++i * 2));
   setImmediate(() => dc.pick('due', ++i * 3));
