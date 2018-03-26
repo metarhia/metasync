@@ -3,7 +3,7 @@
 const tap = require('tap');
 const metasync = require('..');
 
-tap.test('flow with parallel flow', (test) => {
+tap.test('asyn parallel functions composition', (test) => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
@@ -27,7 +27,7 @@ tap.test('flow with parallel flow', (test) => {
   });
 });
 
-tap.test('flow with complex flow', (test) => {
+tap.test('async complex functions composition', (test) => {
 
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
@@ -84,7 +84,7 @@ tap.test('flow with complex flow', (test) => {
 
 });
 
-tap.test('flow cancel before start', (test) => {
+tap.test('async functions composition cancel before start', (test) => {
 
   let count = 0;
 
@@ -118,7 +118,7 @@ tap.test('flow cancel before start', (test) => {
 
 });
 
-tap.test('flow cancel in the middle', (test) => {
+tap.test('async functions composition cancel in the middle', (test) => {
 
   let count = 0;
   let finished = 0;
@@ -169,7 +169,7 @@ tap.test('flow cancel in the middle', (test) => {
 
 });
 
-tap.test('flow cancel after end', (test) => {
+tap.test('async functions composition cancel after end', (test) => {
 
   let count = 0;
 
@@ -219,7 +219,7 @@ tap.test('flow cancel after end', (test) => {
 
 });
 
-tap.test('flow to array', (test) => {
+tap.test('async functions composition to array', (test) => {
 
   let count = 0;
 

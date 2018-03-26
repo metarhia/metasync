@@ -15,5 +15,5 @@ const submodules = [
   'poolify', // Create pool from factory
 ].map(path => require('./lib/' + path));
 
-const flow = submodules[0].flow;
+const { flow } = submodules[0];
 module.exports = Object.assign(flow, ...submodules);
