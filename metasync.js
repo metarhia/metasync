@@ -1,7 +1,7 @@
 'use strict';
 
 const submodules = [
-  'flow', // Unified abstraction
+  'composition', // Unified abstraction
   'control', // Control flow utilities
   'fp', // Async utils for functional programming
   'adapters', // Adapters to convert different async contracts
@@ -15,5 +15,5 @@ const submodules = [
   'poolify', // Create pool from factory
 ].map(path => require('./lib/' + path));
 
-const { flow } = submodules[0];
-module.exports = Object.assign(flow, ...submodules);
+const { compose } = submodules[0];
+module.exports = Object.assign(compose, ...submodules);
