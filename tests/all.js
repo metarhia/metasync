@@ -1,5 +1,5 @@
 'use strict';
 
-['chain', 'flow', 'flow.sequential', 'collector']
+['chain', 'composition', 'composition.sequential', 'collector']
   .map(file => './' + file + '.js')
   .forEach(require);

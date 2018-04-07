@@ -2,7 +2,8 @@
 
 const metasync = require('..');
 
-const q = metasync.queue(3)
+const q = metasync
+  .queue(3)
   .roundRobin()
   .process((item, cb) => {
     console.dir(item);

@@ -3,7 +3,8 @@
 const assert = require('assert');
 const metasync = require('..');
 
-const dc = metasync.collect(3)
+const dc = metasync
+  .collect(3)
   .timeout(5000)
   .done((error, result) => {
     assert.strictEqual(Object.keys(result).length, 3);
@@ -13,7 +14,8 @@ dc.pick('key1', 1);
 dc.pick('key2', 2);
 dc.pick('key3', 3);
 
-const kc = metasync.collect(['key1', 'key2', 'key3'])
+const kc = metasync
+  .collect(['key1', 'key2', 'key3'])
   .timeout(5000)
   .done((error, result) => {
     assert.strictEqual(Object.keys(result).length, 3);
