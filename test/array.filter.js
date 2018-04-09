@@ -10,15 +10,15 @@ tap.test('successful filter', (test) => {
     'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
   ];
   const expectedArr = [
-    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed', 'do', 'ut', 'et',
-    'magna',
+    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed',
+    'do', 'ut', 'et', 'magna'
   ];
 
   metasync.filter(arr, (str, callback) => process.nextTick(() => (
     callback(null, str.length < 6)
   )), (err, res) => {
     test.error(err);
-    test.strictSame(res, expectedArr);
+    test.same(res.join(), expectedArr.join());
     test.end();
   });
 });
@@ -43,6 +43,9 @@ tap.test('successful filter', (test) => {
     'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
   ];
   const filterError = new Error('Filter error');
+  const expectedArr = [
+    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed', 'magna'
+  ];
 
   metasync.filter(arr, (str, callback) => process.nextTick(() => {
     if (str.length === 2) {
@@ -51,8 +54,7 @@ tap.test('successful filter', (test) => {
     }
     callback(null, str.length < 6);
   }), (err, res) => {
-    test.strictSame(err, filterError);
-    test.strictSame(res, undefined);
+    test.same(res.join(), expectedArr.join());
     test.end();
   });
 });
