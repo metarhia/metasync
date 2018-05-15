@@ -1,16 +1,13 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('data collector', (test) => {
+api.metatests.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
     key3: 3
   };
 
-  const dc = metasync
+  const dc = api.metasync
     .collect(3)
     .done((err, result) => {
       test.error(err);
@@ -24,14 +21,14 @@ tap.test('data collector', (test) => {
   dc.collect('key3', null, 3);
 });
 
-tap.test('data collector', (test) => {
+api.metatests.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
     key3: 3
   };
 
-  const kc = metasync
+  const kc = api.metasync
     .collect(['key1', 'key2', 'key3'])
     .done((err, result) => {
       test.error(err);
@@ -45,14 +42,14 @@ tap.test('data collector', (test) => {
   kc.collect('key3', null, 3);
 });
 
-tap.test('distinct data collector', (test) => {
+api.metatests.test('distinct data collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
     key3: 3
   };
 
-  const dc = metasync
+  const dc = api.metasync
     .collect(3)
     .distinct()
     .done((err, result) => {
@@ -67,14 +64,14 @@ tap.test('distinct data collector', (test) => {
   dc.pick('key3', 3);
 });
 
-tap.test('distinct key collector', (test) => {
+api.metatests.test('distinct key collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
     key3: 3
   };
 
-  const kc = metasync
+  const kc = api.metasync
     .collect(['key1', 'key2', 'key3'])
     .distinct()
     .done((err, result) => {
@@ -89,8 +86,8 @@ tap.test('distinct key collector', (test) => {
   kc.pick('key3', 3);
 });
 
-tap.test('data collector with repeated keys', (test) => {
-  const dc = metasync
+api.metatests.test('data collector with repeated keys', (test) => {
+  const dc = api.metasync
     .collect(3)
     .timeout(100)
     .done((err) => {
@@ -103,8 +100,8 @@ tap.test('data collector with repeated keys', (test) => {
   dc.collect('key2', null, 2);
 });
 
-tap.test('key collector with repeated keys', (test) => {
-  const kc = metasync
+api.metatests.test('key collector with repeated keys', (test) => {
+  const kc = api.metasync
     .collect(['key1', 'key2', 'key3'])
     .timeout(100)
     .done((err) => {
@@ -117,9 +114,9 @@ tap.test('key collector with repeated keys', (test) => {
   kc.collect('key2', null, 2);
 });
 
-tap.test('collect with error', (test) => {
+api.metatests.test('collect with error', (test) => {
   const testErr = new Error('Test error');
-  const col = metasync.collect(1);
+  const col = api.metasync.collect(1);
   col.done((err, res) => {
     test.strictSame(err, testErr);
     test.strictSame(res, {});
@@ -128,8 +125,8 @@ tap.test('collect with error', (test) => {
   col.fail('someKey', testErr);
 });
 
-tap.test('collect method calling after it\'s done', (test) => {
-  const col = metasync.collect(1);
+api.metatests.test('collect method calling after it\'s done', (test) => {
+  const col = api.metasync.collect(1);
   col.done((err, res) => {
     test.error(err);
     test.strictSame(res, { someKey: 'someVal' });
@@ -139,8 +136,8 @@ tap.test('collect method calling after it\'s done', (test) => {
   col.pick('someKey2', 'someVal2');
 });
 
-tap.test('keys collector receives wrong key', (test) => {
-  const col = metasync.collect(['rightKey']);
+api.metatests.test('keys collector receives wrong key', (test) => {
+  const col = api.metasync.collect(['rightKey']);
   col.done((err, res) => {
     test.error(err);
     test.strictSame(res, { wrongKey: 'someVal', rightKey: 'someVal' });
@@ -150,8 +147,8 @@ tap.test('keys collector receives wrong key', (test) => {
   col.pick('rightKey', 'someVal');
 });
 
-tap.test('distinct keys collector receives wrong key', (test) => {
-  const col = metasync.collect(['rightKey']).distinct();
+api.metatests.test('distinct keys collector receives wrong key', (test) => {
+  const col = api.metasync.collect(['rightKey']).distinct();
   col.done((err) => {
     test.assert(err);
     test.end();
@@ -160,8 +157,8 @@ tap.test('distinct keys collector receives wrong key', (test) => {
   col.pick('rightKey', 'someVal');
 });
 
-tap.test('collect with take', (test) => {
-  const col = metasync.collect(1);
+api.metatests.test('collect with take', (test) => {
+  const col = api.metasync.collect(1);
   col.done((err, res) => {
     test.error(err);
     test.strictSame(res, { someKey: 'someVal' });
@@ -171,9 +168,9 @@ tap.test('collect with take', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
-tap.test('collect with timeout error', (test) => {
+api.metatests.test('collect with timeout error', (test) => {
   const timeoutErr = new Error('Collector timeout');
-  const col = metasync.collect(1)
+  const col = api.metasync.collect(1)
     .done((err, res) => {
       test.strictSame(err, timeoutErr);
       test.strictSame(res, {});
@@ -184,8 +181,8 @@ tap.test('collect with timeout error', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
-tap.test('collect with take calls bigger than expected', (test) => {
-  const col = metasync.collect(1)
+api.metatests.test('collect with take calls bigger than expected', (test) => {
+  const col = api.metasync.collect(1)
     .done((err, res) => {
       test.error(err);
       test.strictSame(Object.keys(res).length, 1);
@@ -196,8 +193,8 @@ tap.test('collect with take calls bigger than expected', (test) => {
   col.take('someKey2', af, 'someVal2');
 });
 
-tap.test('cancel data collector', (test) => {
-  const dc = metasync
+api.metatests.test('cancel data collector', (test) => {
+  const dc = api.metasync
     .collect(3)
     .done((err) => {
       test.assert(err);
@@ -208,8 +205,8 @@ tap.test('cancel data collector', (test) => {
   dc.cancel();
 });
 
-tap.test('cancel key collector', (test) => {
-  const dc = metasync
+api.metatests.test('cancel key collector', (test) => {
+  const dc = api.metasync
     .collect(['uno', 'due'])
     .done((err) => {
       test.assert(err);
@@ -220,8 +217,8 @@ tap.test('cancel key collector', (test) => {
   dc.cancel();
 });
 
-tap.test('collect then success', (test) => {
-  const col = metasync.collect(1).then(
+api.metatests.test('collect then success', (test) => {
+  const col = api.metasync.collect(1).then(
     (result) => {
       test.assert(result);
       test.end();
@@ -234,8 +231,8 @@ tap.test('collect then success', (test) => {
   col.pick('Key', 'value');
 });
 
-tap.test('collect then fail', (test) => {
-  metasync.collect(5).timeout(10).then(
+api.metatests.test('collect then fail', (test) => {
+  api.metasync.collect(5).timeout(10).then(
     (result) => {
       test.error(result);
       test.end();

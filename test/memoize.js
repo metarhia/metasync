@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('memoize', (test) => {
+api.metatests.test('memoize', (test) => {
   const storage = {
     file1: Buffer.from('file1'),
     file2: Buffer.from('file2'),
@@ -17,7 +14,7 @@ tap.test('memoize', (test) => {
     });
   };
 
-  const memoizedGetData = metasync.memoize(getData);
+  const memoizedGetData = api.metasync.memoize(getData);
 
   const keys = [];
   memoizedGetData.on('memoize', (key) => {
@@ -44,7 +41,7 @@ tap.test('memoize', (test) => {
   });
 });
 
-tap.test('memoize clear cache', (test) => {
+api.metatests.test('memoize clear cache', (test) => {
   const storage = {
     file1: Buffer.from('file1'),
   };
@@ -57,7 +54,7 @@ tap.test('memoize clear cache', (test) => {
     });
   };
 
-  const memoizedGetData = metasync.memoize(getData);
+  const memoizedGetData = api.metasync.memoize(getData);
 
   let onClear = false;
   memoizedGetData.on('clear', () => {
@@ -78,7 +75,7 @@ tap.test('memoize clear cache', (test) => {
   });
 });
 
-tap.test('memoize cache del', (test) => {
+api.metatests.test('memoize cache del', (test) => {
   const storage = {
     file1: Buffer.from('file1'),
   };
@@ -91,7 +88,7 @@ tap.test('memoize cache del', (test) => {
     });
   };
 
-  const memoizedGetData = metasync.memoize(getData);
+  const memoizedGetData = api.metasync.memoize(getData);
 
   let onDel = false;
   memoizedGetData.on('del', () => {
@@ -112,7 +109,7 @@ tap.test('memoize cache del', (test) => {
   });
 });
 
-tap.test('memoize cache add', (test) => {
+api.metatests.test('memoize cache add', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = Buffer.from('added');
@@ -120,7 +117,7 @@ tap.test('memoize cache add', (test) => {
     });
   };
 
-  const memoizedGetData = metasync.memoize(getData);
+  const memoizedGetData = api.metasync.memoize(getData);
 
   let onAdd = false;
   memoizedGetData.on('add', () => {
@@ -137,7 +134,7 @@ tap.test('memoize cache add', (test) => {
   });
 });
 
-tap.test('memoize cache get', (test) => {
+api.metatests.test('memoize cache get', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = Buffer.from('added');
@@ -145,7 +142,7 @@ tap.test('memoize cache get', (test) => {
     });
   };
 
-  const memoizedGetData = metasync.memoize(getData);
+  const memoizedGetData = api.metasync.memoize(getData);
 
   const file1 = Buffer.from('added');
   memoizedGetData.add('file1', null, file1);

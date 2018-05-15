@@ -32,7 +32,7 @@
   "main": "./metasync.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run lint && node tests/all && tap test/*.js",
+    "test": "npm run lint && node tests/all && node test/all",
     "code-coverage": "tap test/*.js --100",
     "code-coverage-report": "tap test/*.js --coverage-report=html",
     "perf": "tests/load/run.sh",
@@ -48,6 +48,6 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "metaschema": "^0.0.7",
-    "tap": "^11.1.4"
+    "metatests": "^0.1.8"
   }
 }

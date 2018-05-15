@@ -1,10 +1,7 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('queue default FIFO', (test) => {
-  const queue = metasync.queue(3).timeout(1);
+api.metatests.test('queue default FIFO', (test) => {
+  const queue = api.metasync.queue(3).timeout(1);
   const res = [];
 
   queue.process((item, callback) => {
@@ -24,8 +21,8 @@ tap.test('queue default FIFO', (test) => {
   }
 });
 
-tap.test('queue FIFO', (test) => {
-  const queue = metasync.queue(3).fifo().timeout(1);
+api.metatests.test('queue FIFO', (test) => {
+  const queue = api.metasync.queue(3).fifo().timeout(1);
   const res = [];
 
   queue.process((item, callback) => {
@@ -45,8 +42,8 @@ tap.test('queue FIFO', (test) => {
   }
 });
 
-tap.test('queue LIFO', (test) => {
-  const queue = metasync.queue(3).lifo().timeout(1);
+api.metatests.test('queue LIFO', (test) => {
+  const queue = api.metasync.queue(3).lifo().timeout(1);
   const res = [];
 
   queue.process((item, callback) => {
@@ -66,8 +63,8 @@ tap.test('queue LIFO', (test) => {
   }
 });
 
-tap.test('queue priority', (test) => {
-  const queue = metasync.queue(3).priority();
+api.metatests.test('queue priority', (test) => {
+  const queue = api.metasync.queue(3).priority();
   const res = [];
 
   queue.process((item, callback) => {
@@ -93,8 +90,8 @@ tap.test('queue priority', (test) => {
   queue.add({ id: 9 }, 3);
 });
 
-tap.test('queue round robin', (test) => {
-  const queue = metasync.queue(3).roundRobin();
+api.metatests.test('queue round robin', (test) => {
+  const queue = api.metasync.queue(3).roundRobin();
   const res = [];
 
   queue.process((item, callback) => {
@@ -120,8 +117,8 @@ tap.test('queue round robin', (test) => {
   queue.add({ id: 9 }, 2);
 });
 
-tap.test('queue round robin with priority', (test) => {
-  const queue = metasync.queue(3).roundRobin().priority();
+api.metatests.test('queue round robin with priority', (test) => {
+  const queue = api.metasync.queue(3).roundRobin().priority();
   const res = [];
 
   queue.process((item, callback) => {

@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('throttle', (test) => {
+api.metatests.test('throttle', (test) => {
   let callCount = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -16,7 +13,7 @@ tap.test('throttle', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
+  const throttledFn = api.metasync.throttle(1, fn, 'someVal', 4);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -25,7 +22,7 @@ tap.test('throttle', (test) => {
   test.strictSame(callCount, 1);
 });
 
-tap.test('throttle merge args', (test) => {
+api.metatests.test('throttle merge args', (test) => {
   let callCount = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -38,7 +35,7 @@ tap.test('throttle merge args', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
+  const throttledFn = api.metasync.throttle(1, fn, 'someVal', 4);
 
   throttledFn('str');
   test.strictSame(callCount, 1);
@@ -47,7 +44,7 @@ tap.test('throttle merge args', (test) => {
   test.strictSame(callCount, 1);
 });
 
-tap.test('throttle without arguments for function', (test) => {
+api.metatests.test('throttle without arguments for function', (test) => {
   let callCount = 0;
 
   const fn = (...args) => {
@@ -58,7 +55,7 @@ tap.test('throttle without arguments for function', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn);
+  const throttledFn = api.metasync.throttle(1, fn);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -67,7 +64,7 @@ tap.test('throttle without arguments for function', (test) => {
   test.strictSame(callCount, 1);
 });
 
-tap.test('debounce', (test) => {
+api.metatests.test('debounce', (test) => {
   let count = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -78,14 +75,14 @@ tap.test('debounce', (test) => {
     test.end();
   };
 
-  const debouncedFn = metasync.debounce(1, fn, 'someVal', 4);
+  const debouncedFn = api.metasync.debounce(1, fn, 'someVal', 4);
 
   debouncedFn();
   debouncedFn();
   test.strictSame(count, 0);
 });
 
-tap.test('debounce without arguments for function', (test) => {
+api.metatests.test('debounce without arguments for function', (test) => {
   let count = 0;
 
   const fn = (...args) => {
@@ -94,16 +91,16 @@ tap.test('debounce without arguments for function', (test) => {
     test.end();
   };
 
-  const debouncedFn = metasync.debounce(1, fn);
+  const debouncedFn = api.metasync.debounce(1, fn);
 
   debouncedFn();
   debouncedFn();
   test.strictSame(count, 0);
 });
 
-tap.test('timeout with sync function', (test) => {
+api.metatests.test('timeout with sync function', (test) => {
   const syncFn = (callback) => callback(null, 'someVal');
-  metasync.timeout(1, syncFn, (err, res, ...args) => {
+  api.metasync.timeout(1, syncFn, (err, res, ...args) => {
     test.error(err);
     test.strictSame(res, 'someVal');
     test.strictSame(args, []);
@@ -111,8 +108,8 @@ tap.test('timeout with sync function', (test) => {
   });
 });
 
-tap.test('timeout', (test) => {
-  metasync.timeout(10, (callback) => {
+api.metatests.test('timeout', (test) => {
+  api.metasync.timeout(10, (callback) => {
     setTimeout(() => {
       callback(null, 'someVal');
     }, 0);

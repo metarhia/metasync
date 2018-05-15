@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('asyn parallel functions composition', (test) => {
+api.metatests.test('asyn parallel functions composition', (test) => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
@@ -19,7 +16,7 @@ tap.test('asyn parallel functions composition', (test) => {
     });
   }
 
-  const fc = metasync([[fn1, fn2]]);
+  const fc = api.metasync([[fn1, fn2]]);
   fc(data, (err, data) => {
     test.error(err);
     test.strictSame(data, expectedData);
@@ -27,7 +24,7 @@ tap.test('asyn parallel functions composition', (test) => {
   });
 });
 
-tap.test('async complex functions composition', (test) => {
+api.metatests.test('async complex functions composition', (test) => {
 
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
@@ -41,7 +38,7 @@ tap.test('async complex functions composition', (test) => {
 
   function fn1(data, cb) {
     process.nextTick(() => {
-      tap.strictSame(data, expectedDataInFn1);
+      test.strictSame(data, expectedDataInFn1);
       cb(null, { data1: 'data 1' });
     });
   }
@@ -75,7 +72,7 @@ tap.test('async complex functions composition', (test) => {
     });
   }
 
-  const fc = metasync([fn1, fn2, [[fn3, [fn4, fn5] ]], [], [[ ]] ]);
+  const fc = api.metasync([fn1, fn2, [[fn3, [fn4, fn5] ]], [], [[ ]] ]);
   fc(data, (err, data) => {
     test.error(err);
     test.strictSame(data, expectedDataInRes);
@@ -84,7 +81,8 @@ tap.test('async complex functions composition', (test) => {
 
 });
 
-tap.test('async functions composition cancel before start', (test) => {
+const AC1 = 'async functions composition cancel before start';
+api.metatests.test(AC1, (test) => {
 
   let count = 0;
 
@@ -108,7 +106,7 @@ tap.test('async functions composition cancel before start', (test) => {
     process.nextTick(() => cb(null, 'data 4'));
   }
 
-  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
+  const fc = api.metasync([fn1, [[fn2, fn3]], fn4]);
   fc.cancel();
   fc({}, (err, data) => {
     test.strictSame(data, undefined);
@@ -118,7 +116,8 @@ tap.test('async functions composition cancel before start', (test) => {
 
 });
 
-tap.test('async functions composition cancel in the middle', (test) => {
+const AC2 = 'async functions composition cancel in the middle';
+api.metatests.test(AC2, (test) => {
 
   let count = 0;
   let finished = 0;
@@ -155,7 +154,7 @@ tap.test('async functions composition cancel in the middle', (test) => {
     }, 200);
   }
 
-  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
+  const fc = api.metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
     test.strictSame(data, undefined);
     test.strictSame(count, 3);
@@ -169,7 +168,7 @@ tap.test('async functions composition cancel in the middle', (test) => {
 
 });
 
-tap.test('async functions composition cancel after end', (test) => {
+api.metatests.test('async functions composition cancel after end', (test) => {
 
   let count = 0;
 
@@ -201,7 +200,7 @@ tap.test('async functions composition cancel after end', (test) => {
     });
   }
 
-  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
+  const fc = api.metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
     test.strictSame(data, {
       data1: 'data 1',
@@ -219,7 +218,7 @@ tap.test('async functions composition cancel after end', (test) => {
 
 });
 
-tap.test('async functions composition to array', (test) => {
+api.metatests.test('async functions composition to array', (test) => {
 
   let count = 0;
 
@@ -243,7 +242,7 @@ tap.test('async functions composition to array', (test) => {
     process.nextTick(() => cb(null, 'data 4'));
   }
 
-  const fc = metasync([fn1, [[fn2, fn3]], fn4]);
+  const fc = api.metasync([fn1, [[fn2, fn3]], fn4]);
   fc(['data 0'], (err, data) => {
     test.strictSame(data, ['data 0', 'data 1', 'data 2', 'data 3', 'data 4']);
     test.strictSame(count, 4);
