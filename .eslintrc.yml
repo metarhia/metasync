@@ -2,6 +2,8 @@ env:
   es6: true
   node: true
 extends: 'eslint:recommended'
+globals:
+  api: false
 rules:
   indent:
     - error

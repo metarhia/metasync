@@ -1,8 +1,5 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
 const asyncSum = (x, y, callback) => (
   process.nextTick(() => callback(null, x + y))
 );
@@ -13,12 +10,13 @@ const asyncMultBy11 = (x, callback) => (
   process.nextTick(() => callback(null, x * 11))
 );
 
-tap.test('asAsync all functions test', (test) => {
-  metasync.asAsync(asyncSum, 3, 5)
+api.metatests.test('asAsync all functions test', (test) => {
+  api.metasync.asAsync(asyncSum, 3, 5)
     .fmap(x => (x * 7))
     .ap(tripleFnInCb)
     .concat(asyncMultBy11)((err, res) => {
-      test.error(err);
+      if (err) test.notOk(err.toString());
+      //test.error(err);
       test.strictSame(res, 1848);
       test.end();
     });

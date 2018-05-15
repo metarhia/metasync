@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('successfull then', (test) => {
+api.metatests.test('successfull then', (test) => {
   let finishedFuncsCount = 0;
   const res1 = 'res1';
   function af1(data, callback) {
@@ -43,7 +40,7 @@ tap.test('successfull then', (test) => {
       callback(null, { res4 });
     });
   }
-  const faf1 = metasync([af1, [[af2, af3]], af4]);
+  const faf1 = api.metasync([af1, [[af2, af3]], af4]);
   faf1.then((res) => {
     test.strictSame(res, {
       res1: 'res1',
@@ -54,6 +51,7 @@ tap.test('successfull then', (test) => {
     test.strictSame(finishedFuncsCount, 4);
     test.end();
   }, (err) => {
-    test.error(err);
+    if (err) test.notOk(err.toString());
+    //test.error(err);
   });
 });

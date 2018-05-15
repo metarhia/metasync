@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('firstOf', (test) => {
+api.metatests.test('firstOf', (test) => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
@@ -26,8 +23,9 @@ tap.test('firstOf', (test) => {
 
   const fns = [1, 2, 3].map(makeIFn);
 
-  metasync.firstOf(fns, (err, data) => {
-    test.error(err);
+  api.metasync.firstOf(fns, (err, data) => {
+    if (err) test.notOk(err.toString());
+    //test.error(err);
     test.strictSame(data, 'data2');
     test.end();
   });

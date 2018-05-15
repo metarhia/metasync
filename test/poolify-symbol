@@ -1,13 +1,10 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('poolify simple', (test) => {
+api.metatests.test('poolify simple', (test) => {
 
   const buffer = () => new Uint32Array(128);
 
-  const pool = metasync.poolify(buffer, 10, 15, 20);
+  const pool = api.metasync.poolify(buffer, 10, 15, 20);
 
   pool(item1 => {
     test.strictSame(pool.items.length, 14);
@@ -24,11 +21,11 @@ tap.test('poolify simple', (test) => {
 
 });
 
-tap.test('poolify loop', (test) => {
+api.metatests.test('poolify loop', (test) => {
 
   const buffer = () => new Uint32Array(128);
 
-  const pool = metasync.poolify(buffer, 10, 15, 20);
+  const pool = api.metasync.poolify(buffer, 10, 15, 20);
 
   for (let i = 0; i < 15; i++) {
     pool(item => {
@@ -42,11 +39,11 @@ tap.test('poolify loop', (test) => {
 
 });
 
-tap.test('poolify max', (test) => {
+api.metatests.test('poolify max', (test) => {
 
   const buffer = () => new Uint32Array(128);
 
-  const pool = metasync.poolify(buffer, 5, 7, 10);
+  const pool = api.metasync.poolify(buffer, 5, 7, 10);
 
   for (let i = 0; i < 15; i++) {
     pool(item => {
@@ -61,11 +58,11 @@ tap.test('poolify max', (test) => {
 
 });
 
-tap.test('poolify delayed order', (test) => {
+api.metatests.test('poolify delayed order', (test) => {
 
   const buffer = () => new Uint32Array(128);
 
-  const pool = metasync.poolify(buffer, 0, 2, 2);
+  const pool = api.metasync.poolify(buffer, 0, 2, 2);
 
   let get3 = false;
   pool(item1 => {
@@ -91,11 +88,11 @@ tap.test('poolify delayed order', (test) => {
 
 });
 
-tap.test('poolify functor', (test) => {
+api.metatests.test('poolify functor', (test) => {
 
   const adder = a => b => adder(a + b);
 
-  const pool = metasync.poolify(adder, 1, 2, 3);
+  const pool = api.metasync.poolify(adder, 1, 2, 3);
 
   pool(item1 => {
     test.strictSame(pool.items.length, 1);
@@ -110,11 +107,11 @@ tap.test('poolify functor', (test) => {
 
 });
 
-tap.test('poolify get sync', (test) => {
+api.metatests.test('poolify get sync', (test) => {
 
   const adder = a => b => adder(a + b);
 
-  const pool = metasync.poolify(adder, 1, 2, 3);
+  const pool = api.metasync.poolify(adder, 1, 2, 3);
 
   const item1 = pool();
   test.strictSame(pool.items.length, 1);

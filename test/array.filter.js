@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('successful filter', (test) => {
+api.metatests.test('successful filter', (test) => {
   const arr = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
     'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
@@ -14,29 +11,31 @@ tap.test('successful filter', (test) => {
     'do', 'ut', 'et', 'magna'
   ];
 
-  metasync.filter(arr, (str, callback) => process.nextTick(() => (
+  api.metasync.filter(arr, (str, callback) => process.nextTick(() => (
     callback(null, str.length < 6)
   )), (err, res) => {
-    test.error(err);
+    if (err) test.notOk(err.toString());
+    //test.error(err);
     test.same(res.join(), expectedArr.join());
     test.end();
   });
 });
 
-tap.test('filter with empty array', (test) => {
+api.metatests.test('filter with empty array', (test) => {
   const arr = [];
   const expectedArr = [];
 
-  metasync.filter(arr, (str, callback) => process.nextTick(() => (
+  api.metasync.filter(arr, (str, callback) => process.nextTick(() => (
     callback(null, str.length < 6)
   )), (err, res) => {
-    test.error(err);
+    if (err) test.notOk(err.toString());
+    //test.error(err);
     test.strictSame(res, expectedArr);
     test.end();
   });
 });
 
-tap.test('successful filter', (test) => {
+api.metatests.test('successful filter', (test) => {
   const arr = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
     'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
@@ -47,7 +46,7 @@ tap.test('successful filter', (test) => {
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed', 'magna'
   ];
 
-  metasync.filter(arr, (str, callback) => process.nextTick(() => {
+  api.metasync.filter(arr, (str, callback) => process.nextTick(() => {
     if (str.length === 2) {
       callback(filterError);
       return;

@@ -1,41 +1,40 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('successfull each', (test) => {
+api.metatests.test('successfull each', (test) => {
   const arr = [1, 2, 3, 4];
 
   const elementsSet = new Set();
   const expectedElementsSet = new Set(arr);
 
-  metasync.each(arr, (el, callback) => process.nextTick(() => {
+  api.metasync.each(arr, (el, callback) => process.nextTick(() => {
     elementsSet.add(el);
     callback(null);
   }), (err) => {
-    test.error(err);
+    if (err) test.notOk(err.toString());
+    //test.error(err);
     test.strictSame(elementsSet, expectedElementsSet);
     test.end();
   });
 });
 
-tap.test('each with empty array', (test) => {
+api.metatests.test('each with empty array', (test) => {
   const arr = [];
 
   const elementsSet = new Set();
   const expectedElementsSet = new Set(arr);
 
-  metasync.each(arr, (el, callback) => process.nextTick(() => {
+  api.metasync.each(arr, (el, callback) => process.nextTick(() => {
     elementsSet.add(el);
     callback(null);
   }), (err) => {
-    test.error(err);
+    if (err) test.notOk(err.toString());
+    //test.error(err);
     test.strictSame(elementsSet, expectedElementsSet);
     test.end();
   });
 });
 
-tap.test('each with error', (test) => {
+api.metatests.test('each with error', (test) => {
   const arr = [1, 2, 3, 4];
   let count = 0;
 
@@ -43,7 +42,7 @@ tap.test('each with error', (test) => {
   const expectedElementsCount = 2;
   const eachError = new Error('Each error');
 
-  metasync.each(arr, (el, callback) => process.nextTick(() => {
+  api.metasync.each(arr, (el, callback) => process.nextTick(() => {
     elementsSet.add(el);
     count++;
     if (count === expectedElementsCount) {

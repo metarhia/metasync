@@ -1,9 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const metasync = require('..');
-
-tap.test('firstOf', (test) => {
+api.metatests.test('firstOf', (test) => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
@@ -26,14 +23,15 @@ tap.test('firstOf', (test) => {
 
   const fns = [1, 2, 3].map(makeIFn);
 
-  metasync.firstOf(fns, (err, data) => {
-    test.error(err);
+  api.metasync.firstOf(fns, (err, data) => {
+    if (err) test.notOk(err.toString());
+    //test.error(err);
     test.strictSame(data, 'data2');
     test.end();
   });
 });
 
-tap.test('parallel with error', (test) => {
+api.metatests.test('parallel with error', (test) => {
   const parallelError = new Error('Parallel error');
 
   function fn1(data, cb) {
@@ -48,14 +46,14 @@ tap.test('parallel with error', (test) => {
     });
   }
 
-  metasync.parallel([fn1, fn2], (err, res) => {
+  api.metasync.parallel([fn1, fn2], (err, res) => {
     test.strictSame(err, parallelError);
     test.strictSame(res, undefined);
     test.end();
   });
 });
 
-tap.test('sequential with error', (test) => {
+api.metatests.test('sequential with error', (test) => {
   const sequentialError = new Error('Sequential error');
   const expectedDataInFn2 = { data1: 'data 1' };
 
@@ -67,12 +65,12 @@ tap.test('sequential with error', (test) => {
 
   function fn2(data, cb) {
     process.nextTick(() => {
-      tap.same(data, expectedDataInFn2);
+      test.same(data, expectedDataInFn2);
       cb(sequentialError);
     });
   }
 
-  metasync.sequential([fn1, fn2], (err, res) => {
+  api.metasync.sequential([fn1, fn2], (err, res) => {
     test.strictSame(err, sequentialError);
     test.strictSame(res, undefined);
     test.end();
