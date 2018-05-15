@@ -16,8 +16,7 @@ const twiceAndColon = (str) => appendColon(repeatStringTwice(str));
 api.metatests.test('Result transformation', (test) => {
   const expected = 'data:';
   api.metasync.fmap(asyncDataCb, appendColon)((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(expected, res);
     test.end();
   });
@@ -45,8 +44,7 @@ api.metatests.test(FP1, (test) => {
 
 api.metatests.test('functor law I', (test) => {
   api.metasync.fmap(asyncDataCb, identity)((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(asyncData, res);
     test.end();
   });
@@ -59,9 +57,8 @@ api.metatests.test('functor law II', (test) => {
 
   asyncTwiceAndColon((err1, res1) => {
     fmap(asyncDataCb, twiceAndColon)((err2, res2) => {
-      if (err1) test.notOk(err1.toString());
-      if (err2) test.notOk(err2.toString());
-      //test.error(err1, err2);
+      test.error(err1);
+      test.error(err2);
       test.strictSame(res1, res2);
       test.end();
     });

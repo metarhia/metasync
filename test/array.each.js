@@ -10,8 +10,7 @@ api.metatests.test('successfull each', (test) => {
     elementsSet.add(el);
     callback(null);
   }), (err) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(elementsSet, expectedElementsSet);
     test.end();
   });
@@ -27,8 +26,7 @@ api.metatests.test('each with empty array', (test) => {
     elementsSet.add(el);
     callback(null);
   }), (err) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(elementsSet, expectedElementsSet);
     test.end();
   });

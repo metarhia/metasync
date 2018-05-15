@@ -18,8 +18,7 @@ api.metatests.test('asyn parallel functions composition', (test) => {
 
   const fc = api.metasync([[fn1, fn2]]);
   fc(data, (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, expectedData);
     test.end();
   });
@@ -75,8 +74,7 @@ api.metatests.test('async complex functions composition', (test) => {
 
   const fc = api.metasync([fn1, fn2, [[fn3, [fn4, fn5] ]], [], [[ ]] ]);
   fc(data, (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, expectedDataInRes);
     test.end();
   });

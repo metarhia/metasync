@@ -17,8 +17,7 @@ const asyncTransformErrorCb = (str, callback) => (
 
 api.metatests.test('two successful functions', (test) => {
   api.metasync.concat(asyncDataCb, asyncTwice)((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, 'datadata');
     test.end();
   });

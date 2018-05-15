@@ -22,20 +22,16 @@ api.metatests.test('memoize', (test) => {
   });
 
   memoizedGetData('file1', (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, storage.file1);
     memoizedGetData('file2', (err, data) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(data, storage.file2);
       memoizedGetData('file1', (err, data) => {
-        if (err) test.notOk(err.toString());
-        //test.error(err);
+        test.error(err);
         test.strictSame(data, storage.file1);
         memoizedGetData('file2', (err, data) => {
-          if (err) test.notOk(err.toString());
-          //test.error(err);
+          test.error(err);
           test.strictSame(data, storage.file2);
           test.strictSame(keys, ['file1', 'file2']);
           test.end();
@@ -66,14 +62,12 @@ api.metatests.test('memoize clear cache', (test) => {
   });
 
   memoizedGetData('file1', (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, storage.file1);
     storage.file1 = Buffer.from('changed');
     memoizedGetData.clear();
     memoizedGetData('file1', (err, data) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(data, Buffer.from('changed'));
       test.strictSame(onClear, true);
       test.end();
@@ -102,14 +96,12 @@ api.metatests.test('memoize cache del', (test) => {
   });
 
   memoizedGetData('file1', (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, storage.file1);
     storage.file1 = Buffer.from('changed');
     memoizedGetData.del('file1');
     memoizedGetData('file1', (err, data) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(data, Buffer.from('changed'));
       test.strictSame(onDel, true);
       test.end();
@@ -135,8 +127,7 @@ api.metatests.test('memoize cache add', (test) => {
   const file1 = Buffer.from('added');
   memoizedGetData.add('file1', null, file1);
   memoizedGetData('file1', (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, Buffer.from('added'));
     test.strictSame(onAdd, true);
     test.end();
@@ -156,8 +147,7 @@ api.metatests.test('memoize cache get', (test) => {
   const file1 = Buffer.from('added');
   memoizedGetData.add('file1', null, file1);
   memoizedGetData.get('file1', (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, Buffer.from('added'));
     test.end();
   });

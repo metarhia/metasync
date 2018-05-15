@@ -14,8 +14,7 @@ api.metatests.test('successful filter', (test) => {
   api.metasync.filter(arr, (str, callback) => process.nextTick(() => (
     callback(null, str.length < 6)
   )), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.same(res.join(), expectedArr.join());
     test.end();
   });
@@ -28,8 +27,7 @@ api.metatests.test('filter with empty array', (test) => {
   api.metasync.filter(arr, (str, callback) => process.nextTick(() => (
     callback(null, str.length < 6)
   )), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedArr);
     test.end();
   });

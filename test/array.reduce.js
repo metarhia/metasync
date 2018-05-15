@@ -8,8 +8,7 @@ api.metatests.test('successfull with initial', (test) => {
   api.metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedRes);
     test.end();
   }, initial);
@@ -23,8 +22,7 @@ api.metatests.test('reduce with initial and empty array', (test) => {
   api.metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedRes);
     test.end();
   }, initial);
@@ -52,8 +50,7 @@ api.metatests.test('successfull without initial', (test) => {
   api.metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedRes);
     test.end();
   });
@@ -66,8 +63,7 @@ api.metatests.test('successfull with asymetric function', (test) => {
   api.metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev * 2 + +cur))
   ), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedRes);
     test.end();
   });

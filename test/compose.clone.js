@@ -20,12 +20,10 @@ api.metatests.test('async functions composition clone', (test) => {
   const fc2 = fc1.clone();
 
   fc1(data, (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(data, expectedData);
     fc2(data, (err, data) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(data, expectedData);
       test.end();
     });

@@ -7,8 +7,7 @@ api.metatests.test('succesfull map', (test) => {
   api.metasync.map(arr, (x, callback) => (
     process.nextTick(() => callback(null, x * x))
   ), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedArr);
     test.end();
   });
@@ -21,8 +20,7 @@ api.metatests.test('map with empty array', (test) => {
   api.metasync.map(arr, (x, callback) => (
     process.nextTick(() => callback(null, x * x))
   ), (err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, expectedArr);
     test.end();
   });

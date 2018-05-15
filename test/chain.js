@@ -8,8 +8,7 @@ api.metatests.test('map', (test) => {
   });
 
   api.metasync.for(data).map(fn).fetch((err, result) => {
-    if (err) test.notOk(err.toString(), 'must not return an error');
-    //test.error(err, 'must not return an error');
+    test.error(err, 'must not return an error');
     test.strictSame(result, expected, `result should be: ${expected}`);
     test.end();
   });

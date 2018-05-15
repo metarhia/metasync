@@ -51,7 +51,6 @@ api.metatests.test('successfull then', (test) => {
     test.strictSame(finishedFuncsCount, 4);
     test.end();
   }, (err) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
   });
 });

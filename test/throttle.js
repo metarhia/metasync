@@ -101,8 +101,7 @@ api.metatests.test('debounce without arguments for function', (test) => {
 api.metatests.test('timeout with sync function', (test) => {
   const syncFn = (callback) => callback(null, 'someVal');
   api.metasync.timeout(1, syncFn, (err, res, ...args) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, 'someVal');
     test.strictSame(args, []);
     test.end();
@@ -115,8 +114,7 @@ api.metatests.test('timeout', (test) => {
       callback(null, 'someVal');
     }, 0);
   }, (err, res, ...args) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, 'someVal');
     test.strictSame(args, []);
     test.end();

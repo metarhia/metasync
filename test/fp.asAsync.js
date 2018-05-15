@@ -15,8 +15,7 @@ api.metatests.test('asAsync all functions test', (test) => {
     .fmap(x => (x * 7))
     .ap(tripleFnInCb)
     .concat(asyncMultBy11)((err, res) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(res, 1848);
       test.end();
     });

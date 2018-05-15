@@ -13,8 +13,7 @@ const asyncErrorCb = (callback) => (
 
 api.metatests.test('two successful functions', (test) => {
   api.metasync.ap(asyncArgs, functionInCallback)((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, 9);
     test.end();
   });

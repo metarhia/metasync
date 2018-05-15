@@ -24,8 +24,9 @@ api.metatests.test('firstOf', (test) => {
   const fns = [1, 2, 3].map(makeIFn);
 
   api.metasync.firstOf(fns, (err, data) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+
+
+    test.error(err);
     test.strictSame(data, 'data2');
     test.end();
   });

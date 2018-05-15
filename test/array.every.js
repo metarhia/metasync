@@ -6,8 +6,7 @@ function identity(x, callback) {
 
 function strictSameResult(input, expectedResult, test, done) {
   api.metasync.every(input, identity, (err, result) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(result, expectedResult);
 
     done();
@@ -65,8 +64,7 @@ api.metatests.test('every', test => {
   }
 
   api.metasync.every(data, predicate, (err, result) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(result, true);
     test.end();
   });

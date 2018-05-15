@@ -12,8 +12,7 @@ api.metatests.test('find with error', (test) => {
   });
 
   api.metasync.find(data, predicate, (err) => {
-    test.assert(err instanceof Error, 'err must be an instance of Error');
-    //test.type(err, 'Error', 'err must be an instance of Error');
+    test.type(err, 'Error', 'err must be an instance of Error');
     test.strictSame(err.message, expectedErrorMessage);
     test.end();
   });
@@ -27,8 +26,7 @@ api.metatests.test('find', (test) => {
   ));
 
   api.metasync.find(data, predicate, (err, result) => {
-    if (err) test.notOk(err.toString(), 'must not return an error');
-    //test.error(err, 'must not return an error');
+    test.error(err, 'must not return an error');
     test.strictSame(result, expected, `result should be: ${expected}`);
     test.end();
   });
@@ -38,8 +36,7 @@ api.metatests.test('with empty array', (test) => {
   api.metasync.find([], (el, callback) => (
     process.nextTick(() => callback(null, true))
   ), (err, result) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(result, undefined);
     test.end();
   });
@@ -50,8 +47,7 @@ api.metatests.test('with array without element which is searching', (test) => {
   api.metasync.find(data, (el, callback) => (
     process.nextTick(() => callback(null, el === 20))
   ), (err, result) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(result, undefined);
     test.end();
   });

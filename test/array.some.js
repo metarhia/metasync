@@ -5,8 +5,7 @@ api.metatests.test('successful some', (test) => {
 
   const predicate = (x, callback) => callback(null, x % 2 === 0);
   api.metasync.some(arr, predicate, (err, accepted) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(accepted, true);
     test.end();
   });
@@ -17,8 +16,7 @@ api.metatests.test('failing some', (test) => {
 
   const predicate = (x, callback) => callback(null, x > 3);
   api.metasync.some(arr, predicate, (err, accepted) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(accepted, false);
     test.end();
   });
@@ -43,8 +41,7 @@ api.metatests.test('some with empty array', (test) => {
 
   const predicate = (x, callback) => callback(null, x > 3);
   api.metasync.some(arr, predicate, (err, accepted) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(accepted, false);
     test.end();
   });

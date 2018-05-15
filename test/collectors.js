@@ -10,8 +10,7 @@ api.metatests.test('data collector', (test) => {
   const dc = api.metasync
     .collect(3)
     .done((err, result) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(result, expectedResult);
       test.end();
     })
@@ -32,8 +31,7 @@ api.metatests.test('data collector', (test) => {
   const kc = api.metasync
     .collect(['key1', 'key2', 'key3'])
     .done((err, result) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(result, expectedResult);
       test.end();
     })
@@ -55,8 +53,7 @@ api.metatests.test('distinct data collector', (test) => {
     .collect(3)
     .distinct()
     .done((err, result) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(result, expectedResult);
       test.end();
     });
@@ -78,8 +75,7 @@ api.metatests.test('distinct key collector', (test) => {
     .collect(['key1', 'key2', 'key3'])
     .distinct()
     .done((err, result) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(result, expectedResult);
       test.end();
     });
@@ -132,8 +128,7 @@ api.metatests.test('collect with error', (test) => {
 api.metatests.test('collect method calling after it\'s done', (test) => {
   const col = api.metasync.collect(1);
   col.done((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, { someKey: 'someVal' });
     test.end();
   });
@@ -144,8 +139,7 @@ api.metatests.test('collect method calling after it\'s done', (test) => {
 api.metatests.test('keys collector receives wrong key', (test) => {
   const col = api.metasync.collect(['rightKey']);
   col.done((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, { wrongKey: 'someVal', rightKey: 'someVal' });
     test.end();
   });
@@ -166,8 +160,7 @@ api.metatests.test('distinct keys collector receives wrong key', (test) => {
 api.metatests.test('collect with take', (test) => {
   const col = api.metasync.collect(1);
   col.done((err, res) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(res, { someKey: 'someVal' });
     test.end();
   });
@@ -191,8 +184,7 @@ api.metatests.test('collect with timeout error', (test) => {
 api.metatests.test('collect with take calls bigger than expected', (test) => {
   const col = api.metasync.collect(1)
     .done((err, res) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.strictSame(Object.keys(res).length, 1);
       test.end();
     });
@@ -232,8 +224,7 @@ api.metatests.test('collect then success', (test) => {
       test.end();
     },
     (err) => {
-      if (err) test.notOk(err.toString());
-      //test.error(err);
+      test.error(err);
       test.end();
     }
   );
@@ -243,8 +234,7 @@ api.metatests.test('collect then success', (test) => {
 api.metatests.test('collect then fail', (test) => {
   api.metasync.collect(5).timeout(10).then(
     (result) => {
-      test.notOk(result);
-      //test.error(result);
+      test.error(result);
       test.end();
     },
     (err) => {

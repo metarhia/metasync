@@ -8,8 +8,7 @@ api.metatests.test('successfull series', (test) => {
     elements.push(el);
     callback(null);
   }, (err) => {
-    if (err) test.notOk(err.toString());
-    //test.error(err);
+    test.error(err);
     test.strictSame(elements, expectedElements);
     test.end();
   });
