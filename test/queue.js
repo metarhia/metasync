@@ -22,7 +22,6 @@ api.metatests.test('queue add', (test) => {
   }
 });
 
-
 api.metatests.test('queue pause resume clear', (test) => {
   const queue = api.metasync.queue(3);
   queue.pause();
