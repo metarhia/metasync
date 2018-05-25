@@ -256,7 +256,7 @@ and callback
 ## Async function
 `metasync.asAsync(fn, ...args)`
 - `fn` - function
-- `...args` - its argumants
+- `...args` - its arguments
 
 ## Convert source to callback-last contract
 `metasync.callbackify(source)`
