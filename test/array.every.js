@@ -1,19 +1,17 @@
 'use strict';
 
-function identity(x, callback) {
-  callback(null, x);
-}
+const identity = (x, callback) => callback(null, x);
 
-function strictSameResult(input, expectedResult, test, done) {
+const strictSameResult = (input, expectedResult, test, done) => {
   api.metasync.every(input, identity, (err, result) => {
     test.error(err);
     test.strictSame(result, expectedResult);
 
     done();
   });
-}
+};
 
-function fewStrictSameResult(inOutPairs, test) {
+const fewStrictSameResult = (inOutPairs, test) => {
   let i = 0;
   const testsEnd = api.metasync.collect(inOutPairs.length);
   testsEnd.done(() =>  test.end());
@@ -21,17 +19,17 @@ function fewStrictSameResult(inOutPairs, test) {
   for (const [input, output] of inOutPairs) {
     strictSameResult(input, output, test, cb);
   }
-}
+};
 
 api.metatests.test('every with error', test => {
   const data = [1, 2, 3];
   const everyErr = new Error('Every error');
 
-  function predicate(item, callback) {
+  const predicate = (item, callback) => {
     process.nextTick(() => (
       item % 2 === 0 ? callback(everyErr) : callback(null, true)
     ));
-  }
+  };
 
   api.metasync.every(data, predicate, err => {
     test.strictSame(err, everyErr);
@@ -59,9 +57,9 @@ api.metatests.test('every with two-element arrays', test =>
 api.metatests.test('every', test => {
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
-  function predicate(item, callback) {
+  const predicate = (item, callback) => {
     process.nextTick(() => callback(null, item > 0));
-  }
+  };
 
   api.metasync.every(data, predicate, (err, result) => {
     test.error(err);

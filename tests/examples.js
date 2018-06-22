@@ -21,7 +21,7 @@ if (!assert.deepStrictEqual) {
 
 // Data Collector
 
-function dataCollectorTest(end) {
+const dataCollectorTest = (end) => {
 
   const dataCollector = new metasync.DataCollector(4);
 
@@ -47,9 +47,9 @@ function dataCollectorTest(end) {
     dataCollector.collect('timer', { date: new Date() });
   }, ASYNC_TIMEOUT);
 
-}
+};
 
-function dataCollectorTimeoutTest(end) {
+const dataCollectorTimeoutTest = (end) => {
 
   const dataCollector = new metasync.DataCollector(4, 1000);
 
@@ -64,9 +64,9 @@ function dataCollectorTimeoutTest(end) {
 
   dataCollector.collect('user', { name: 'Marcus Aurelius' });
 
-}
+};
 
-function dataCollectorErrorTest(end) {
+const dataCollectorErrorTest = (end) => {
 
   const dataCollector = new metasync.DataCollector(4);
 
@@ -91,11 +91,11 @@ function dataCollectorErrorTest(end) {
   dataCollector.collect('score', 1000);
   dataCollector.collect('tcp', new Error('No socket'));
 
-}
+};
 
 // Key Collector
 
-function keyCollectorTest(end) {
+const keyCollectorTest = (end) => {
 
   const keyCollector = new metasync.KeyCollector(['user', 'history'], 1000);
 
@@ -113,62 +113,63 @@ function keyCollectorTest(end) {
     keyCollector.collect('history', data);
   });
 
-}
+};
+
 // Parallel execution
 
-function parallelTest(end) {
+const parallelTest = (end) => {
+
+  const pf1 = (data, callback) => {
+    console.log('pf1');
+    setTimeout(() => callback('result1'), ASYNC_TIMEOUT);
+  };
+
+  const pf2 = (data, callback) => {
+    console.log('pf2');
+    setTimeout(() => callback('result2'), ASYNC_TIMEOUT);
+  };
+
+  const pf3 = (data, callback) => {
+    console.log('pf3');
+    setTimeout(() => callback('result3'), ASYNC_TIMEOUT);
+  };
 
   metasync.parallel([pf1, pf2, pf3], () => {
     console.log('Parallel test done');
     end();
   });
 
-  function pf1(data, callback) {
-    console.log('pf1');
-    setTimeout(() => callback('result1'), ASYNC_TIMEOUT);
-  }
-
-  function pf2(data, callback) {
-    console.log('pf2');
-    setTimeout(() => callback('result2'), ASYNC_TIMEOUT);
-  }
-
-  function pf3(data, callback) {
-    console.log('pf3');
-    setTimeout(() => callback('result3'), ASYNC_TIMEOUT);
-  }
-
-}
+};
 
 // Sequential execution
 
-function sequentialTest(end) {
+const sequentialTest = (end) => {
+
+  const sf1 = (data, callback) => {
+    console.log('sf1');
+    setTimeout(() => callback('result1'), ASYNC_TIMEOUT);
+  };
+
+  const sf2 = (data, callback) => {
+    console.log('sf2');
+    setTimeout(() => callback('result2'), ASYNC_TIMEOUT);
+  };
+
+  const sf3 = (data, callback) => {
+    console.log('sf3');
+    setTimeout(() => callback('result3'), ASYNC_TIMEOUT);
+  };
 
   metasync.sequential([sf1, sf2, sf3], () => {
     console.log('Sequential test done');
     end();
   });
 
-  function sf1(data, callback) {
-    console.log('sf1');
-    setTimeout(() => callback('result1'), ASYNC_TIMEOUT);
-  }
-
-  function sf2(data, callback) {
-    console.log('sf2');
-    setTimeout(() => callback('result2'), ASYNC_TIMEOUT);
-  }
-
-  function sf3(data, callback) {
-    console.log('sf3');
-    setTimeout(() => callback('result3'), ASYNC_TIMEOUT);
-  }
-
-}
+};
 
 // Asynchrous filter
 
-function filterTest(end) {
+const filterTest = (end) => {
 
   const dataToFilter = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
@@ -176,7 +177,7 @@ function filterTest(end) {
     'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua',
   ];
 
-  function filterPredicate(item, callback) {
+  const filterPredicate = (item, callback) => {
     // filter words which consists of unique letters only
     const letters = [];
     console.log('checking value: ' + item);
@@ -190,7 +191,7 @@ function filterTest(end) {
       () => callback(null, letters.length === item.length),
       ASYNC_TIMEOUT
     );
-  }
+  };
 
   metasync.filter(dataToFilter, filterPredicate, (err, result) => {
     console.log('filtered array: ' + result);
@@ -198,11 +199,11 @@ function filterTest(end) {
     end();
   });
 
-}
+};
 
 // Asynchrous find
 
-function findTest(end) {
+const findTest = (end) => {
 
   metasync.find(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
@@ -216,11 +217,10 @@ function findTest(end) {
     }
   );
 
-}
-
+};
 
 // Asynchrous some
-function someTest(end) {
+const someTest = (end) => {
   metasync.some(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     (item, callback) => {
@@ -234,11 +234,11 @@ function someTest(end) {
       end();
     }
   );
-}
+};
 
 // Asyncronous each in parallel
 
-function eachTest(end) {
+const eachTest = (end) => {
 
   metasync.each(
     ['a', 'b', 'c'],
@@ -252,11 +252,11 @@ function eachTest(end) {
     }
   );
 
-}
+};
 
 // Asyncronous series (sequential)
 
-function seriesTest(end) {
+const seriesTest = (end) => {
 
   metasync.series(
     //['a', 'b', 'c'],
@@ -271,11 +271,11 @@ function seriesTest(end) {
     }
   );
 
-}
+};
 
 // Asyncronous reduce (sequential)
 
-function reduceTest(end) {
+const reduceTest = (end) => {
 
   metasync.reduce(
     ['a', 'b', 'c'],
@@ -289,11 +289,11 @@ function reduceTest(end) {
     }
   );
 
-}
+};
 
-function concurrentQueueTest(end) {
+const concurrentQueueTest = (end) => {
 
-  const queue =  new metasync.ConcurrentQueue(3, 2000);
+  const queue = new metasync.ConcurrentQueue(3, 2000);
 
   queue.on('process', (item, callback) => {
     setTimeout(() => {
@@ -319,9 +319,9 @@ function concurrentQueueTest(end) {
   queue.add({ id: 6 });
   queue.add({ id: 8 });
   queue.add({ id: 9 });
-}
+};
 
-function concurrentQueuePauseResumeStopTest(end) {
+const concurrentQueuePauseResumeStopTest = (end) => {
   const queue =  new metasync.ConcurrentQueue(3, 2000);
   queue.pause();
   queue.on('empty', end);
@@ -337,18 +337,18 @@ function concurrentQueuePauseResumeStopTest(end) {
   if (queue.count === 0) {
     console.log('ConcurrentQueue stop test done');
   }
-}
+};
 
-function throttleTest(end) {
+const throttleTest = (end) => {
   let state;
 
-  function fn(letter) {
+  const fn = (letter) => {
     console.log('Throttled function, state: ' + state);
     if (state === letter) {
       console.log('Throttle test done');
       end();
     }
-  }
+  };
 
   const f1 = metasync.throttle(500, fn, ['I']);
 
@@ -382,18 +382,18 @@ function throttleTest(end) {
     f1();
   }, 1100);
 
-}
+};
 
-function debounceTest(end) {
+const debounceTest = (end) => {
   let state;
 
-  function fn(letter) {
+  const fn = (letter) => {
     console.log('Debounced function, state: ' + state);
     if (state === letter) {
       console.log('Debounce test done');
       end();
     }
-  }
+  };
 
   const f1 = metasync.debounce(500, fn, ['I']);
 
@@ -426,9 +426,9 @@ function debounceTest(end) {
     state = 'I';
     f1();
   }, 1100);
-}
+};
 
-function mapTest(end) {
+const mapTest = (end) => {
   metasync.map([1, 2, 3], (item, callback) => {
     setTimeout(() => {
       callback(null, item * item);
@@ -453,9 +453,9 @@ function mapTest(end) {
     console.log('Map test #2 done');
     end();
   });
-}
+};
 
-function timeoutTest(end) {
+const timeoutTest = (end) => {
   // Done function called by timer
   const start1 = new Date();
   metasync.timeout(200, (done) => {
@@ -474,43 +474,41 @@ function timeoutTest(end) {
     console.log('Timout test #2 done');
     end();
   });
-}
+};
 
-function chainTest(end) {
+const chainTest = (end) => {
   // Just to make sure we don't forget to merge the tests. There's some bug in
   // metasync.composition so part of tests, including this one, are not run.
   // As a temporary workaround, you can run it via
   //   $ node chain-example
   require('./chain-example');
   end();
-}
+};
 
-function printCallbackArgs(end) {
-  return (err, ...args) => {
-    if (err) {
-      console.log('Error: ' + err);
-      return;
-    }
-    console.log(...args);
-    console.log('done');
-    end();
-  };
-}
+const printCallbackArgs = (end) => (err, ...args) => {
+  if (err) {
+    console.log('Error: ' + err);
+    return;
+  }
+  console.log(...args);
+  console.log('done');
+  end();
+};
 
-function ofTest(end) {
+const ofTest = (end) => {
   console.log('of test:');
   metasync.monad.of(4, 'str', [1, 2, 3])(printCallbackArgs(end));
-}
+};
 
-function fmapTest(end) {
+const fmapTest = (end) => {
   console.log('fmap test:');
   const of = metasync.monad.of;
   const args = [4, 'str', [1, 2, 3]];
   const reverseArgs = (...args) => args.reverse();
   of(...args).fmap(reverseArgs)(printCallbackArgs(end));
-}
+};
 
-function monadChainTest(end) {
+const monadChainTest = (end) => {
   console.log('Monad concat test:');
   const M = metasync.monad;
   const args = [4, 'str', [1, 2, 3]];
@@ -518,18 +516,18 @@ function monadChainTest(end) {
     printCallbackArgs(callback)(null, ...args)
   );
   M.of(...args).concat(asyncPrint)(end);
-}
+};
 
-function apTest(end) {
+const apTest = (end) => {
   console.log('ap test:');
   const M = metasync.monad;
   const storage = {};
 
-  function collect(key, val) {
+  const collect = (key, val) => {
     if (key === undefined) return;
     storage[key] = val;
     return collect;
-  }
+  };
 
   const arrOfAsyncFunctions = [
     ['first', 1], ['second', 2], ['third', 3]
@@ -541,9 +539,9 @@ function apTest(end) {
     console.log('done');
     end();
   });
-}
+};
 
-function cbTest(end) {
+const cbTest = (end) => {
   const fn1 = undefined;
   const fn2 = null;
   const fn3 = (err, data) => console.log('Done callback test ' + data);
@@ -558,7 +556,7 @@ function cbTest(end) {
   cb3(null, 'ok');
 
   end();
-}
+};
 
 // Run tests
 

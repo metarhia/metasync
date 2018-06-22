@@ -4,17 +4,17 @@ api.metatests.test('async functions composition clone', (test) => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
-  function fn1(data, cb) {
+  const fn1 = (data, cb) => {
     process.nextTick(() => {
       cb(null, { data1: 'data 1' });
     });
-  }
+  };
 
-  function fn2(data, cb) {
+  const fn2 = (data, cb) => {
     process.nextTick(() => {
       cb(null, { data2: 'data 2' });
     });
-  }
+  };
 
   const fc1 = api.metasync([[fn1, fn2]]);
   const fc2 = fc1.clone();
