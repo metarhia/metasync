@@ -35,17 +35,17 @@ api.metatests.test('firstOf', (test) => {
 api.metatests.test('parallel with error', (test) => {
   const parallelError = new Error('Parallel error');
 
-  function fn1(data, cb) {
+  const fn1 = (data, cb) => {
     process.nextTick(() => {
       cb(null, { data1: 'data 1' });
     });
-  }
+  };
 
-  function fn2(data, cb) {
+  const fn2 = (data, cb) => {
     process.nextTick(() => {
       cb(parallelError);
     });
-  }
+  };
 
   api.metasync.parallel([fn1, fn2], (err, res) => {
     test.strictSame(err, parallelError);
@@ -58,18 +58,18 @@ api.metatests.test('sequential with error', (test) => {
   const sequentialError = new Error('Sequential error');
   const expectedDataInFn2 = { data1: 'data 1' };
 
-  function fn1(data, cb) {
+  const fn1 = (data, cb) => {
     process.nextTick(() => {
       cb(null, { data1: 'data 1' });
     });
-  }
+  };
 
-  function fn2(data, cb) {
+  const fn2 = (data, cb) => {
     process.nextTick(() => {
       test.same(data, expectedDataInFn2);
       cb(sequentialError);
     });
-  }
+  };
 
   api.metasync.sequential([fn1, fn2], (err, res) => {
     test.strictSame(err, sequentialError);
