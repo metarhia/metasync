@@ -5,6 +5,7 @@ const tests = [
   'composition',
   'composition.pause',
   'composition.sequential',
+  'composition.cancel',
   'collector'
 ];
 
