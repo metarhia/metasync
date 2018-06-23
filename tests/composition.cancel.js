@@ -22,21 +22,21 @@ const fn1 = (data, cb) => {
 const fn2 = (data, cb) => {
   wrapAsync(() => {
     assert.ok('fn2');
-    //if (fc) fc.cancel();
+    if (fc) fc.cancel();
     cb(null, 2);
   });
 };
 
 const fn3 = (data, cb) => {
   wrapAsync(() => {
-    //assert.fail('fn3');
+    assert.fail('fn3');
     cb(null, 3);
   });
 };
 
 const fn4 = (data, cb) => {
   wrapAsync(() => {
-    //assert.fail('fn4');
+    assert.fail('fn4');
     cb(null, 4);
   });
 };
@@ -44,6 +44,5 @@ const fn4 = (data, cb) => {
 fc = metasync([fn1, fn2, fn3, fn4]);
 
 fc([], (err, data) => {
-  console.dir([err, data]);
-  assert.fail('done');
+  assert.equal(data, undefined);
 });
