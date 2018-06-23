@@ -44,5 +44,6 @@ const fn4 = (data, cb) => {
 fc = metasync([fn1, fn2, fn3, fn4]);
 
 fc([], (err, data) => {
+  console.dir([err, data]);
   assert.fail('done');
 });
