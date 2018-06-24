@@ -1,7 +1,6 @@
 # Asynchronous Programming Library
 
 [![TravisCI](https://travis-ci.org/metarhia/metasync.svg?branch=master)](https://travis-ci.org/metarhia/metasync)
-[![bitHound](https://www.bithound.io/github/metarhia/metasync/badges/score.svg)](https://www.bithound.io/github/metarhia/metasync)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/60fe108b31614b4191cd557d49112169)](https://www.codacy.com/app/metarhia/metasync)
 [![NPM Version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
 [![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg)](https://www.npmjs.com/package/metasync)
