@@ -33,8 +33,6 @@
   "readmeFilename": "README.md",
   "scripts": {
     "test": "npm run lint && node tests/all && node test/all",
-    "code-coverage": "tap test/*.js --100",
-    "code-coverage-report": "tap test/*.js --coverage-report=html",
     "perf": "tests/load/run.sh",
     "lint": "eslint .",
     "docs": "metaschema ./metasync.js"
