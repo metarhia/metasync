@@ -33,7 +33,7 @@ api.metatests.test('successfull then', (test) => {
     callback(null, { res4 });
   });
   const faf1 = api.metasync([af1, [[af2, af3]], af4]);
-  faf1.then((res) => {
+  faf1().then((res) => {
     test.strictSame(res, {
       res1: 'res1',
       res2: 'res2',

@@ -1,8 +1,8 @@
 'use strict';
 
 const metatests = require('metatests');
-const common = require('..');
-const metasync = require('metasync');
+const common = require('metarhia-common');
+const metasync = require('..');
 const events = require('events');
 
 global.api = { common, events, metatests, metasync };
