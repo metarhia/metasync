@@ -1,6 +1,6 @@
 'use strict';
 
-api.metatests.test('successfull then', (test) => {
+api.metatests.test('successfull then', async(test) => {
   let finishedFuncsCount = 0;
   const res1 = 'res1';
   const af1 = (data, callback) => process.nextTick(() => {
@@ -33,16 +33,13 @@ api.metatests.test('successfull then', (test) => {
     callback(null, { res4 });
   });
   const faf1 = api.metasync([af1, [[af2, af3]], af4]);
-  faf1().then((res) => {
-    test.strictSame(res, {
-      res1: 'res1',
-      res2: 'res2',
-      res3: 'res3',
-      res4: 'res4',
-    });
-    test.strictSame(finishedFuncsCount, 4);
-    test.end();
-  }, (err) => {
-    test.error(err);
+  const res = await faf1();
+  test.strictSame(res, {
+    res1: 'res1',
+    res2: 'res2',
+    res3: 'res3',
+    res4: 'res4',
   });
+  test.strictSame(finishedFuncsCount, 4);
+  test.end();
 });

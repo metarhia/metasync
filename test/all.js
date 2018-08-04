@@ -1,8 +1,8 @@
 'use strict';
 
 const metatests = require('metatests');
-const common = require('..');
-const metasync = require('metasync');
+const common = require('metarhia-common');
+const metasync = require('..');
 const events = require('events');
 
 global.api = { common, events, metatests, metasync };
@@ -14,7 +14,7 @@ const all = [
   'array.each', 'array.every', 'array.filter',
   'array.find', 'array.map', 'array.reduce',
   'array.series', 'array.some',
-  'compose.clone', 'compose', 'compose.then',
+  'compose.clone', 'compose', 'compose.then', 'compose.await',
   'control', 'do', 'firstOf', 'memoize',
   'fp.ap', 'fp.asAsync', 'fp.concat', 'fp.fmap', 'fp.of',
   'poolify', 'throttle', 'queue', 'queue.modes'
