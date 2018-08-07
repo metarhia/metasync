@@ -30,12 +30,18 @@
     "url": "https://github.com/metarhia/metasync"
   },
   "main": "./metasync.js",
+  "browser": {
+    "./metasync.js": "./metasync.browser.js"
+  },
   "readmeFilename": "README.md",
   "scripts": {
     "test": "npm run lint && node tests/all && node test/all",
     "perf": "tests/load/run.sh",
     "lint": "eslint .",
-    "docs": "metaschema ./metasync.js"
+    "docs": "metaschema ./metasync.js",
+    "prebuild": "node prebuild && babel metasync.browser.js -d .",
+    "build": "npm run prebuild && babel lib -d dist",
+    "prepublish": "npm run build"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -44,6 +50,8 @@
     "metarhia-common": "^0.0.27"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
     "metaschema": "^0.0.7",
     "metatests": "^0.1.11"
