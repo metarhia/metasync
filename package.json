@@ -40,7 +40,7 @@
     "lint": "eslint .",
     "docs": "metaschema ./metasync.js",
     "build": "babel metasync.js -d dist && babel lib -d dist/lib",
-    "prepublish": "npm run build"
+    "prepublish": "npm run -s build"
   },
   "engines": {
     "node": ">=6.0.0"
