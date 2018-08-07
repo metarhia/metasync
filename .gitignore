@@ -1,5 +1,4 @@
 node_modules
 dist
-metasync.browser.js
 *.log
 .DS_Store

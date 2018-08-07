@@ -31,7 +31,7 @@
   },
   "main": "./metasync.js",
   "browser": {
-    "./metasync.js": "./metasync.browser.js"
+    "./metasync.js": "./dist/metasync.js"
   },
   "readmeFilename": "README.md",
   "scripts": {
@@ -39,8 +39,7 @@
     "perf": "tests/load/run.sh",
     "lint": "eslint .",
     "docs": "metaschema ./metasync.js",
-    "prebuild": "node prebuild && babel metasync.browser.js -d .",
-    "build": "npm run prebuild && babel lib -d dist",
+    "build": "babel metasync.js -d dist && babel lib -d dist/lib",
     "prepublish": "npm run build"
   },
   "engines": {
