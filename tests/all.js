@@ -1,7 +1,6 @@
 'use strict';
 
 const tests = [
-  'chain',
   'composition',
   'composition.pause',
   'composition.parallel',

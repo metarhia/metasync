@@ -1,15 +1,107 @@
 'use strict';
 
-api.metatests.test('map', (test) => {
+api.metatests.test('for.map', test => {
   const data = [1, 2, 3, 4];
   const expected = [2, 4, 6, 8];
   const fn = (item, callback) => process.nextTick(() => {
     callback(null, item * 2);
   });
+  api.metasync
+    .for(data)
+    .map(fn)
+    .fetch((error, result) => {
+      test.strictSame(result, expected);
+      test.end();
+    });
+});
 
-  api.metasync.for(data).map(fn).fetch((err, result) => {
-    test.error(err, 'must not return an error');
-    test.strictSame(result, expected, `result should be: ${expected}`);
-    test.end();
-  });
+api.metatests.test('for chain sync', test => {
+  api.metasync
+    .for([1, 2, 3, 4])
+    .filter((item, cb) => cb(null, item % 2 === 0))
+    .map((item, cb) => cb(null, item * 2))
+    .reduce((a, b, cb) => cb(null, a + b))
+    .fetch((error, result) => {
+      test.error(error, 'must not return an error');
+      test.strictSame(result, 12); // 2 * 2 + 4 * 2
+      test.end();
+    });
+});
+
+api.metatests.test('for chain async', test => {
+  api.metasync
+    .for([1, 2, 3, 4])
+    .filter((item, cb) => process.nextTick(cb, null, item % 2 === 0))
+    .map((item, cb) => process.nextTick(cb, null, item * 2))
+    .reduce((a, b, cb) => process.nextTick(cb, null, a + b))
+    .fetch((error, result) => {
+      test.error(error, 'must not return an error');
+      test.strictSame(result, 12); // 2 * 2 + 4 * 2
+      test.end();
+    });
+});
+
+api.metatests.test('for chain error', test => {
+  api.metasync
+    .for([1, 2, 3, 4])
+    .filter((item, cb) => cb(null, item % 2 === 0))
+    .map((item, cb) => cb(new Error('Something happens')))
+    .reduce((a, b, cb) => cb(null, a + b))
+    .fetch((error, result) => {
+      test.strictSame(error instanceof Error, true);
+      test.strictSame(result, undefined);
+      test.end();
+    });
+});
+
+api.metatests.test('for chain after fetch', test => {
+  api.metasync
+    .for([1, 2, 3, 4])
+    .map((item, cb) => cb(null, item * item))
+    .filter((item, cb) => cb(null, item > 5))
+    .fetch((error, result, resume) => {
+      test.strictSame(result.length, 2);
+      test.strictSame(result[0], 9);
+      test.strictSame(result[1], 16);
+      resume(null, result);
+    })
+    .filter((item, cb) => {
+      cb(null, item > 10);
+    })
+    .map((item, cb) => {
+      cb(null, --item);
+    })
+    .fetch((error, result) => {
+      test.strictSame(result.length, 1);
+      test.strictSame(result[0], 15);
+      test.end();
+    });
+});
+
+api.metatests.test('for chain all methods', test => {
+  api.metasync
+    .for([1, 2, 3, 4])
+    .concat([8, 6, 7])
+    .slice(1)
+    .sort()
+    .reverse()
+    .shift()
+    .unshift(10)
+    .pop()
+    .push(11)
+    .fetch((error, result, resume) => {
+      const expected = [10, 7, 6, 4, 3, 11];
+      test.strictSame(result, expected);
+      resume(null, result);
+    })
+    .includes(6)
+    .fetch((error, result, resume) => {
+      test.strictSame(result, true);
+      resume(null, [6, 8]);
+    })
+    .includes(7)
+    .fetch((error, result) => {
+      test.strictSame(result, false);
+      test.end();
+    });
 });
