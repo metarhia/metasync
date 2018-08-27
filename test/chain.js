@@ -22,7 +22,7 @@ api.metatests.test('for chain sync', test => {
     .map((item, cb) => cb(null, item * 2))
     .reduce((a, b, cb) => cb(null, a + b))
     .fetch((error, result) => {
-      test.error(error, 'must not return an error');
+      test.error(error);
       test.strictSame(result, 12); // 2 * 2 + 4 * 2
       test.end();
     });
@@ -35,7 +35,7 @@ api.metatests.test('for chain async', test => {
     .map((item, cb) => process.nextTick(cb, null, item * 2))
     .reduce((a, b, cb) => process.nextTick(cb, null, a + b))
     .fetch((error, result) => {
-      test.error(error, 'must not return an error');
+      test.error(error);
       test.strictSame(result, 12); // 2 * 2 + 4 * 2
       test.end();
     });
@@ -60,9 +60,8 @@ api.metatests.test('for chain after fetch', test => {
     .map((item, cb) => cb(null, item * item))
     .filter((item, cb) => cb(null, item > 5))
     .fetch((error, result, resume) => {
-      test.strictSame(result.length, 2);
-      test.strictSame(result[0], 9);
-      test.strictSame(result[1], 16);
+      test.error(error);
+      test.strictSame(result, [9, 16]);
       resume(null, result);
     })
     .filter((item, cb) => {
@@ -72,8 +71,8 @@ api.metatests.test('for chain after fetch', test => {
       cb(null, --item);
     })
     .fetch((error, result) => {
-      test.strictSame(result.length, 1);
-      test.strictSame(result[0], 15);
+      test.error(error);
+      test.strictSame(result, [15]);
       test.end();
     });
 });
@@ -90,17 +89,20 @@ api.metatests.test('for chain all methods', test => {
     .pop()
     .push(11)
     .fetch((error, result, resume) => {
+      test.error(error);
       const expected = [10, 7, 6, 4, 3, 11];
       test.strictSame(result, expected);
       resume(null, result);
     })
     .includes(6)
     .fetch((error, result, resume) => {
+      test.error(error);
       test.strictSame(result, true);
       resume(null, [6, 8]);
     })
     .includes(7)
     .fetch((error, result) => {
+      test.error(error);
       test.strictSame(result, false);
       test.end();
     });
