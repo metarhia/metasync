@@ -1,6 +1,9 @@
 'use strict';
 
-api.metatests.test('throttle', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('throttle', (test) => {
   let callCount = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -13,7 +16,7 @@ api.metatests.test('throttle', (test) => {
     }
   };
 
-  const throttledFn = api.metasync.throttle(1, fn, 'someVal', 4);
+  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -22,7 +25,7 @@ api.metatests.test('throttle', (test) => {
   test.strictSame(callCount, 1);
 });
 
-api.metatests.test('throttle merge args', (test) => {
+metatests.test('throttle merge args', (test) => {
   let callCount = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -35,7 +38,7 @@ api.metatests.test('throttle merge args', (test) => {
     }
   };
 
-  const throttledFn = api.metasync.throttle(1, fn, 'someVal', 4);
+  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
 
   throttledFn('str');
   test.strictSame(callCount, 1);
@@ -44,7 +47,7 @@ api.metatests.test('throttle merge args', (test) => {
   test.strictSame(callCount, 1);
 });
 
-api.metatests.test('throttle without arguments for function', (test) => {
+metatests.test('throttle without arguments for function', (test) => {
   let callCount = 0;
 
   const fn = (...args) => {
@@ -55,7 +58,7 @@ api.metatests.test('throttle without arguments for function', (test) => {
     }
   };
 
-  const throttledFn = api.metasync.throttle(1, fn);
+  const throttledFn = metasync.throttle(1, fn);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -64,7 +67,7 @@ api.metatests.test('throttle without arguments for function', (test) => {
   test.strictSame(callCount, 1);
 });
 
-api.metatests.test('debounce', (test) => {
+metatests.test('debounce', (test) => {
   let count = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -75,14 +78,14 @@ api.metatests.test('debounce', (test) => {
     test.end();
   };
 
-  const debouncedFn = api.metasync.debounce(1, fn, 'someVal', 4);
+  const debouncedFn = metasync.debounce(1, fn, 'someVal', 4);
 
   debouncedFn();
   debouncedFn();
   test.strictSame(count, 0);
 });
 
-api.metatests.test('debounce without arguments for function', (test) => {
+metatests.test('debounce without arguments for function', (test) => {
   let count = 0;
 
   const fn = (...args) => {
@@ -91,16 +94,16 @@ api.metatests.test('debounce without arguments for function', (test) => {
     test.end();
   };
 
-  const debouncedFn = api.metasync.debounce(1, fn);
+  const debouncedFn = metasync.debounce(1, fn);
 
   debouncedFn();
   debouncedFn();
   test.strictSame(count, 0);
 });
 
-api.metatests.test('timeout with sync function', (test) => {
+metatests.test('timeout with sync function', (test) => {
   const syncFn = (callback) => callback(null, 'someVal');
-  api.metasync.timeout(1, syncFn, (err, res, ...args) => {
+  metasync.timeout(1, syncFn, (err, res, ...args) => {
     test.error(err);
     test.strictSame(res, 'someVal');
     test.strictSame(args, []);
@@ -108,8 +111,8 @@ api.metatests.test('timeout with sync function', (test) => {
   });
 });
 
-api.metatests.test('timeout', (test) => {
-  api.metasync.timeout(10, (callback) => {
+metatests.test('timeout', (test) => {
+  metasync.timeout(10, (callback) => {
     setTimeout(() => {
       callback(null, 'someVal');
     }, 0);

@@ -1,6 +1,9 @@
 'use strict';
 
-api.metatests.test('successfull then', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('successful then', (test) => {
   let finishedFuncsCount = 0;
   const res1 = 'res1';
   const af1 = (data, callback) => process.nextTick(() => {
@@ -32,7 +35,7 @@ api.metatests.test('successfull then', (test) => {
     finishedFuncsCount++;
     callback(null, { res4 });
   });
-  const faf1 = api.metasync([af1, [[af2, af3]], af4]);
+  const faf1 = metasync([af1, [[af2, af3]], af4]);
   faf1().then((res) => {
     test.strictSame(res, {
       res1: 'res1',

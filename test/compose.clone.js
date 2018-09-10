@@ -1,6 +1,9 @@
 'use strict';
 
-api.metatests.test('async functions composition clone', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('async functions composition clone', (test) => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
@@ -16,7 +19,7 @@ api.metatests.test('async functions composition clone', (test) => {
     });
   };
 
-  const fc1 = api.metasync([[fn1, fn2]]);
+  const fc1 = metasync([[fn1, fn2]]);
   const fc2 = fc1.clone();
 
   fc1(data, (err, data) => {

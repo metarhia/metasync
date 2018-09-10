@@ -1,10 +1,13 @@
 'use strict';
 
-api.metatests.test('successfull series', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('successful series', (test) => {
   const arr = [1, 2, 3, 4];
   const expectedElements = arr;
   const elements = [];
-  api.metasync.series(arr, (el, callback) => {
+  metasync.series(arr, (el, callback) => {
     elements.push(el);
     callback(null);
   }, (err) => {
@@ -14,7 +17,7 @@ api.metatests.test('successfull series', (test) => {
   });
 });
 
-api.metatests.test('series with error', (test) => {
+metatests.test('series with error', (test) => {
   const arr = [1, 2, 3, 4];
   const expectedElements = [1, 2];
   const expectedElementsCount = 2;
@@ -23,7 +26,7 @@ api.metatests.test('series with error', (test) => {
   let count = 0;
   const seriesError = new Error('seriesError');
 
-  api.metasync.series(arr, (el, callback) => {
+  metasync.series(arr, (el, callback) => {
     elements.push(el);
     count++;
     if (count === expectedElementsCount) {

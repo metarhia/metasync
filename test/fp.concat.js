@@ -1,5 +1,8 @@
 'use strict';
 
+const metasync = require('..');
+const metatests = require('metatests');
+
 const asyncData = 'data';
 const asyncDataCb = (callback) => (
   process.nextTick(() => callback(null, asyncData))
@@ -15,24 +18,24 @@ const asyncTransformErrorCb = (str, callback) => (
   process.nextTick(() => callback(asyncError))
 );
 
-api.metatests.test('two successful functions', (test) => {
-  api.metasync.concat(asyncDataCb, asyncTwice)((err, res) => {
+metatests.test('two successful functions', (test) => {
+  metasync.concat(asyncDataCb, asyncTwice)((err, res) => {
     test.error(err);
     test.strictSame(res, 'datadata');
     test.end();
   });
 });
 
-api.metatests.test('first function error', (test) => {
-  api.metasync.concat(asyncErrorCb, asyncTwice)((err, res) => {
+metatests.test('first function error', (test) => {
+  metasync.concat(asyncErrorCb, asyncTwice)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
   });
 });
 
-api.metatests.test('second function error', (test) => {
-  api.metasync.concat(asyncDataCb, asyncTransformErrorCb)((err, res) => {
+metatests.test('second function error', (test) => {
+  metasync.concat(asyncDataCb, asyncTransformErrorCb)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();

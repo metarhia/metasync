@@ -1,5 +1,8 @@
 'use strict';
 
+const metasync = require('..');
+const metatests = require('metatests');
+
 const asyncData = 'data';
 const asyncDataCb = (callback) => process.nextTick(() => {
   callback(null, asyncData);
@@ -13,17 +16,17 @@ const repeatStringTwice = (str) => (str + str);
 const appendColon = (str) => (str + ':');
 const twiceAndColon = (str) => appendColon(repeatStringTwice(str));
 
-api.metatests.test('Result transformation', (test) => {
+metatests.test('Result transformation', (test) => {
   const expected = 'data:';
-  api.metasync.fmap(asyncDataCb, appendColon)((err, res) => {
+  metasync.fmap(asyncDataCb, appendColon)((err, res) => {
     test.error(err);
     test.strictSame(expected, res);
     test.end();
   });
 });
 
-api.metatests.test('Getting asynchronous error', (test) => {
-  api.metasync.fmap(asyncErrorCb, appendColon)((err, res) => {
+metatests.test('Getting asynchronous error', (test) => {
+  metasync.fmap(asyncErrorCb, appendColon)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
@@ -31,9 +34,9 @@ api.metatests.test('Getting asynchronous error', (test) => {
 });
 
 const FP1 = 'Getting error with no second argument execution';
-api.metatests.test(FP1, (test) => {
+metatests.test(FP1, (test) => {
   let executed = false;
-  api.metasync.fmap(asyncErrorCb, (str) => {
+  metasync.fmap(asyncErrorCb, (str) => {
     executed = true;
     return appendColon(str);
   })(() => {
@@ -42,16 +45,16 @@ api.metatests.test(FP1, (test) => {
   });
 });
 
-api.metatests.test('functor law I', (test) => {
-  api.metasync.fmap(asyncDataCb, identity)((err, res) => {
+metatests.test('functor law I', (test) => {
+  metasync.fmap(asyncDataCb, identity)((err, res) => {
     test.error(err);
     test.strictSame(asyncData, res);
     test.end();
   });
 });
 
-api.metatests.test('functor law II', (test) => {
-  const fmap = api.metasync.fmap;
+metatests.test('functor law II', (test) => {
+  const fmap = metasync.fmap;
   const asyncTwice = fmap(asyncDataCb, repeatStringTwice);
   const asyncTwiceAndColon = fmap(asyncTwice, appendColon);
 

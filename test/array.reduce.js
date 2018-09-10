@@ -1,11 +1,14 @@
 'use strict';
 
-api.metatests.test('successfull with initial', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('successful with initial', (test) => {
   const arr = [1, 2, 3, 4, 5];
   const initial = 10;
   const expectedRes = 25;
 
-  api.metasync.reduce(arr, (prev, cur, callback) => (
+  metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
     test.error(err);
@@ -14,12 +17,12 @@ api.metatests.test('successfull with initial', (test) => {
   }, initial);
 });
 
-api.metatests.test('reduce with initial and empty array', (test) => {
+metatests.test('reduce with initial and empty array', (test) => {
   const arr = [];
   const initial = 10;
   const expectedRes = 10;
 
-  api.metasync.reduce(arr, (prev, cur, callback) => (
+  metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
     test.error(err);
@@ -28,13 +31,13 @@ api.metatests.test('reduce with initial and empty array', (test) => {
   }, initial);
 });
 
-api.metatests.test('reduce without initial and with empty array', (test) => {
+metatests.test('reduce without initial and with empty array', (test) => {
   const arr = [];
   const expectedError = new TypeError(
     'Reduce of empty array with no initial value'
   );
 
-  api.metasync.reduce(arr, (prev, cur, callback) => (
+  metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
     test.strictSame(err, expectedError);
@@ -43,11 +46,11 @@ api.metatests.test('reduce without initial and with empty array', (test) => {
   });
 });
 
-api.metatests.test('successfull without initial', (test) => {
+metatests.test('successful without initial', (test) => {
   const arr = [1, 2, 3, 4, 5];
   const expectedRes = 15;
 
-  api.metasync.reduce(arr, (prev, cur, callback) => (
+  metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev + cur))
   ), (err, res) => {
     test.error(err);
@@ -56,11 +59,11 @@ api.metatests.test('successfull without initial', (test) => {
   });
 });
 
-api.metatests.test('successfull with asymetric function', (test) => {
+metatests.test('successful with asymetric function', (test) => {
   const arr = '10110011';
   const expectedRes = 179;
 
-  api.metasync.reduce(arr, (prev, cur, callback) => (
+  metasync.reduce(arr, (prev, cur, callback) => (
     process.nextTick(() => callback(null, prev * 2 + +cur))
   ), (err, res) => {
     test.error(err);
@@ -69,11 +72,11 @@ api.metatests.test('successfull with asymetric function', (test) => {
   });
 });
 
-api.metatests.test('with error', (test) => {
+metatests.test('with error', (test) => {
   const arr = '10120011';
   const reduceError = new Error('Reduce error');
 
-  api.metasync.reduce(arr, (prev, cur, callback) => process.nextTick(() => {
+  metasync.reduce(arr, (prev, cur, callback) => process.nextTick(() => {
     const digit = +cur;
     if (digit > 1) {
       callback(reduceError);

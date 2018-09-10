@@ -1,12 +1,15 @@
 'use strict';
 
-api.metatests.test('for.map', test => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('for.map', test => {
   const data = [1, 2, 3, 4];
   const expected = [2, 4, 6, 8];
   const fn = (item, callback) => process.nextTick(() => {
     callback(null, item * 2);
   });
-  api.metasync
+  metasync
     .for(data)
     .map(fn)
     .fetch((error, result) => {
@@ -15,8 +18,8 @@ api.metatests.test('for.map', test => {
     });
 });
 
-api.metatests.test('for chain sync', test => {
-  api.metasync
+metatests.test('for chain sync', test => {
+  metasync
     .for([1, 2, 3, 4])
     .filter((item, cb) => cb(null, item % 2 === 0))
     .map((item, cb) => cb(null, item * 2))
@@ -28,8 +31,8 @@ api.metatests.test('for chain sync', test => {
     });
 });
 
-api.metatests.test('for chain async', test => {
-  api.metasync
+metatests.test('for chain async', test => {
+  metasync
     .for([1, 2, 3, 4])
     .filter((item, cb) => process.nextTick(cb, null, item % 2 === 0))
     .map((item, cb) => process.nextTick(cb, null, item * 2))
@@ -41,8 +44,8 @@ api.metatests.test('for chain async', test => {
     });
 });
 
-api.metatests.test('for chain error', test => {
-  api.metasync
+metatests.test('for chain error', test => {
+  metasync
     .for([1, 2, 3, 4])
     .filter((item, cb) => cb(null, item % 2 === 0))
     .map((item, cb) => cb(new Error('Something happens')))
@@ -54,8 +57,8 @@ api.metatests.test('for chain error', test => {
     });
 });
 
-api.metatests.test('for chain after fetch', test => {
-  api.metasync
+metatests.test('for chain after fetch', test => {
+  metasync
     .for([1, 2, 3, 4])
     .map((item, cb) => cb(null, item * item))
     .filter((item, cb) => cb(null, item > 5))
@@ -77,8 +80,8 @@ api.metatests.test('for chain after fetch', test => {
     });
 });
 
-api.metatests.test('for chain all methods', test => {
-  api.metasync
+metatests.test('for chain all methods', test => {
+  metasync
     .for([1, 2, 3, 4])
     .concat([8, 6, 7])
     .slice(1)

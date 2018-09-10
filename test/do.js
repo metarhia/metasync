@@ -1,5 +1,8 @@
 'use strict';
 
+const metasync = require('..');
+const metatests = require('metatests');
+
 const wrapAsync = (
   // Emulate Asynchronous calls
   callback // function
@@ -7,7 +10,7 @@ const wrapAsync = (
   setTimeout(callback, Math.floor((Math.random() * 500)));
 };
 
-api.metatests.test('simple chain/do', (test) => {
+metatests.test('simple chain/do', (test) => {
   const readConfig = (name, callback) => {
     test.strictSame(name, 'myConfig');
     wrapAsync(() => {
@@ -36,7 +39,7 @@ api.metatests.test('simple chain/do', (test) => {
     });
   };
 
-  const c1 = api.metasync
+  const c1 = metasync
     .do(readConfig, 'myConfig')
     .do(selectFromDb, 'select * from cities')
     .do(getHttpPage, 'http://kpi.ua')

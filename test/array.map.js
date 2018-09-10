@@ -1,10 +1,13 @@
 'use strict';
 
-api.metatests.test('succesfull map', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('succesfull map', (test) => {
   const arr = [1, 2, 3];
   const expectedArr = [1, 4, 9];
 
-  api.metasync.map(arr, (x, callback) => (
+  metasync.map(arr, (x, callback) => (
     process.nextTick(() => callback(null, x * x))
   ), (err, res) => {
     test.error(err);
@@ -13,11 +16,11 @@ api.metatests.test('succesfull map', (test) => {
   });
 });
 
-api.metatests.test('map with empty array', (test) => {
+metatests.test('map with empty array', (test) => {
   const arr = [];
   const expectedArr = [];
 
-  api.metasync.map(arr, (x, callback) => (
+  metasync.map(arr, (x, callback) => (
     process.nextTick(() => callback(null, x * x))
   ), (err, res) => {
     test.error(err);
@@ -26,12 +29,12 @@ api.metatests.test('map with empty array', (test) => {
   });
 });
 
-api.metatests.test('map with error', (test) => {
+metatests.test('map with error', (test) => {
   const arr = [1, 2, 3];
   const mapError = new Error('Map error');
   let count = 0;
 
-  api.metasync.map(arr, (x, callback) => process.nextTick(() => {
+  metasync.map(arr, (x, callback) => process.nextTick(() => {
     count++;
     if (count === 2) {
       callback(mapError);

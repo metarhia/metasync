@@ -1,7 +1,10 @@
 'use strict';
 
-api.metatests.test('queue add', (test) => {
-  const queue = api.metasync.queue(3).timeout(2000);
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('queue add', (test) => {
+  const queue = metasync.queue(3).timeout(2000);
   let taskIndex = 1;
 
   queue.process((item, callback) => {
@@ -22,8 +25,8 @@ api.metatests.test('queue add', (test) => {
   }
 });
 
-api.metatests.test('queue pause resume clear', (test) => {
-  const queue = api.metasync.queue(3);
+metatests.test('queue pause resume clear', (test) => {
+  const queue = metasync.queue(3);
   queue.pause();
   queue.add({ id: 1 });
   test.strictSame(queue.count, 0);
@@ -45,8 +48,8 @@ api.metatests.test('queue pause resume clear', (test) => {
   test.end();
 });
 
-api.metatests.test('queue with no process function and no timeout', (test) => {
-  const queue = api.metasync.queue(3);
+metatests.test('queue with no process function and no timeout', (test) => {
+  const queue = metasync.queue(3);
   queue.add({ id: 1 });
   queue.add({ id: 2 });
   queue.add({ id: 3 });
@@ -55,10 +58,10 @@ api.metatests.test('queue with no process function and no timeout', (test) => {
   test.end();
 });
 
-api.metatests.test('queue with timeout event', (test) => {
+metatests.test('queue with timeout event', (test) => {
   const timeoutErr = new Error('Queue timed out');
 
-  const queue = api.metasync.queue(3);
+  const queue = metasync.queue(3);
 
   queue.process((item, callback) => {
     setTimeout(() => {

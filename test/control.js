@@ -1,6 +1,9 @@
 'use strict';
 
-api.metatests.test('firstOf', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('firstOf', (test) => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
@@ -23,7 +26,7 @@ api.metatests.test('firstOf', (test) => {
 
   const fns = [1, 2, 3].map(makeIFn);
 
-  api.metasync.firstOf(fns, (err, data) => {
+  metasync.firstOf(fns, (err, data) => {
 
 
     test.error(err);
@@ -32,7 +35,7 @@ api.metatests.test('firstOf', (test) => {
   });
 });
 
-api.metatests.test('parallel with error', (test) => {
+metatests.test('parallel with error', (test) => {
   const parallelError = new Error('Parallel error');
 
   const fn1 = (data, cb) => {
@@ -47,14 +50,14 @@ api.metatests.test('parallel with error', (test) => {
     });
   };
 
-  api.metasync.parallel([fn1, fn2], (err, res) => {
+  metasync.parallel([fn1, fn2], (err, res) => {
     test.strictSame(err, parallelError);
     test.strictSame(res, undefined);
     test.end();
   });
 });
 
-api.metatests.test('sequential with error', (test) => {
+metatests.test('sequential with error', (test) => {
   const sequentialError = new Error('Sequential error');
   const expectedDataInFn2 = { data1: 'data 1' };
 
@@ -71,7 +74,7 @@ api.metatests.test('sequential with error', (test) => {
     });
   };
 
-  api.metasync.sequential([fn1, fn2], (err, res) => {
+  metasync.sequential([fn1, fn2], (err, res) => {
     test.strictSame(err, sequentialError);
     test.strictSame(res, undefined);
     test.end();

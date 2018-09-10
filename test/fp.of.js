@@ -1,8 +1,11 @@
 'use strict';
 
-api.metatests.test('of test', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('of test', (test) => {
   const args = [1, 2, 3, 4, 5];
-  api.metasync.of(...args)((err, ...argsCb) => {
+  metasync.of(...args)((err, ...argsCb) => {
     test.error(err);
     test.strictSame(args, argsCb);
     test.end();

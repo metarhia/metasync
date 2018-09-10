@@ -1,6 +1,9 @@
 'use strict';
 
-api.metatests.test('firstOf', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('firstOf', (test) => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
@@ -23,7 +26,7 @@ api.metatests.test('firstOf', (test) => {
 
   const fns = [1, 2, 3].map(makeIFn);
 
-  api.metasync.firstOf(fns, (err, data) => {
+  metasync.firstOf(fns, (err, data) => {
     test.error(err);
     test.strictSame(data, 'data2');
     test.end();

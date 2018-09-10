@@ -1,7 +1,10 @@
 'use strict';
 
-api.metatests.test('queue default FIFO', (test) => {
-  const queue = api.metasync.queue(3).timeout(1);
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('queue default FIFO', (test) => {
+  const queue = metasync.queue(3).timeout(1);
   const res = [];
 
   queue.process((item, callback) => {
@@ -21,8 +24,8 @@ api.metatests.test('queue default FIFO', (test) => {
   }
 });
 
-api.metatests.test('queue FIFO', (test) => {
-  const queue = api.metasync.queue(3).fifo().timeout(1);
+metatests.test('queue FIFO', (test) => {
+  const queue = metasync.queue(3).fifo().timeout(1);
   const res = [];
 
   queue.process((item, callback) => {
@@ -42,8 +45,8 @@ api.metatests.test('queue FIFO', (test) => {
   }
 });
 
-api.metatests.test('queue LIFO', (test) => {
-  const queue = api.metasync.queue(3).lifo().timeout(1);
+metatests.test('queue LIFO', (test) => {
+  const queue = metasync.queue(3).lifo().timeout(1);
   const res = [];
 
   queue.process((item, callback) => {
@@ -63,8 +66,8 @@ api.metatests.test('queue LIFO', (test) => {
   }
 });
 
-api.metatests.test('queue priority', (test) => {
-  const queue = api.metasync.queue(3).priority();
+metatests.test('queue priority', (test) => {
+  const queue = metasync.queue(3).priority();
   const res = [];
 
   queue.process((item, callback) => {
@@ -90,8 +93,8 @@ api.metatests.test('queue priority', (test) => {
   queue.add({ id: 9 }, 3);
 });
 
-api.metatests.test('queue round robin', (test) => {
-  const queue = api.metasync.queue(3).roundRobin();
+metatests.test('queue round robin', (test) => {
+  const queue = metasync.queue(3).roundRobin();
   const res = [];
 
   queue.process((item, callback) => {
@@ -117,8 +120,8 @@ api.metatests.test('queue round robin', (test) => {
   queue.add({ id: 9 }, 2);
 });
 
-api.metatests.test('queue round robin with priority', (test) => {
-  const queue = api.metasync.queue(3).roundRobin().priority();
+metatests.test('queue round robin with priority', (test) => {
+  const queue = metasync.queue(3).roundRobin().priority();
   const res = [];
 
   queue.process((item, callback) => {
