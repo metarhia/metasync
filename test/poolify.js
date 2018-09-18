@@ -1,131 +1,85 @@
 'use strict';
 
-api.metatests.test('poolify simple', (test) => {
+const metasync = require('..');
+const metatests = require('metatests');
+
+metatests.test('poolify simple', (test) => {
 
   const buffer = () => new Uint32Array(128);
+  const expectedItem = buffer();
 
-  const pool = api.metasync.poolify(buffer, 10, 15, 20);
+  const pool = metasync.poolify(buffer, 0, 2, 4);
 
   pool(item1 => {
-    test.strictSame(pool.items.length, 14);
-    test.strictSame(item1.length, 128);
+    test.strictSame(item1, expectedItem);
     pool(item2 => {
-      test.strictSame(pool.items.length, 13);
-      test.strictSame(item2.length, 128);
-      pool([item1]);
-      pool([item2]);
-      test.strictSame(pool.items.length, 15);
+      test.strictSame(item2, expectedItem);
+      pool(item1);
+      pool(item2);
+      test.assert(pool(), 'Must have 2 items in a pool');
+      test.assert(pool(), 'Must have 2 items in a pool');
       test.end();
     });
   });
-
 });
 
-api.metatests.test('poolify loop', (test) => {
+metatests.test('poolify loop', (test) => {
 
   const buffer = () => new Uint32Array(128);
+  const expectedItem = buffer();
 
-  const pool = api.metasync.poolify(buffer, 10, 15, 20);
+  const pool = metasync.poolify(buffer, 10, 15, 20);
 
   for (let i = 0; i < 15; i++) {
-    pool(item => {
-      pool([item]);
-      if (i === 14) {
-        test.strictSame(item.length, 128);
-        test.end();
-      }
-    });
+    test.strictSame(pool(), expectedItem);
   }
-
+  test.end();
 });
 
-api.metatests.test('poolify max', (test) => {
+metatests.test('poolify max', (test) => {
 
   const buffer = () => new Uint32Array(128);
+  const expectedItem = buffer();
 
-  const pool = api.metasync.poolify(buffer, 5, 7, 10);
+  const pool = metasync.poolify(buffer, 5, 7, 10);
 
   for (let i = 0; i < 15; i++) {
     pool(item => {
+      test.strictSame(item, expectedItem);
       setTimeout(() => {
-        pool([item]);
-        if (i === 14) {
-          test.end();
-        }
-      }, 100);
+        pool(item);
+        if (i === 14) test.end();
+      }, 1);
     });
   }
-
 });
 
-api.metatests.test('poolify delayed order', (test) => {
+metatests.test('poolify delayed order', (test) => {
 
   const buffer = () => new Uint32Array(128);
+  const expectedItem = buffer();
 
-  const pool = api.metasync.poolify(buffer, 0, 2, 2);
+  const pool = metasync.poolify(buffer, 0, 2, 2);
 
   let get3 = false;
   pool(item1 => {
-    test.strictSame(pool.items.length, 1);
+    test.strictSame(item1, expectedItem);
     pool(item2 => {
-      test.strictSame(pool.items.length, 0);
+      test.strictSame(item2, expectedItem);
+      test.assertNot(pool());
       pool(item3 => {
-        test.strictSame(pool.items.length, 0);
+        test.strictSame(item3, expectedItem);
         test.strictSame(get3, false);
         get3 = true;
-        pool([item3]);
       });
       pool(item4 => {
-        test.strictSame(pool.items.length, 1);
+        test.strictSame(item4, expectedItem);
         test.strictSame(get3, true);
-        pool([item4]);
         test.end();
       });
-      pool([item1]);
-      pool([item2]);
+      pool(item1);
+      pool(item2);
     });
   });
-
-});
-
-api.metatests.test('poolify functor', (test) => {
-
-  const adder = a => b => adder(a + b);
-
-  const pool = api.metasync.poolify(adder, 1, 2, 3);
-
-  pool(item1 => {
-    test.strictSame(pool.items.length, 1);
-    pool(item2 => {
-      test.strictSame(pool.items.length, 0);
-      pool([item1]);
-      pool([item2]);
-      test.strictSame(pool.items.length, 2);
-      test.end();
-    });
-  });
-
-});
-
-api.metatests.test('poolify get sync', (test) => {
-
-  const adder = a => b => adder(a + b);
-
-  const pool = api.metasync.poolify(adder, 1, 2, 3);
-
-  const item1 = pool();
-  test.strictSame(pool.items.length, 1);
-  const item2 = pool();
-  test.strictSame(pool.items.length, 0);
-  const item3 = pool();
-  test.strictSame(pool.items.length, 0);
-  const item4 = pool();
-  test.strictSame(item4, undefined);
-  test.strictSame(pool.items.length, 0);
-  pool([item1]);
-  pool([item2]);
-  pool([item3]);
-  test.strictSame(pool.items.length, 3);
-  test.end();
 
 });
