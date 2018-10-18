@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('successful some', (test) => {
+metatests.test('successful some', test => {
   const arr = [1, 2, 3];
 
   const predicate = (x, callback) => callback(null, x % 2 === 0);
@@ -14,7 +14,7 @@ metatests.test('successful some', (test) => {
   });
 });
 
-metatests.test('failing some', (test) => {
+metatests.test('failing some', test => {
   const arr = [1, 2, 3];
 
   const predicate = (x, callback) => callback(null, x > 3);
@@ -25,7 +25,7 @@ metatests.test('failing some', (test) => {
   });
 });
 
-metatests.test('erroneous some', (test) => {
+metatests.test('erroneous some', test => {
   const arr = [1, 2, 3];
   const someError = new Error('Some error');
 
@@ -39,7 +39,7 @@ metatests.test('erroneous some', (test) => {
   });
 });
 
-metatests.test('some with empty array', (test) => {
+metatests.test('some with empty array', test => {
   const arr = [];
 
   const predicate = (x, callback) => callback(null, x > 3);

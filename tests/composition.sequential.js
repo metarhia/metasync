@@ -11,5 +11,6 @@ const f4 = (c, cb) => cb();
 const fc = metasync([f1, f2, f3, f4]);
 
 fc((err, context) => {
+  assert.ifError(err);
   assert.deepEqual(context, {});
 });

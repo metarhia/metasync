@@ -3,11 +3,8 @@
 const assert = require('assert');
 const metasync = require('..');
 
-const wrapAsync = (
-  // Emulate Asynchronous calls
-  callback // function
-) => {
-  setTimeout(callback, Math.floor((Math.random() * 500)));
+const wrapAsync = callback => {
+  setTimeout(callback, Math.floor(Math.random() * 500));
 };
 
 let fc = null;
@@ -44,5 +41,6 @@ const fn4 = (data, cb) => {
 fc = metasync([fn1, fn2, fn3, fn4]);
 
 fc([], (err, data) => {
+  assert.ok(err);
   assert.equal(data, undefined);
 });

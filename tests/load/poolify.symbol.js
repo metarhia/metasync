@@ -6,7 +6,7 @@ const GETS = 300;
 const benchmark = require('./benchmark.js');
 const metasync = require('../../lib/poolify.symbol.js');
 
-const poolifySymbol = (done) => {
+const poolifySymbol = done => {
 
   const buffer = () => new Uint32Array(128);
   const pool = metasync.poolify(buffer, 10, 100, 200);

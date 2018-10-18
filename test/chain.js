@@ -13,6 +13,7 @@ metatests.test('for.map', test => {
     .for(data)
     .map(fn)
     .fetch((error, result) => {
+      test.error(error);
       test.strictSame(result, expected);
       test.end();
     });

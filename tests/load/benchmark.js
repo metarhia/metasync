@@ -3,8 +3,8 @@
 const benchmark = {};
 module.exports = benchmark;
 
-const rpad = (s, char, count) => (s + char.repeat(count - s.length));
-const lpad = (s, char, count) => (char.repeat(count - s.length) + s);
+const rpad = (s, char, count) => s + char.repeat(count - s.length);
+const lpad = (s, char, count) => char.repeat(count - s.length) + s;
 
 benchmark.do = (count, tests) => {
   let fn;
@@ -20,6 +20,9 @@ benchmark.do = (count, tests) => {
 
     const nextRepeat = () => {
       fn((err, res) => {
+        if (err) {
+          console.error(err);
+        }
         j++;
         result.push(res);
         if (j < count) {

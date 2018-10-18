@@ -40,21 +40,21 @@ metatests.test('every with error', test => {
   });
 });
 
-metatests.test('every with empty array', test => (
+metatests.test('every with empty array', test =>
   strictSameResult([], true, test, () => test.end())
-));
-
-metatests.test('every with one-element arrays', test =>
-  fewStrictSameResult([ [[false], false], [[true], true] ], test)
 );
 
-metatests.test('every with two-element arrays', test =>
-  fewStrictSameResult([
-    [[false, false], false],
-    [[false, true ], false],
-    [[true,  false], false],
-    [[true,  true ], true ],
-  ], test)
+metatests.test(
+  'every with one-element arrays',
+  test => fewStrictSameResult([ [[false], false], [[true], true] ], test)
+);
+
+metatests.test('every with two-element arrays', test => fewStrictSameResult([
+  [[false, false], false],
+  [[false, true ], false],
+  [[true,  false], false],
+  [[true,  true ], true ],
+], test)
 );
 
 metatests.test('every', test => {

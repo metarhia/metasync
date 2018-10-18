@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('poolify simple', (test) => {
+metatests.test('poolify simple', test => {
 
   const buffer = () => new Uint32Array(128);
 
@@ -24,7 +24,7 @@ metatests.test('poolify simple', (test) => {
 
 });
 
-metatests.test('poolify loop', (test) => {
+metatests.test('poolify loop', test => {
 
   const buffer = () => new Uint32Array(128);
 
@@ -42,7 +42,7 @@ metatests.test('poolify loop', (test) => {
 
 });
 
-metatests.test('poolify max', (test) => {
+metatests.test('poolify max', test => {
 
   const buffer = () => new Uint32Array(128);
 
@@ -61,7 +61,7 @@ metatests.test('poolify max', (test) => {
 
 });
 
-metatests.test('poolify delayed order', (test) => {
+metatests.test('poolify delayed order', test => {
 
   const buffer = () => new Uint32Array(128);
 
@@ -91,7 +91,7 @@ metatests.test('poolify delayed order', (test) => {
 
 });
 
-metatests.test('poolify functor', (test) => {
+metatests.test('poolify functor', test => {
 
   const adder = a => b => adder(a + b);
 
@@ -110,7 +110,7 @@ metatests.test('poolify functor', (test) => {
 
 });
 
-metatests.test('poolify get sync', (test) => {
+metatests.test('poolify get sync', test => {
 
   const adder = a => b => adder(a + b);
 

@@ -3,18 +3,18 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('firstOf', (test) => {
+metatests.test('firstOf', test => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
-  const execUnlessDataReturned = (data) => (callback) => {
+  const execUnlessDataReturned = data => callback => {
     if (dataReturned) {
       callback(null, data);
     } else {
       process.nextTick(execUnlessDataReturned);
     }
   };
-  const makeIFn = (i) => (callback) => process.nextTick(() => {
+  const makeIFn = i => callback => process.nextTick(() => {
     const iData = 'data' + i;
     if (i === returningFnIndex) {
       dataReturned = true;

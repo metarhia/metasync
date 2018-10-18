@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('successful filter', (test) => {
+metatests.test('successful filter', test => {
   const arr = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
     'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
@@ -11,32 +11,32 @@ metatests.test('successful filter', (test) => {
   ];
   const expectedArr = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed',
-    'do', 'ut', 'et', 'magna'
+    'do', 'ut', 'et', 'magna',
   ];
 
-  metasync.filter(arr, (str, callback) => process.nextTick(() => (
+  metasync.filter(arr, (str, callback) => process.nextTick(() =>
     callback(null, str.length < 6)
-  )), (err, res) => {
+  ), (err, res) => {
     test.error(err);
     test.same(res.join(), expectedArr.join());
     test.end();
   });
 });
 
-metatests.test('filter with empty array', (test) => {
+metatests.test('filter with empty array', test => {
   const arr = [];
   const expectedArr = [];
 
-  metasync.filter(arr, (str, callback) => process.nextTick(() => (
+  metasync.filter(arr, (str, callback) => process.nextTick(() =>
     callback(null, str.length < 6)
-  )), (err, res) => {
+  ), (err, res) => {
     test.error(err);
     test.strictSame(res, expectedArr);
     test.end();
   });
 });
 
-metatests.test('successful filter', (test) => {
+metatests.test('successful filter', test => {
   const arr = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
     'adipiscing', 'elit', 'sed', 'do', 'eiusmod', 'tempor',
@@ -44,7 +44,7 @@ metatests.test('successful filter', (test) => {
   ];
   const filterError = new Error('Filter error');
   const expectedArr = [
-    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed', 'magna'
+    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'elit', 'sed', 'magna',
   ];
 
   metasync.filter(arr, (str, callback) => process.nextTick(() => {
@@ -54,6 +54,7 @@ metatests.test('successful filter', (test) => {
     }
     callback(null, str.length < 6);
   }), (err, res) => {
+    test.error(err);
     test.same(res.join(), expectedArr.join());
     test.end();
   });

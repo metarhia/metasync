@@ -5,7 +5,7 @@ const COUNT = 1000000;
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-const Collect = (done) => {
+const Collect = done => {
   const dc = metasync.collect(6);
   dc.done(done);
   let i = 0;

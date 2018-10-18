@@ -3,14 +3,11 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-const wrapAsync = (
-  // Emulate Asynchronous calls
-  callback // function
-) => {
-  setTimeout(callback, Math.floor((Math.random() * 500)));
+const wrapAsync = callback => {
+  setTimeout(callback, Math.floor(Math.random() * 500));
 };
 
-metatests.test('simple chain/do', (test) => {
+metatests.test('simple chain/do', test => {
   const readConfig = (name, callback) => {
     test.strictSame(name, 'myConfig');
     wrapAsync(() => {

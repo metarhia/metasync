@@ -4,19 +4,19 @@ const metasync = require('..');
 const metatests = require('metatests');
 
 const asyncData = 'data';
-const asyncDataCb = (callback) => process.nextTick(() => {
+const asyncDataCb = callback => process.nextTick(() => {
   callback(null, asyncData);
 });
 const asyncError = new Error('Async error');
-const asyncErrorCb = (callback) => process.nextTick(() => {
+const asyncErrorCb = callback => process.nextTick(() => {
   callback(asyncError);
 });
 const identity = x => x;
-const repeatStringTwice = (str) => (str + str);
-const appendColon = (str) => (str + ':');
-const twiceAndColon = (str) => appendColon(repeatStringTwice(str));
+const repeatStringTwice = str => str + str;
+const appendColon = str => str + ':';
+const twiceAndColon = str => appendColon(repeatStringTwice(str));
 
-metatests.test('Result transformation', (test) => {
+metatests.test('Result transformation', test => {
   const expected = 'data:';
   metasync.fmap(asyncDataCb, appendColon)((err, res) => {
     test.error(err);
@@ -25,7 +25,7 @@ metatests.test('Result transformation', (test) => {
   });
 });
 
-metatests.test('Getting asynchronous error', (test) => {
+metatests.test('Getting asynchronous error', test => {
   metasync.fmap(asyncErrorCb, appendColon)((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
@@ -34,9 +34,9 @@ metatests.test('Getting asynchronous error', (test) => {
 });
 
 const FP1 = 'Getting error with no second argument execution';
-metatests.test(FP1, (test) => {
+metatests.test(FP1, test => {
   let executed = false;
-  metasync.fmap(asyncErrorCb, (str) => {
+  metasync.fmap(asyncErrorCb, str => {
     executed = true;
     return appendColon(str);
   })(() => {
@@ -45,7 +45,7 @@ metatests.test(FP1, (test) => {
   });
 });
 
-metatests.test('functor law I', (test) => {
+metatests.test('functor law I', test => {
   metasync.fmap(asyncDataCb, identity)((err, res) => {
     test.error(err);
     test.strictSame(asyncData, res);
@@ -53,7 +53,7 @@ metatests.test('functor law I', (test) => {
   });
 });
 
-metatests.test('functor law II', (test) => {
+metatests.test('functor law II', test => {
   const fmap = metasync.fmap;
   const asyncTwice = fmap(asyncDataCb, repeatStringTwice);
   const asyncTwiceAndColon = fmap(asyncTwice, appendColon);

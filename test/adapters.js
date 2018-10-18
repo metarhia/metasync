@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('callbackify: Promise to callback-last', (test) => {
+metatests.test('callbackify: Promise to callback-last', test => {
 
   const promise = Promise.resolve('result');
   const callback = metasync.callbackify(promise);
@@ -18,7 +18,7 @@ metatests.test('callbackify: Promise to callback-last', (test) => {
 
 });
 
-metatests.test('callbackify: sync function to callback-last', (test) => {
+metatests.test('callbackify: sync function to callback-last', test => {
 
   const source = par => par;
   const callback = metasync.callbackify(source);
@@ -33,7 +33,7 @@ metatests.test('callbackify: sync function to callback-last', (test) => {
 
 });
 
-metatests.test('promisify: callback-last to Promise', (test) => {
+metatests.test('promisify: callback-last to Promise', test => {
 
   const id = 100;
   const data = { key: 'value' };
@@ -53,7 +53,7 @@ metatests.test('promisify: callback-last to Promise', (test) => {
 
 });
 
-metatests.test('promisify: callback-last to Promise throw', (test) => {
+metatests.test('promisify: callback-last to Promise throw', test => {
 
   const id = 100;
 
@@ -73,12 +73,12 @@ metatests.test('promisify: callback-last to Promise throw', (test) => {
 });
 
 
-metatests.test('promisify: sync function to Promise', (test) => {
+metatests.test('promisify: sync function to Promise', test => {
 
   const id = 100;
   const data = { key: 'value' };
 
-  const getDataSync = (dataId) => {
+  const getDataSync = dataId => {
     test.strictSame(dataId, id);
     return data;
   };
@@ -93,11 +93,11 @@ metatests.test('promisify: sync function to Promise', (test) => {
 
 });
 
-metatests.test('promisify: sync to Promise throw', (test) => {
+metatests.test('promisify: sync to Promise throw', test => {
 
   const id = 100;
 
-  const getDataSync = (dataId) => {
+  const getDataSync = dataId => {
     test.strictSame(dataId, id);
     return new Error('Data not found');
   };

@@ -7,6 +7,7 @@ const dc = metasync
   .collect(3)
   .timeout(5000)
   .done((error, result) => {
+    assert.ifError(error);
     assert.strictEqual(Object.keys(result).length, 3);
   });
 
@@ -18,6 +19,7 @@ const kc = metasync
   .collect(['key1', 'key2', 'key3'])
   .timeout(5000)
   .done((error, result) => {
+    assert.ifError(error);
     assert.strictEqual(Object.keys(result).length, 3);
   });
 
@@ -31,6 +33,7 @@ kc.pick('key3', 3);
     .timeout(5000)
     .distinct()
     .done((error, result) => {
+      assert.ifError(error);
       assert.strictEqual(Object.keys(result).length, 3);
     });
 
@@ -46,6 +49,7 @@ kc.pick('key3', 3);
     .timeout(5000)
     .distinct()
     .done((error, result) => {
+      assert.ifError(error);
       assert.strictEqual(Object.keys(result).length, 3);
     });
 
@@ -60,6 +64,7 @@ kc.pick('key3', 3);
     .collect(3)
     .timeout(5000)
     .done((error, result) => {
+      assert.ok(error);
       assert.strictEqual(Object.keys(result).length, 2);
     });
 
@@ -73,6 +78,7 @@ kc.pick('key3', 3);
     .collect(['key1', 'key2', 'key3'])
     .timeout(5000)
     .done((error, result) => {
+      assert.ok(error);
       assert.strictEqual(Object.keys(result).length, 2);
     });
 
@@ -86,6 +92,7 @@ kc.pick('key3', 3);
     .collect(3)
     .timeout(5000)
     .done((error, result) => {
+      assert.ifError(error);
       assert.strictEqual(Object.keys(result).length, 3);
       assert.strictEqual(result.key3, 3);
     });

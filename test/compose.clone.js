@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('async functions composition clone', (test) => {
+metatests.test('async functions composition clone', test => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 

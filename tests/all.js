@@ -6,7 +6,7 @@ const tests = [
   'composition.parallel',
   'composition.sequential',
   'composition.cancel',
-  'collector'
+  'collector',
 ];
 
 tests

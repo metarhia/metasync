@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('async parallel functions composition', (test) => {
+metatests.test('async parallel functions composition', test => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
@@ -28,7 +28,7 @@ metatests.test('async parallel functions composition', (test) => {
   });
 });
 
-metatests.test('async complex functions composition', (test) => {
+metatests.test('async complex functions composition', test => {
 
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
@@ -86,7 +86,7 @@ metatests.test('async complex functions composition', (test) => {
 });
 
 const AC1 = 'async functions composition cancel before start';
-metatests.test(AC1, (test) => {
+metatests.test(AC1, test => {
 
   let count = 0;
 
@@ -113,6 +113,7 @@ metatests.test(AC1, (test) => {
   const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc.cancel();
   fc({}, (err, data) => {
+    test.isError(err);
     test.strictSame(data, undefined);
     test.strictSame(count, 0);
     test.end();
@@ -121,7 +122,7 @@ metatests.test(AC1, (test) => {
 });
 
 const AC2 = 'async functions composition cancel in the middle';
-metatests.test(AC2, (test) => {
+metatests.test(AC2, test => {
 
   let count = 0;
   let finished = 0;
@@ -160,6 +161,7 @@ metatests.test(AC2, (test) => {
 
   const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
+    test.isError(err);
     test.strictSame(data, undefined);
     test.strictSame(count, 3);
     test.strictSame(finished, 1);
@@ -172,7 +174,7 @@ metatests.test(AC2, (test) => {
 
 });
 
-metatests.test('async functions composition cancel after end', (test) => {
+metatests.test('async functions composition cancel after end', test => {
 
   let count = 0;
 
@@ -206,11 +208,12 @@ metatests.test('async functions composition cancel after end', (test) => {
 
   const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc({}, (err, data) => {
+    test.error(err);
     test.strictSame(data, {
       data1: 'data 1',
       data2: 'data 2',
       data3: 'data 3',
-      data4: 'data 4'
+      data4: 'data 4',
     });
     test.strictSame(count, 4);
     test.end();
@@ -222,7 +225,7 @@ metatests.test('async functions composition cancel after end', (test) => {
 
 });
 
-metatests.test('async functions composition to array', (test) => {
+metatests.test('async functions composition to array', test => {
 
   let count = 0;
 
@@ -248,6 +251,7 @@ metatests.test('async functions composition to array', (test) => {
 
   const fc = metasync([fn1, [[fn2, fn3]], fn4]);
   fc(['data 0'], (err, data) => {
+    test.error(err);
     test.strictSame(data, ['data 0', 'data 1', 'data 2', 'data 3', 'data 4']);
     test.strictSame(count, 4);
     test.end();

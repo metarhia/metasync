@@ -21,13 +21,14 @@ if (!assert.deepStrictEqual) {
 
 // Data Collector
 
-const dataCollectorTest = (end) => {
+const dataCollectorTest = end => {
 
   const dataCollector = new metasync.DataCollector(4);
 
   dataCollector.on('done', (errs, data) => {
+    assert.ifError(errs);
     console.dir({
-      dataKeys: Object.keys(data)
+      dataKeys: Object.keys(data),
     });
     console.log('DataCollector test done');
     end();
@@ -36,10 +37,12 @@ const dataCollectorTest = (end) => {
   dataCollector.collect('user', { name: 'Marcus Aurelius' });
 
   fs.readFile('HISTORY.md', (err, data) => {
+    assert.ifError(err);
     dataCollector.collect('history', data);
   });
 
   fs.readFile('README.md', (err, data) => {
+    assert.ifError(err);
     dataCollector.collect('readme', data);
   });
 
@@ -49,14 +52,14 @@ const dataCollectorTest = (end) => {
 
 };
 
-const dataCollectorTimeoutTest = (end) => {
+const dataCollectorTimeoutTest = end => {
 
   const dataCollector = new metasync.DataCollector(4, 1000);
 
   dataCollector.on('timeout', (err, data) => {
     console.dir({
       err: err ? err.toString() : null,
-      dataKeys: Object.keys(data)
+      dataKeys: Object.keys(data),
     });
     console.log('Collector timeout test done');
     end();
@@ -66,21 +69,21 @@ const dataCollectorTimeoutTest = (end) => {
 
 };
 
-const dataCollectorErrorTest = (end) => {
+const dataCollectorErrorTest = end => {
 
   const dataCollector = new metasync.DataCollector(4);
 
   dataCollector.on('error', (err, key) => {
     console.dir({
       err: err ? err.toString() : null,
-      key
+      key,
     });
   });
 
   dataCollector.on('done', (errs, data) => {
     console.dir({
       errorKeys: errs ? Object.keys(errs) : null,
-      dataKeys: Object.keys(data)
+      dataKeys: Object.keys(data),
     });
     console.log('Collector Error test done');
     end();
@@ -95,13 +98,14 @@ const dataCollectorErrorTest = (end) => {
 
 // Key Collector
 
-const keyCollectorTest = (end) => {
+const keyCollectorTest = end => {
 
   const keyCollector = new metasync.KeyCollector(['user', 'history'], 1000);
 
   keyCollector.on('done', (errs, data) => {
+    assert.ifError(errs);
     console.dir({
-      dataKeys: Object.keys(data)
+      dataKeys: Object.keys(data),
     });
     console.log('KeyCollector test done');
     end();
@@ -110,6 +114,7 @@ const keyCollectorTest = (end) => {
   keyCollector.collect('user', { name: 'Marcus Aurelius' });
 
   fs.readFile('HISTORY.md', (err, data) => {
+    assert.ifError(err);
     keyCollector.collect('history', data);
   });
 
@@ -117,7 +122,7 @@ const keyCollectorTest = (end) => {
 
 // Parallel execution
 
-const parallelTest = (end) => {
+const parallelTest = end => {
 
   const pf1 = (data, callback) => {
     console.log('pf1');
@@ -143,7 +148,7 @@ const parallelTest = (end) => {
 
 // Sequential execution
 
-const sequentialTest = (end) => {
+const sequentialTest = end => {
 
   const sf1 = (data, callback) => {
     console.log('sf1');
@@ -169,7 +174,7 @@ const sequentialTest = (end) => {
 
 // Asynchrous filter
 
-const filterTest = (end) => {
+const filterTest = end => {
 
   const dataToFilter = [
     'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur',
@@ -194,6 +199,7 @@ const filterTest = (end) => {
   };
 
   metasync.filter(dataToFilter, filterPredicate, (err, result) => {
+    assert.ifError(err);
     console.log('filtered array: ' + result);
     console.log('Filter test done');
     end();
@@ -203,14 +209,13 @@ const filterTest = (end) => {
 
 // Asynchrous find
 
-const findTest = (end) => {
+const findTest = end => {
 
   metasync.find(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    (item, callback) => (
-      callback(null, item % 3 === 0 && item % 5 === 0)
-    ),
+    (item, callback) => callback(null, item % 3 === 0 && item % 5 === 0),
     (err, result) => {
+      assert.ifError(err);
       console.log('found value: ' + result);
       console.log('Find test done');
       end();
@@ -220,15 +225,16 @@ const findTest = (end) => {
 };
 
 // Asynchrous some
-const someTest = (end) => {
+const someTest = end => {
   metasync.some(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     (item, callback) => {
-      const res = (item % 3 === 0 && item % 5 === 0);
+      const res = item % 3 === 0 && item % 5 === 0;
       console.log('Some test ' + item + ': ' + res);
       callback(null, res);
     },
     (err, result) => {
+      assert.ifError(err);
       console.log('Value ' + (result ? 'found' : 'not found'));
       console.log('Some test done');
       end();
@@ -238,7 +244,7 @@ const someTest = (end) => {
 
 // Asyncronous each in parallel
 
-const eachTest = (end) => {
+const eachTest = end => {
 
   metasync.each(
     ['a', 'b', 'c'],
@@ -256,7 +262,7 @@ const eachTest = (end) => {
 
 // Asyncronous series (sequential)
 
-const seriesTest = (end) => {
+const seriesTest = end => {
 
   metasync.series(
     //['a', 'b', 'c'],
@@ -275,7 +281,7 @@ const seriesTest = (end) => {
 
 // Asyncronous reduce (sequential)
 
-const reduceTest = (end) => {
+const reduceTest = end => {
 
   metasync.reduce(
     ['a', 'b', 'c'],
@@ -291,7 +297,7 @@ const reduceTest = (end) => {
 
 };
 
-const concurrentQueueTest = (end) => {
+const concurrentQueueTest = end => {
 
   const queue = new metasync.ConcurrentQueue(3, 2000);
 
@@ -321,7 +327,7 @@ const concurrentQueueTest = (end) => {
   queue.add({ id: 9 });
 };
 
-const concurrentQueuePauseResumeStopTest = (end) => {
+const concurrentQueuePauseResumeStopTest = end => {
   const queue =  new metasync.ConcurrentQueue(3, 2000);
   queue.pause();
   queue.on('empty', end);
@@ -339,10 +345,10 @@ const concurrentQueuePauseResumeStopTest = (end) => {
   }
 };
 
-const throttleTest = (end) => {
+const throttleTest = end => {
   let state;
 
-  const fn = (letter) => {
+  const fn = letter => {
     console.log('Throttled function, state: ' + state);
     if (state === letter) {
       console.log('Throttle test done');
@@ -384,10 +390,10 @@ const throttleTest = (end) => {
 
 };
 
-const debounceTest = (end) => {
+const debounceTest = end => {
   let state;
 
-  const fn = (letter) => {
+  const fn = letter => {
     console.log('Debounced function, state: ' + state);
     if (state === letter) {
       console.log('Debounce test done');
@@ -428,7 +434,7 @@ const debounceTest = (end) => {
   }, 1100);
 };
 
-const mapTest = (end) => {
+const mapTest = end => {
   metasync.map([1, 2, 3], (item, callback) => {
     setTimeout(() => {
       callback(null, item * item);
@@ -455,10 +461,10 @@ const mapTest = (end) => {
   });
 };
 
-const timeoutTest = (end) => {
+const timeoutTest = end => {
   // Done function called by timer
   const start1 = new Date();
-  metasync.timeout(200, (done) => {
+  metasync.timeout(200, done => {
     setTimeout(done, 300);
   }, () => {
     const timeDiff = new Date() - start1;
@@ -476,16 +482,7 @@ const timeoutTest = (end) => {
   });
 };
 
-const chainTest = (end) => {
-  // Just to make sure we don't forget to merge the tests. There's some bug in
-  // metasync.composition so part of tests, including this one, are not run.
-  // As a temporary workaround, you can run it via
-  //   $ node chain-example
-  require('./chain-example');
-  end();
-};
-
-const printCallbackArgs = (end) => (err, ...args) => {
+const printCallbackArgs = end => (err, ...args) => {
   if (err) {
     console.log('Error: ' + err);
     return;
@@ -495,12 +492,12 @@ const printCallbackArgs = (end) => (err, ...args) => {
   end();
 };
 
-const ofTest = (end) => {
+const ofTest = end => {
   console.log('of test:');
   metasync.monad.of(4, 'str', [1, 2, 3])(printCallbackArgs(end));
 };
 
-const fmapTest = (end) => {
+const fmapTest = end => {
   console.log('fmap test:');
   const of = metasync.monad.of;
   const args = [4, 'str', [1, 2, 3]];
@@ -508,29 +505,29 @@ const fmapTest = (end) => {
   of(...args).fmap(reverseArgs)(printCallbackArgs(end));
 };
 
-const monadChainTest = (end) => {
+const monadChainTest = end => {
   console.log('Monad concat test:');
   const M = metasync.monad;
   const args = [4, 'str', [1, 2, 3]];
-  const asyncPrint = M.toAsync((args, callback) =>
-    printCallbackArgs(callback)(null, ...args)
+  const asyncPrint = M.toAsync(
+    (args, callback) => printCallbackArgs(callback)(null, ...args)
   );
   M.of(...args).concat(asyncPrint)(end);
 };
 
-const apTest = (end) => {
+const apTest = end => {
   console.log('ap test:');
   const M = metasync.monad;
   const storage = {};
 
   const collect = (key, val) => {
-    if (key === undefined) return;
+    if (key === undefined) return null;
     storage[key] = val;
     return collect;
   };
 
   const arrOfAsyncFunctions = [
-    ['first', 1], ['second', 2], ['third', 3]
+    ['first', 1], ['second', 2], ['third', 3],
   ].map(args => M.of(...args));
   const apR = (prev, next) => M.ap(next, prev);
 
@@ -541,10 +538,13 @@ const apTest = (end) => {
   });
 };
 
-const cbTest = (end) => {
+const cbTest = end => {
   const fn1 = undefined;
   const fn2 = null;
-  const fn3 = (err, data) => console.log('Done callback test ' + data);
+  const fn3 = (err, data) => {
+    assert.ifError(err);
+    console.log('Done callback test ' + data);
+  };
 
   const cb1 = metasync.cb(fn1);
   const cb2 = metasync.cb(fn2);
@@ -584,7 +584,6 @@ metasync([
   debounceTest,
   mapTest,
   timeoutTest,
-  chainTest,
 ], () => {
   console.log('All tests done');
 });

@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('successful each', (test) => {
+metatests.test('successful each', test => {
   const arr = [1, 2, 3, 4];
 
   const elementsSet = new Set();
@@ -12,14 +12,14 @@ metatests.test('successful each', (test) => {
   metasync.each(arr, (el, callback) => process.nextTick(() => {
     elementsSet.add(el);
     callback(null);
-  }), (err) => {
+  }), err => {
     test.error(err);
     test.strictSame(elementsSet, expectedElementsSet);
     test.end();
   });
 });
 
-metatests.test('each with empty array', (test) => {
+metatests.test('each with empty array', test => {
   const arr = [];
 
   const elementsSet = new Set();
@@ -28,14 +28,14 @@ metatests.test('each with empty array', (test) => {
   metasync.each(arr, (el, callback) => process.nextTick(() => {
     elementsSet.add(el);
     callback(null);
-  }), (err) => {
+  }), err => {
     test.error(err);
     test.strictSame(elementsSet, expectedElementsSet);
     test.end();
   });
 });
 
-metatests.test('each with error', (test) => {
+metatests.test('each with error', test => {
   const arr = [1, 2, 3, 4];
   let count = 0;
 
@@ -51,7 +51,7 @@ metatests.test('each with error', (test) => {
     } else {
       callback(null);
     }
-  }), (err) => {
+  }), err => {
     test.strictSame(err, eachError);
     test.strictSame(elementsSet.size, expectedElementsCount);
     test.end();
