@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+// Emulate Asynchronous calls of function
+//   callback - <Function>
 const wrapAsync = callback => {
   setTimeout(callback, Math.floor(Math.random() * 500));
 };
@@ -43,7 +45,7 @@ metatests.test('simple chain/do', test => {
     .do(readFile, 'README.md');
 
   c1((err, result) => {
-    test.strictSame(err, null);
+    test.error(err);
     test.strictSame(result, 'file content');
     test.end();
   });
