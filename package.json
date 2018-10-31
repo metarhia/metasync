@@ -53,6 +53,6 @@
     "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
     "metaschema": "^0.0.7",
-    "metatests": "^0.2.1"
+    "metatests": "^0.2.2"
   }
 }
