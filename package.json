@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.3.29",
+  "version": "0.3.30",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Asynchronous Programming Library",
   "license": "MIT",
@@ -46,7 +46,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "metarhia-common": "^0.0.27"
+    "metarhia-common": "^0.0.37"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -54,7 +54,7 @@
     "eslint": "^5.8.0",
     "eslint-config-metarhia": "^6.0.0",
     "eslint-plugin-import": "^2.14.0",
-    "metaschema": "^0.0.7",
-    "metatests": "^0.2.2"
+    "metaschema": "^0.0.26",
+    "metatests": "^0.2.3"
   }
 }
