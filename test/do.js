@@ -8,33 +8,33 @@ const wrapAsync = callback => {
 };
 
 metatests.test('simple chain/do', test => {
-  const readConfig = (name, callback) => {
+  const readConfig = test.mustCall((name, callback) => {
     test.strictSame(name, 'myConfig');
     wrapAsync(() => {
       callback(null, { name });
     });
-  };
+  });
 
-  const selectFromDb = (query, callback) => {
+  const selectFromDb = test.mustCall((query, callback) => {
     test.strictSame(query, 'select * from cities');
     wrapAsync(() => {
       callback(null, [{ name: 'Kiev' }, { name: 'Roma' }]);
     });
-  };
+  });
 
-  const getHttpPage = (url, callback) => {
+  const getHttpPage = test.mustCall((url, callback) => {
     test.strictSame(url, 'http://kpi.ua');
     wrapAsync(() => {
       callback(null, '<html>Some archaic web here</html>');
     });
-  };
+  });
 
-  const readFile = (path, callback) => {
+  const readFile = test.mustCall((path, callback) => {
     test.strictSame(path, 'README.md');
     wrapAsync(() => {
       callback(null, 'file content');
     });
-  };
+  });
 
   const c1 = metasync
     .do(readConfig, 'myConfig')
