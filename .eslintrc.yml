@@ -1,1 +1,2 @@
 extends: 'metarhia'
+parserOptions: { "ecmaVersion": 2019 }
