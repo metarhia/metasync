@@ -21,23 +21,26 @@ const doSmth = time => {
 };
 
 metatests.test('Non-blocking', test => {
+  const ITEM_TIME = 1;
+  const TIMER_TIME = 9;
   const ARRAY_SIZE = 1000;
-  const MIN_IO_CALLS = 90;
-  const MAX_IO_CALLS = 110;
+  const EXPECTED_PERCENT = 0.5;
+  const EXPECTED_DEVIATION = 0.2;
 
-  let ioCallsCount = 0;
   const arr = new Array(ARRAY_SIZE).fill(1);
 
-  const timer = setInterval(() => {
-    doSmth(9);
-    ioCallsCount++;
-  }, 1);
+  const timer = setInterval(() => doSmth(TIMER_TIME), 1);
 
-  metasync.asyncMap(arr, () => doSmth(1),
-    { percent: 0.5 }, () => {
+  const begin = Date.now();
+  metasync.asyncMap(arr, () => doSmth(ITEM_TIME),
+    { percent: EXPECTED_PERCENT }, () => {
       clearInterval(timer);
-      test.assert(ioCallsCount >= MIN_IO_CALLS);
-      test.assert(ioCallsCount <= MAX_IO_CALLS);
+
+      const mapTime = ITEM_TIME * ARRAY_SIZE;
+      const allTime = Date.now() - begin;
+      const actualPercent = mapTime / allTime;
+      const actualDeviation = Math.abs(actualPercent - EXPECTED_PERCENT);
+      test.assert(actualDeviation <= EXPECTED_DEVIATION);
       test.end();
     });
 });
