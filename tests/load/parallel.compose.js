@@ -27,7 +27,7 @@ const testCompose = done => {
   };
 
   const f1 = metasync([[p1, p2, p3, p4, p5, p6]]);
-  f1(done);
+  f1([], done);
 };
 
 benchmark.do(COUNT, [testCompose]);
