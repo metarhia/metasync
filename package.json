@@ -35,7 +35,7 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run lint && metatests test",
+    "test": "npm run lint && metatests test/*.js",
     "perf": "tests/load/run.sh",
     "lint": "eslint .",
     "docs": "metaschema ./metasync.js",

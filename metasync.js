@@ -1,5 +1,8 @@
 'use strict';
 
+const common = require('@metarhia/common');
+const nodeVerion = common.between(process.version, 'v', '.');
+
 const submodules = [
   'composition', // Unified abstraction
   'control', // Control flow utilities
@@ -14,6 +17,10 @@ const submodules = [
   'do', // Simple chain/do
   'poolify', // Create pool from factory
 ].map(path => require('./lib/' + path));
+
+if (nodeVerion >= 10) {
+  submodules.push(require('./lib/async-iterator'));
+}
 
 const { compose } = submodules[0];
 module.exports = Object.assign(compose, ...submodules);
