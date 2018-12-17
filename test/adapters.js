@@ -93,13 +93,32 @@ metatests.test('promisify: sync function to Promise', test => {
 
 });
 
-metatests.test('promisify: sync to Promise throw', test => {
+metatests.test('promisify: sync to Promise return error', test => {
 
   const id = 100;
 
   const getDataSync = dataId => {
     test.strictSame(dataId, id);
     return new Error('Data not found');
+  };
+
+  const getDataPromise = metasync.promisifySync(getDataSync);
+  getDataPromise(id).then(result => {
+    test.notOk(result);
+  }).catch(err => {
+    test.ok(err);
+    test.end();
+  });
+
+});
+
+metatests.test('promisify: sync to Promise throw', test => {
+
+  const id = 100;
+
+  const getDataSync = dataId => {
+    test.strictSame(dataId, id);
+    throw new Error('Data not found');
   };
 
   const getDataPromise = metasync.promisifySync(getDataSync);
