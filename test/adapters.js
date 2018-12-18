@@ -5,10 +5,10 @@ const metatests = require('metatests');
 
 metatests.test('callbackify: Promise to callback-last', test => {
 
-  const promise = Promise.resolve('result');
-  const callback = metasync.callbackify(promise);
+  const promiseReturning = () => Promise.resolve('result');
+  const asyncFn = metasync.callbackify(promiseReturning);
 
-  callback((err, value) => {
+  asyncFn((err, value) => {
     if (err) {
       test.error(err, 'must not throw');
     }
@@ -18,12 +18,12 @@ metatests.test('callbackify: Promise to callback-last', test => {
 
 });
 
-metatests.test('callbackify: sync function to callback-last', test => {
+metatests.test('asyncify: sync function to callback-last', test => {
 
-  const source = par => par;
-  const callback = metasync.callbackify(source);
+  const fn = par => par;
+  const asyncFn = metasync.asyncify(fn);
 
-  callback('result', (err, value) => {
+  asyncFn('result', (err, value) => {
     if (err) {
       test.error(err, 'must not throw');
     }
