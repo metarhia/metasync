@@ -130,3 +130,18 @@ metatests.test('promisify: sync to Promise throw', test => {
   });
 
 });
+
+metatests.test('promiseToCallbackLast: Promise to callback-last', test => {
+
+  const promise = Promise.resolve('result');
+  const asyncFn = metasync.promiseToCallbackLast(promise);
+
+  asyncFn((err, value) => {
+    if (err) {
+      test.error(err, 'must not throw');
+    }
+    test.strictSame(value, 'result');
+    test.end();
+  });
+
+});
