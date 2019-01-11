@@ -19,11 +19,12 @@ const iter = asyncIter(arr)
   .map(number => {
     doSmth(ITEM_TIME);
     sum += number;
-  }).throttle(EXPECTED_PERCENT);
+  })
+  .throttle(EXPECTED_PERCENT);
 
 const timer = setInterval(() => doSmth(TIMER_TIME), 0);
 
-(async() => {
+(async () => {
   const begin = Date.now();
   await iter.toArray();
   const allTime = Date.now() - begin;

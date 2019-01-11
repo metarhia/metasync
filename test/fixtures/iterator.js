@@ -18,9 +18,7 @@ metatests.test('new AsyncIterator() on non Iterable', test => {
 metatests.test('new AsyncIterator() on AsyncIterable', test => {
   const iterator = array[Symbol.iterator]();
   const iterable = {
-    [Symbol.asyncIterator]: () => (
-      { next: async() => iterator.next() }
-    ),
+    [Symbol.asyncIterator]: () => ({ next: async () => iterator.next() }),
   };
 
   const iter = asyncIter(iterable);
@@ -59,7 +57,9 @@ metatests.test('AsyncIterator.count', async test => {
 });
 
 metatests.test('AsyncIterator.count on consumed iterator', async test => {
-  const count = await asyncIter(array).skip(array.length).count();
+  const count = await asyncIter(array)
+    .skip(array.length)
+    .count();
   test.strictSame(count, 0);
   test.end();
 });
@@ -132,13 +132,15 @@ metatests.test(
   'AsyncIterator.reduce with no initialValue on consumed iterator',
   async test => {
     const iterator = asyncIter(array);
-    iterator.reduce(() => {})
+    iterator
+      .reduce(() => {})
       .then(() => iterator.reduce((acc, current) => acc + current))
       .catch(error => {
         test.isError(
           error,
-          new TypeError('Reduce of consumed async iterator ' +
-            'with no initial value')
+          new TypeError(
+            'Reduce of consumed async iterator with no initial value'
+          )
         );
         test.end();
       });
@@ -202,7 +204,9 @@ metatests.test('AsyncIterator.filter with thisArg', async test => {
 metatests.test('AsyncIterator.flat', async test => {
   const array = [[[[1], 2], 3], 4];
   const flatArray = [1, 2, 3, 4];
-  const newArray = await asyncIter(array).flat(3).toArray();
+  const newArray = await asyncIter(array)
+    .flat(3)
+    .toArray();
   test.strictSame(newArray, flatArray);
   test.end();
 });
@@ -210,7 +214,9 @@ metatests.test('AsyncIterator.flat', async test => {
 metatests.test('AsyncIterator.flat with no depth', async test => {
   const array = [[[[1], 2], 3], 4];
   const flatArray = [[[1], 2], 3, 4];
-  const newArray = await asyncIter(array).flat().toArray();
+  const newArray = await asyncIter(array)
+    .flat()
+    .toArray();
   test.strictSame(newArray, flatArray);
   test.end();
 });
@@ -271,8 +277,12 @@ metatests.test('AsyncIterator.zip', async test => {
 
 metatests.test('AsyncIterator.chain', async test => {
   const it = asyncIter(array).take(1);
-  const itr = await asyncIter(array).skip(1).take(1);
-  const iterator = await asyncIter(array).skip(2).take(2);
+  const itr = await asyncIter(array)
+    .skip(1)
+    .take(1);
+  const iterator = await asyncIter(array)
+    .skip(2)
+    .take(2);
   test.strictSame(await it.chain(itr, iterator).toArray(), [1, 2, 3, 4]);
   test.end();
 });
@@ -343,16 +353,20 @@ metatests.test('AsyncIterator.some with thisArg', async test => {
   test.end();
 });
 
-metatests.testSync('AsyncIterator.someCount that must return true',
+metatests.testSync(
+  'AsyncIterator.someCount that must return true',
   async test => {
     test.assert(await asyncIter(array).someCount(element => element % 2, 2));
-  });
+  }
+);
 
-metatests.testSync('AsyncIterator.someCount that must return false',
+metatests.testSync(
+  'AsyncIterator.someCount that must return false',
   async test => {
     test.assertNot(await asyncIter(array).someCount(element => element % 2, 3));
     test.assertNot(await asyncIter(array).someCount(element => element < 0, 1));
-  });
+  }
+);
 
 metatests.testSync('AsyncIterator.someCount with thisArg', async test => {
   const obj = {
@@ -370,13 +384,16 @@ metatests.test('AsyncIterator.find that must find an element', async test => {
   test.end();
 });
 
-metatests.test('AsyncIterator.find that must not find an element',
+metatests.test(
+  'AsyncIterator.find that must not find an element',
   async test => {
     test.strictSame(
       await asyncIter(array).find(element => element > 4),
-      undefined);
+      undefined
+    );
     test.end();
-  });
+  }
+);
 
 metatests.test('AsyncIterator.find with thisArg', async test => {
   const obj = {
@@ -440,15 +457,16 @@ metatests.test('AsyncIterator.throttle', async test => {
     test.assert(actualDeviation <= EXPECTED_DEVIATION);
     test.end();
   });
-
 });
 
 metatests.testSync('AsyncIterator.enumerate must return tuples', async test => {
   let i = 0;
-  await asyncIter(array).enumerate().forEach(t => {
-    test.strictSame(t, [i, array[i]]);
-    i++;
-  });
+  await asyncIter(array)
+    .enumerate()
+    .forEach(t => {
+      test.strictSame(t, [i, array[i]]);
+      i++;
+    });
 });
 
 metatests.testSync('AsyncIterator.enumerate must start from 0', async test => {

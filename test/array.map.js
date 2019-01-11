@@ -38,16 +38,21 @@ metatests.test('map with error', test => {
   const mapError = new Error('Map error');
   let count = 0;
 
-  metasync.map(arr, (x, callback) => process.nextTick(() => {
-    count++;
-    if (count === 2) {
-      callback(mapError);
-      return;
+  metasync.map(
+    arr,
+    (x, callback) =>
+      process.nextTick(() => {
+        count++;
+        if (count === 2) {
+          callback(mapError);
+          return;
+        }
+        callback(null, x * x);
+      }),
+    (err, res) => {
+      test.strictSame(err, mapError);
+      test.strictSame(res, undefined);
+      test.end();
     }
-    callback(null, x * x);
-  }), (err, res) => {
-    test.strictSame(err, mapError);
-    test.strictSame(res, undefined);
-    test.end();
-  });
+  );
 });

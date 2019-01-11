@@ -9,10 +9,14 @@ metatests.test('succesfull map', test => {
   const arr = [1, 2, 3];
   const expectedArr = [2, 4, 6];
 
-  metasync.asyncMap(arr, item => item * 2, (err, newArr) => {
-    test.error(err);
-    test.strictSame(newArr, expectedArr);
-  });
+  metasync.asyncMap(
+    arr,
+    item => item * 2,
+    (err, newArr) => {
+      test.error(err);
+      test.strictSame(newArr, expectedArr);
+    }
+  );
 });
 
 const doSmth = time => {
@@ -32,8 +36,11 @@ metatests.test('Non-blocking', test => {
   const timer = setInterval(() => doSmth(TIMER_TIME), 1);
 
   const begin = Date.now();
-  metasync.asyncMap(arr, () => doSmth(ITEM_TIME),
-    { percent: EXPECTED_PERCENT }, () => {
+  metasync.asyncMap(
+    arr,
+    () => doSmth(ITEM_TIME),
+    { percent: EXPECTED_PERCENT },
+    () => {
       clearInterval(timer);
 
       const mapTime = ITEM_TIME * ARRAY_SIZE;
@@ -42,6 +49,6 @@ metatests.test('Non-blocking', test => {
       const actualDeviation = Math.abs(actualPercent - EXPECTED_PERCENT);
       test.assert(actualDeviation <= EXPECTED_DEVIATION);
       test.end();
-    });
+    }
+  );
 });
-

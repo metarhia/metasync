@@ -3,13 +3,11 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-const asyncArgs = callback =>
-  process.nextTick(() => callback(null, 4, 5));
+const asyncArgs = callback => process.nextTick(() => callback(null, 4, 5));
 const functionInCallback = callback =>
   process.nextTick(() => callback(null, (x, y) => x + y));
 const asyncError = new Error('Async error');
-const asyncErrorCb = callback =>
-  process.nextTick(() => callback(asyncError));
+const asyncErrorCb = callback => process.nextTick(() => callback(asyncError));
 
 metatests.test('two successful functions', test => {
   metasync.ap(asyncArgs, functionInCallback)((err, res) => {

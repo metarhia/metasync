@@ -14,15 +14,16 @@ metatests.test('firstOf', test => {
       process.nextTick(execUnlessDataReturned);
     }
   };
-  const makeIFn = i => callback => process.nextTick(() => {
-    const iData = 'data' + i;
-    if (i === returningFnIndex) {
-      dataReturned = true;
-      callback(null, iData);
-    } else {
-      execUnlessDataReturned(iData);
-    }
-  });
+  const makeIFn = i => callback =>
+    process.nextTick(() => {
+      const iData = 'data' + i;
+      if (i === returningFnIndex) {
+        dataReturned = true;
+        callback(null, iData);
+      } else {
+        execUnlessDataReturned(iData);
+      }
+    });
 
   const fns = [1, 2, 3].map(makeIFn);
 

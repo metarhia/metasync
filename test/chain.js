@@ -6,9 +6,10 @@ const metatests = require('metatests');
 metatests.test('for.map', test => {
   const data = [1, 2, 3, 4];
   const expected = [2, 4, 6, 8];
-  const fn = (item, callback) => process.nextTick(() => {
-    callback(null, item * 2);
-  });
+  const fn = (item, callback) =>
+    process.nextTick(() => {
+      callback(null, item * 2);
+    });
   metasync
     .for(data)
     .map(fn)

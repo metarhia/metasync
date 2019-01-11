@@ -75,9 +75,8 @@ metatests.test('successful with asymetric function', test => {
 
   metasync.reduce(
     arr,
-    (prev, cur, callback) => process.nextTick(
-      () => callback(null, prev * 2 + +cur)
-    ),
+    (prev, cur, callback) =>
+      process.nextTick(() => callback(null, prev * 2 + +cur)),
     (err, res) => {
       test.error(err);
       test.strictSame(res, expectedRes);
@@ -90,16 +89,21 @@ metatests.test('with error', test => {
   const arr = '10120011';
   const reduceError = new Error('Reduce error');
 
-  metasync.reduce(arr, (prev, cur, callback) => process.nextTick(() => {
-    const digit = +cur;
-    if (digit > 1) {
-      callback(reduceError);
-      return;
+  metasync.reduce(
+    arr,
+    (prev, cur, callback) =>
+      process.nextTick(() => {
+        const digit = +cur;
+        if (digit > 1) {
+          callback(reduceError);
+          return;
+        }
+        callback(null, prev * 2 + digit);
+      }),
+    (err, res) => {
+      test.strictSame(err, reduceError);
+      test.strictSame(res, undefined);
+      test.end();
     }
-    callback(null, prev * 2 + digit);
-  }), (err, res) => {
-    test.strictSame(err, reduceError);
-    test.strictSame(res, undefined);
-    test.end();
-  });
+  );
 });

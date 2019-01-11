@@ -4,7 +4,6 @@ const metasync = require('..');
 const metatests = require('metatests');
 
 metatests.test('lifo / simple', test => {
-
   const expectedResult = [1, 2, 3, 9, 8, 7, 6, 5, 4];
   const result = [];
 

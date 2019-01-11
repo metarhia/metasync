@@ -4,13 +4,15 @@ const metasync = require('..');
 const metatests = require('metatests');
 
 const asyncData = 'data';
-const asyncDataCb = callback => process.nextTick(() => {
-  callback(null, asyncData);
-});
+const asyncDataCb = callback =>
+  process.nextTick(() => {
+    callback(null, asyncData);
+  });
 const asyncError = new Error('Async error');
-const asyncErrorCb = callback => process.nextTick(() => {
-  callback(asyncError);
-});
+const asyncErrorCb = callback =>
+  process.nextTick(() => {
+    callback(asyncError);
+  });
 const identity = x => x;
 const repeatStringTwice = str => str + str;
 const appendColon = str => str + ':';

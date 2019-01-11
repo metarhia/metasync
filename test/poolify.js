@@ -4,7 +4,6 @@ const metasync = require('..');
 const metatests = require('metatests');
 
 metatests.test('poolify simple', test => {
-
   const buffer = () => new Uint32Array(128);
 
   const pool = metasync.poolify(buffer, 10, 15, 20);
@@ -21,11 +20,9 @@ metatests.test('poolify simple', test => {
       test.end();
     });
   });
-
 });
 
 metatests.test('poolify loop', test => {
-
   const buffer = () => new Uint32Array(128);
 
   const pool = metasync.poolify(buffer, 10, 15, 20);
@@ -39,11 +36,9 @@ metatests.test('poolify loop', test => {
       }
     });
   }
-
 });
 
 metatests.test('poolify max', test => {
-
   const buffer = () => new Uint32Array(128);
 
   const pool = metasync.poolify(buffer, 5, 7, 10);
@@ -58,11 +53,9 @@ metatests.test('poolify max', test => {
       }, 100);
     });
   }
-
 });
 
 metatests.test('poolify delayed order', test => {
-
   const buffer = () => new Uint32Array(128);
 
   const pool = metasync.poolify(buffer, 0, 2, 2);
@@ -88,11 +81,9 @@ metatests.test('poolify delayed order', test => {
       pool([item2]);
     });
   });
-
 });
 
 metatests.test('poolify functor', test => {
-
   const adder = a => b => adder(a + b);
 
   const pool = metasync.poolify(adder, 1, 2, 3);
@@ -107,11 +98,9 @@ metatests.test('poolify functor', test => {
       test.end();
     });
   });
-
 });
 
 metatests.test('poolify get sync', test => {
-
   const adder = a => b => adder(a + b);
 
   const pool = metasync.poolify(adder, 1, 2, 3);
@@ -130,5 +119,4 @@ metatests.test('poolify get sync', test => {
   pool([item3]);
   test.strictSame(pool.items.length, 3);
   test.end();
-
 });

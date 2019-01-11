@@ -10,7 +10,6 @@ const wrapAsync = callback => {
 };
 
 metatests.test('async complex functions composition', test => {
-
   const fn1 = test.mustCall((data, cb) => {
     wrapAsync(() => {
       cb(null, 1);

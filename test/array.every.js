@@ -17,7 +17,7 @@ const strictSameResult = (input, expectedResult, test, done) => {
 const fewStrictSameResult = (inOutPairs, test) => {
   let i = 0;
   const testsEnd = metasync.collect(inOutPairs.length);
-  testsEnd.done(() =>  test.end());
+  testsEnd.done(() => test.end());
   const cb = () => testsEnd.pick('item' + i++);
   for (const [input, output] of inOutPairs) {
     strictSameResult(input, output, test, cb);
@@ -29,9 +29,9 @@ metatests.test('every with error', test => {
   const everyErr = new Error('Every error');
 
   const predicate = (item, callback) => {
-    process.nextTick(() => (
+    process.nextTick(() =>
       item % 2 === 0 ? callback(everyErr) : callback(null, true)
-    ));
+    );
   };
 
   metasync.every(data, predicate, err => {
@@ -44,17 +44,20 @@ metatests.test('every with empty array', test =>
   strictSameResult([], true, test, () => test.end())
 );
 
-metatests.test(
-  'every with one-element arrays',
-  test => fewStrictSameResult([ [[false], false], [[true], true] ], test)
+metatests.test('every with one-element arrays', test =>
+  fewStrictSameResult([[[false], false], [[true], true]], test)
 );
 
-metatests.test('every with two-element arrays', test => fewStrictSameResult([
-  [[false, false], false],
-  [[false, true ], false],
-  [[true,  false], false],
-  [[true,  true ], true ],
-], test)
+metatests.test('every with two-element arrays', test =>
+  fewStrictSameResult(
+    [
+      [[false, false], false],
+      [[false, true], false],
+      [[true, false], false],
+      [[true, true], true],
+    ],
+    test
+  )
 );
 
 metatests.test('every', test => {

@@ -7,7 +7,6 @@ const benchmark = require('./benchmark.js');
 const metasync = require('../../lib/poolify.opt.js');
 
 const poolifyNoMixin = done => {
-
   const buffer = () => new Uint32Array(128);
   const pool = metasync.poolify(buffer, 10, 100, 200);
 
@@ -19,7 +18,6 @@ const poolifyNoMixin = done => {
       });
     });
   }
-
 };
 
 benchmark.do(COUNT, [poolifyNoMixin]);

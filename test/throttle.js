@@ -112,14 +112,18 @@ metatests.test('timeout with sync function', test => {
 });
 
 metatests.test('timeout', test => {
-  metasync.timeout(10, callback => {
-    setTimeout(() => {
-      callback(null, 'someVal');
-    }, 0);
-  }, (err, res, ...args) => {
-    test.error(err);
-    test.strictSame(res, 'someVal');
-    test.strictSame(args, []);
-    test.end();
-  });
+  metasync.timeout(
+    10,
+    callback => {
+      setTimeout(() => {
+        callback(null, 'someVal');
+      }, 0);
+    },
+    (err, res, ...args) => {
+      test.error(err);
+      test.strictSame(res, 'someVal');
+      test.strictSame(args, []);
+      test.end();
+    }
+  );
 });

@@ -6,8 +6,8 @@ const fs = require('fs');
 
 const getPerson = (context, cb) => {
   const persons = [
-    { name: 'Marcus Aurelius', city: 'Rome',     born: 121 },
-    { name: 'Mao Zedong',      city: 'Shaoshan', born: 1893 },
+    { name: 'Marcus Aurelius', city: 'Rome', born: 121 },
+    { name: 'Mao Zedong', city: 'Shaoshan', born: 1893 },
   ];
   const person = persons.find(p => p.name === context.name);
   cb(null, { person });
@@ -31,7 +31,6 @@ const prepareResult = (context, cb) => {
 };
 
 metatests.test('sync complex functions composition', test => {
-
   const readFile = (context, cb) => {
     fs.readFile(context.file, (err, buffer) => {
       test.error(err);
@@ -39,23 +38,24 @@ metatests.test('sync complex functions composition', test => {
     });
   };
 
-  const fc = metasync([
-    getPerson, [[lookupCountry, readFile]], prepareResult,
-  ]);
+  const fc = metasync([getPerson, [[lookupCountry, readFile]], prepareResult]);
 
-  fc({
-    name: 'Mao Zedong',
-    file: './AUTHORS',
-  }, (err, context) => {
-    test.error(err);
-    const expected = {
+  fc(
+    {
       name: 'Mao Zedong',
-      city: 'Shaoshan',
-      born: 1893,
-      country: 'Quin Empire',
-      length: 318,
-    };
-    test.strictSame(context.result, expected);
-    test.end();
-  });
+      file: './AUTHORS',
+    },
+    (err, context) => {
+      test.error(err);
+      const expected = {
+        name: 'Mao Zedong',
+        city: 'Shaoshan',
+        born: 1893,
+        country: 'Quin Empire',
+        length: 318,
+      };
+      test.strictSame(context.result, expected);
+      test.end();
+    }
+  );
 });

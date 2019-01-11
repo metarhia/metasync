@@ -29,9 +29,8 @@ metatests.test('erroneous some', test => {
   const arr = [1, 2, 3];
   const someError = new Error('Some error');
 
-  const predicate = (x, callback) => (
-    x % 2 === 0 ? callback(someError) : callback(null, false)
-  );
+  const predicate = (x, callback) =>
+    x % 2 === 0 ? callback(someError) : callback(null, false);
   metasync.some(arr, predicate, (err, accepted) => {
     test.strictSame(err, someError);
     test.strictSame(accepted, undefined);

@@ -4,7 +4,6 @@ const metasync = require('..');
 const metatests = require('metatests');
 
 metatests.test('priority / pipe', test => {
-
   const expectedResult = [2, 8, 6, 4];
   const result = [];
 
@@ -32,13 +31,13 @@ metatests.test('priority / pipe', test => {
     test.end();
   });
 
-  q1.add({ id: 1 },   0);
-  q1.add({ id: 2 },   0);
-  q1.add({ id: 3 },   1);
-  q1.add({ id: 4 },   0);
-  q1.add({ id: 5 },   0);
-  q1.add({ id: 6 },  10);
-  q1.add({ id: 7 },   0);
+  q1.add({ id: 1 }, 0);
+  q1.add({ id: 2 }, 0);
+  q1.add({ id: 3 }, 1);
+  q1.add({ id: 4 }, 0);
+  q1.add({ id: 5 }, 0);
+  q1.add({ id: 6 }, 10);
+  q1.add({ id: 7 }, 0);
   q1.add({ id: 8 }, 100);
-  q1.add({ id: 9 },   0);
+  q1.add({ id: 9 }, 0);
 });

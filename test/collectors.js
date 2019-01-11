@@ -128,7 +128,7 @@ metatests.test('collect with error', test => {
   col.fail('someKey', testErr);
 });
 
-metatests.test('collect method calling after it\'s done', test => {
+metatests.test("collect method calling after it's done", test => {
   const col = metasync.collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -173,7 +173,8 @@ metatests.test('collect with take', test => {
 
 metatests.test('collect with timeout error', test => {
   const timeoutErr = new Error('Collector timeout');
-  const col = metasync.collect(1)
+  const col = metasync
+    .collect(1)
     .done((err, res) => {
       test.strictSame(err, timeoutErr);
       test.strictSame(res, {});
@@ -185,36 +186,31 @@ metatests.test('collect with timeout error', test => {
 });
 
 metatests.test('collect with take calls bigger than expected', test => {
-  const col = metasync.collect(1)
-    .done((err, res) => {
-      test.error(err);
-      test.strictSame(Object.keys(res).length, 1);
-      test.end();
-    });
+  const col = metasync.collect(1).done((err, res) => {
+    test.error(err);
+    test.strictSame(Object.keys(res).length, 1);
+    test.end();
+  });
   const af = (x, callback) => setTimeout(() => callback(null, x), 1);
   col.take('someKey', af, 'someVal');
   col.take('someKey2', af, 'someVal2');
 });
 
 metatests.test('cancel data collector', test => {
-  const dc = metasync
-    .collect(3)
-    .done(err => {
-      test.assert(err);
-      test.end();
-    });
+  const dc = metasync.collect(3).done(err => {
+    test.assert(err);
+    test.end();
+  });
 
   dc.pick('key', 'value');
   dc.cancel();
 });
 
 metatests.test('cancel key collector', test => {
-  const dc = metasync
-    .collect(['uno', 'due'])
-    .done(err => {
-      test.assert(err);
-      test.end();
-    });
+  const dc = metasync.collect(['uno', 'due']).done(err => {
+    test.assert(err);
+    test.end();
+  });
 
   dc.pick('key', 'value');
   dc.cancel();
@@ -235,14 +231,17 @@ metatests.test('collect then success', test => {
 });
 
 metatests.test('collect then fail', test => {
-  metasync.collect(5).timeout(10).then(
-    result => {
-      test.error(result);
-      test.end();
-    },
-    err => {
-      test.assert(err);
-      test.end();
-    }
-  );
+  metasync
+    .collect(5)
+    .timeout(10)
+    .then(
+      result => {
+        test.error(result);
+        test.end();
+      },
+      err => {
+        test.assert(err);
+        test.end();
+      }
+    );
 });
