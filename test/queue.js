@@ -4,7 +4,7 @@ const metasync = require('..');
 const metatests = require('metatests');
 
 metatests.test('queue add', test => {
-  const queue = metasync.queue(3).timeout(2000);
+  const queue = metasync.queue(3).disableLunch().timeout(2000);
   let taskIndex = 1;
 
   queue.process((item, callback) => {

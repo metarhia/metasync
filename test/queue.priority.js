@@ -9,6 +9,7 @@ metatests.test('fifo / priority', test => {
 
   const q = metasync
     .queue(3)
+    .disableLunch()
     .priority()
     .process((item, cb) => {
       result.push(item.id);

@@ -9,6 +9,7 @@ metatests.test('priority / pipe', test => {
 
   const q1 = metasync
     .queue(3)
+    .disableLunch()
     .priority()
     .process((item, cb) => {
       setTimeout(cb, 50, item.id % 2 ? new Error('unexpected') : null, item);
@@ -16,6 +17,7 @@ metatests.test('priority / pipe', test => {
 
   const q2 = metasync
     .queue(1)
+    .disableLunch()
     .wait(100)
     .timeout(200)
     .priority()

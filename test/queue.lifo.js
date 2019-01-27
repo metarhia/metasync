@@ -9,6 +9,7 @@ metatests.test('lifo / simple', test => {
 
   const q = metasync
     .queue(3)
+    .disableLunch()
     .priority()
     .lifo()
     .process((item, cb) => {

@@ -33,6 +33,7 @@ metatests.test('priority / roundRobin', test => {
 
   const q = metasync
     .queue(3)
+    .disableLunch()
     .roundRobin()
     .priority()
     .process((item, cb) => {

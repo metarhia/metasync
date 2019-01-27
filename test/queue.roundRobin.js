@@ -33,6 +33,7 @@ metatests.test('roundRobin', test => {
 
   const q = metasync
     .queue(3)
+    .disableLunch()
     .roundRobin()
     .process((item, cb) => {
       result.push(item.id);
