@@ -37,9 +37,9 @@
   "scripts": {
     "test": "npm run lint && metatests test/*.js",
     "perf": "tests/load/run.sh",
-    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\"",
+    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\"",
     "docs": "metaschema ./metasync.js",
-    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\"",
+    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\"",
     "build": "babel metasync.js -d dist && babel lib -d dist/lib",
     "prepublish": "npm run -s build"
   },
