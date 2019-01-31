@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('successful with initial', test => {
+metatests.test('reduce with initial', test => {
   const arr = [1, 2, 3, 4, 5];
   const initial = 10;
   const expectedRes = 25;
@@ -54,7 +54,21 @@ metatests.test('reduce without initial and with empty array', test => {
   );
 });
 
-metatests.test('successful without initial', test => {
+metatests.test('reduce without initial and with single-element array', test => {
+  const arr = [2];
+
+  metasync.reduce(
+    arr,
+    (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
+    (err, res) => {
+      test.strictSame(err, null);
+      test.strictSame(res, 2);
+      test.end();
+    }
+  );
+});
+
+metatests.test('reduce without initial', test => {
   const arr = [1, 2, 3, 4, 5];
   const expectedRes = 15;
 
@@ -69,7 +83,7 @@ metatests.test('successful without initial', test => {
   );
 });
 
-metatests.test('successful with asymetric function', test => {
+metatests.test('reduce with asymetric function', test => {
   const arr = '10110011';
   const expectedRes = 179;
 
@@ -85,7 +99,7 @@ metatests.test('successful with asymetric function', test => {
   );
 });
 
-metatests.test('with error', test => {
+metatests.test('reduce with error', test => {
   const arr = '10120011';
   const reduceError = new Error('Reduce error');
 
