@@ -29,10 +29,14 @@
     "type": "git",
     "url": "https://github.com/metarhia/metasync"
   },
-  "main": "./metasync.js",
+  "main": "metasync.js",
   "browser": {
-    "./metasync.js": "./dist/metasync.js"
+    "metasync.js": "dist/metasync.js"
   },
+  "files": [
+    "dist/",
+    "lib/"
+  ],
   "readmeFilename": "README.md",
   "scripts": {
     "test": "npm run lint && metatests test/*.js",
