@@ -48,7 +48,7 @@
     "prepublish": "npm run -s build"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
     "@metarhia/common": "^1.0.0"
