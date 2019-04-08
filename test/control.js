@@ -134,3 +134,21 @@ metatests.test('runIf forward an error', test => {
     test.end();
   });
 });
+
+metatests.test('runIfFn', test => {
+  test.plan(5);
+  const value = 42;
+  const asyncFn = cb => {
+    cb(null, value);
+  };
+
+  metasync.runIfFn(test.mustCall(asyncFn), (err, res) => {
+    test.error(err);
+    test.strictSame(res, value);
+  });
+
+  metasync.runIfFn(null, (err, res) => {
+    test.error(err);
+    test.assertNot(res);
+  });
+});
