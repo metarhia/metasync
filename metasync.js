@@ -5,17 +5,17 @@ const nodeVerion = common.between(process.version, 'v', '.');
 
 const submodules = [
   'composition', // Unified abstraction
-  'control', // Control flow utilities
-  'fp', // Async utils for functional programming
   'adapters', // Adapters to convert different async contracts
-  'throttle', // Throttling utilities
   'array', // Array utilities
   'chain', // Process arrays sync and async array in chain
   'collector', // DataCollector and KeyCollector
-  'queue', // Concurrent queue
-  'memoize', // Async memoization
+  'control', // Control flow utilities
   'do', // Simple chain/do
+  'fp', // Async utils for functional programming
+  'memoize', // Async memoization
   'poolify', // Create pool from factory
+  'queue', // Concurrent queue
+  'throttle', // Throttling utilities
 ].map(path => require('./lib/' + path));
 
 if (nodeVerion >= 10) {
