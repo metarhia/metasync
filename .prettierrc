@@ -3,7 +3,7 @@
   "trailingComma": "es5",
   "overrides": [
     {
-      "files": [".babelrc", ".prettierrc"],
+      "files": [".babelrc", ".prettierrc", ".metadocrc"],
       "options": { "parser": "json" }
     }
   ]
