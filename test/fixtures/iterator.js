@@ -15,6 +15,13 @@ metatests.test('new AsyncIterator() on non Iterable', test => {
   test.end();
 });
 
+metatests.test('AsyncIterator.throttle with min value', test => {
+  const expectedMin = 1;
+  const { min } = asyncIter([]).throttle(1, expectedMin);
+  test.strictSame(min, expectedMin);
+  test.end();
+});
+
 metatests.test('new AsyncIterator() on AsyncIterable', test => {
   const iterator = array[Symbol.iterator]();
   const iterable = {
