@@ -24,54 +24,6 @@ metatests.test('queue default FIFO', test => {
   }
 });
 
-metatests.test('queue FIFO', test => {
-  const queue = metasync
-    .queue(3)
-    .fifo()
-    .timeout(1);
-  const res = [];
-
-  queue.process((item, callback) => {
-    process.nextTick(() => {
-      res.push(item.id);
-      callback();
-    });
-  });
-
-  queue.drain(() => {
-    test.strictSame(res, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    test.end();
-  });
-
-  for (let id = 1; id < 10; id++) {
-    queue.add({ id });
-  }
-});
-
-metatests.test('queue LIFO', test => {
-  const queue = metasync
-    .queue(3)
-    .lifo()
-    .timeout(1);
-  const res = [];
-
-  queue.process((item, callback) => {
-    process.nextTick(() => {
-      res.push(item.id);
-      callback();
-    });
-  });
-
-  queue.drain(() => {
-    test.strictSame(res, [1, 2, 3, 9, 8, 7, 6, 5, 4]);
-    test.end();
-  });
-
-  for (let id = 1; id < 10; id++) {
-    queue.add({ id });
-  }
-});
-
 metatests.test('queue priority', test => {
   const queue = metasync.queue(3).priority();
   const res = [];
