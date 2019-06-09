@@ -12,6 +12,7 @@ const submodules = [
   'control', // Control flow utilities
   'do', // Simple chain/do
   'fp', // Async utils for functional programming
+  'future', // Future stateless and lazy Promise analogue
   'memoize', // Async memoization
   'poolify', // Create pool from factory
   'queue', // Concurrent queue
