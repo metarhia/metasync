@@ -1,6 +1,6 @@
 'use strict';
 
-const { Future } = require('..');
+const { Future, futurify } = require('..');
 const metatests = require('metatests');
 
 metatests.test('Future map/fork', async test => {
@@ -89,4 +89,38 @@ metatests.test('Future stateless', async test => {
   });
 
   test.end();
+});
+
+metatests.test('Future futurify success', async test => {
+  const f1 = (a, b, callback) => {
+    if (typeof a !== 'number' || typeof b !== 'number') {
+      callback(new Error('Arguments must be numbers'));
+      return;
+    }
+    callback(null, a + b);
+  };
+
+  const f2 = futurify(f1);
+
+  f2(10, 20).fork(value => {
+    test.strictSame(value, 30);
+    test.end();
+  });
+});
+
+metatests.test('Future futurify fail', async test => {
+  const f1 = (a, b, callback) => {
+    if (typeof a !== 'number' || typeof b !== 'number') {
+      callback(new Error('Arguments must be numbers'));
+      return;
+    }
+    callback(null, a + b);
+  };
+
+  const f2 = futurify(f1);
+
+  f2('10', '20').fork(test.mustNotCall, error => {
+    test.strictSame(error.message, 'Arguments must be numbers');
+    test.end();
+  });
 });
