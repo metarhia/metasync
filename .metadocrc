@@ -7,7 +7,6 @@
     "lib/adapters.js",
     "lib/array.js",
     "lib/async-iterator.js",
-    "lib/chain.js",
     "lib/collector.js",
     "lib/composition.js",
     "lib/control.js",

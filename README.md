@@ -366,52 +366,6 @@ Create an AsyncIterator instance
 
 #### AsyncIterator.prototype.enumerate()
 
-### for(array)
-
-- `array`: [`<Array>`][array] start mutations from this data
-
-_Returns:_ [`<ArrayChain>`][arraychain]
-
-Create ArrayChain instance
-
-### class ArrayChain
-
-#### ArrayChain.prototype.constructor(array)
-
-#### ArrayChain.prototype.execute(err)
-
-#### ArrayChain.prototype.fetch(fn)
-
-#### ArrayChain.prototype.map(fn)
-
-#### ArrayChain.prototype.filter(fn)
-
-#### ArrayChain.prototype.reduce(fn)
-
-#### ArrayChain.prototype.each(fn)
-
-#### ArrayChain.prototype.series(fn)
-
-#### ArrayChain.prototype.find(fn)
-
-#### ArrayChain.prototype.concat(...args)
-
-#### ArrayChain.prototype.slice(...args)
-
-#### ArrayChain.prototype.includes(...args)
-
-#### ArrayChain.prototype.reverse(...args)
-
-#### ArrayChain.prototype.sort(...args)
-
-#### ArrayChain.prototype.shift(...args)
-
-#### ArrayChain.prototype.unshift(...args)
-
-#### ArrayChain.prototype.push(...args)
-
-#### ArrayChain.prototype.pop(...args)
-
 ### collect(expected)
 
 - `expected`: [`<number>`][number]|[`<string[]>`][string]
@@ -915,7 +869,6 @@ Set timeout for asynchronous function execution
 
 [asynciterable]: https://tc39.github.io/ecma262/#sec-asynciterable-interface
 [asynciterator]: #class-asynciterator
-[arraychain]: #class-arraychain
 [collector]: #class-collector
 [queue]: #class-queue
 [object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object

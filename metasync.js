@@ -7,7 +7,6 @@ const submodules = [
   'composition', // Unified abstraction
   'adapters', // Adapters to convert different async contracts
   'array', // Array utilities
-  'chain', // Process arrays sync and async array in chain
   'collector', // DataCollector and KeyCollector
   'control', // Control flow utilities
   'do', // Simple chain/do
