@@ -6,6 +6,7 @@
   "files": [
     "lib/adapters.js",
     "lib/array.js",
+    "lib/async-emitter.js",
     "lib/async-iterator.js",
     "lib/chain.js",
     "lib/collector.js",
