@@ -642,11 +642,11 @@ Add event listener
 _Example:_
 
 ```js
-const collector = new Collector();
-collector.on('memoize', (err, data) => { ... });
-collector.on('add', (key, err, data) => { ... });
-collector.on('del', (key) => { ... })
-collector.on('clear', () => { ... });
+const memoized = new Memoized();
+memoized.on('memoize', (err, data) => { ... });
+memoized.on('add', (key, err, data) => { ... });
+memoized.on('del', (key) => { ... })
+memoized.on('clear', () => { ... });
 ```
 
 #### Memoized.prototype.emit(eventName, args)
@@ -654,7 +654,7 @@ collector.on('clear', () => { ... });
 - `eventName`: [`<string>`][string]
 - `args`: `<any>` rest arguments
 
-Emit Collector events
+Emit Memoized events
 
 ### poolify(factory, min, norm, max)
 
