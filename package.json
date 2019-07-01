@@ -51,7 +51,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@metarhia/common": "^1.4.2"
+    "@metarhia/common": "^2.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

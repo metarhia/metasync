@@ -100,7 +100,7 @@ Convert sync function to Promise object
 
 ### map(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function] to be executed for each value in the array
   - `current`: `<any>` current element being processed in the array
   - `callback`: [`<Function>`][function]
@@ -108,13 +108,13 @@ Convert sync function to Promise object
     - `value`: `<any>`
 - `done`: [`<Function>`][function] on done
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `result`: [`<Array>`][array]
+  - `result`: [`<Iterable>`][iterable]
 
 Asynchronous map (iterate parallel)
 
 ### filter(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function] to be executed for each value in the array
   - `value`: `<any>` item from items array
   - `callback`: [`<Function>`][function]
@@ -122,9 +122,9 @@ Asynchronous map (iterate parallel)
     - `accepted`: [`<boolean>`][boolean]
 - `done`: [`<Function>`][function] on done
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `result`: [`<Array>`][array]
+  - `result`: [`<Iterable>`][iterable]
 
-Asynchrous filter (iterate parallel)
+Asynchronous filter (iterate parallel)
 
 _Example:_
 
@@ -138,7 +138,7 @@ metasync.filter(
 
 ### reduce(items, fn, done\[, initial\])
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function] to be executed for each value in array
   - `previous`: `<any>` value previously returned in the last iteration
   - `current`: `<any>` current element being processed in the array
@@ -148,10 +148,10 @@ metasync.filter(
     - `data`: `<any>` resulting value
   - `counter`: [`<number>`][number] index of the current element being processed
     in array
-  - `items`: [`<Array>`][array] the array reduce was called upon
-- `done`: [`<Function>`][function] on done
+  - `items`: [`<Iterable>`][iterable] the array reduce was called upon
+- `done`: [`<Function>`][function] on done, optional
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `result`: [`<Array>`][array]
+  - `result`: [`<Iterable>`][iterable]
 - `initial`: `<any>` optional value to be used as first argument in first
   iteration
 
@@ -159,7 +159,7 @@ Asynchronous reduce
 
 ### reduceRight(items, fn, done\[, initial\])
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function] to be executed for each value in array
   - `previous`: `<any>` value previously returned in the last iteration
   - `current`: `<any>` current element being processed in the array
@@ -169,10 +169,10 @@ Asynchronous reduce
     - `data`: `<any>` resulting value
   - `counter`: [`<number>`][number] index of the current element being processed
     in array
-  - `items`: [`<Array>`][array] the array reduce was called upon
-- `done`: [`<Function>`][function] on done
+  - `items`: [`<Iterable>`][iterable] the array reduce was called upon
+- `done`: [`<Function>`][function] on done, optional
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `result`: [`<Array>`][array]
+  - `result`: [`<Iterable>`][iterable]
 - `initial`: `<any>` optional value to be used as first argument in first
   iteration
 
@@ -180,14 +180,14 @@ Asynchronous reduceRight
 
 ### each(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function]
   - `value`: `<any>` item from items array
   - `callback`: [`<Function>`][function]
     - `err`: [`<Error>`][error]|[`<null>`][null]
 - `done`: [`<Function>`][function] on done
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `items`: [`<Array>`][array]
+  - `items`: [`<Iterable>`][iterable]
 
 Asynchronous each (iterate in parallel)
 
@@ -206,14 +206,14 @@ metasync.each(
 
 ### series(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function]
   - `value`: `<any>` item from items array
   - `callback`: [`<Function>`][function]
     - `err`: [`<Error>`][error]|[`<null>`][null]
 - `done`: [`<Function>`][function] on done
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `items`: [`<Array>`][array]
+  - `items`: [`<Iterable>`][iterable]
 
 Asynchronous series
 
@@ -234,7 +234,7 @@ metasync.series(
 
 ### find(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function]
   - `value`: `<any>` item from items array
   - `callback`: [`<Function>`][function]
@@ -260,7 +260,7 @@ metasync.find(
 
 ### every(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function]
   - `value`: `<any>` item from items array
   - `callback`: [`<Function>`][function]
@@ -274,7 +274,7 @@ Asynchronous every
 
 ### some(items, fn, done)
 
-- `items`: [`<Array>`][array] incoming
+- `items`: [`<Iterable>`][iterable] incoming
 - `fn`: [`<Function>`][function]
   - `value`: `<any>` item from items array
   - `callback`: [`<Function>`][function]
@@ -288,7 +288,7 @@ Asynchronous some (iterate in series)
 
 ### asyncMap(items, fn\[, options\]\[, done\])
 
-- `items`: [`<Array>`][array] incoming dataset
+- `items`: [`<Iterable>`][iterable] incoming dataset
 - `fn`: [`<Function>`][function]
   - `item`: `<any>`
   - `index`: [`<number>`][number]
@@ -297,7 +297,7 @@ Asynchronous some (iterate in series)
   - `percent`: [`<number>`][number] ratio of map time to all time
 - `done`: [`<Function>`][function] call on done, optional
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `result`: [`<Array>`][array]
+  - `result`: [`<Iterable>`][iterable]
 
 Non-blocking synchronous map
 
@@ -332,6 +332,8 @@ Create an AsyncIterator instance
 
 #### async AsyncIterator.prototype.reduce(reducer, initialValue)
 
+#### async AsyncIterator.prototype.reduceRight(reducer, initialValue)
+
 #### async AsyncIterator.prototype.some(predicate, thisArg)
 
 #### async AsyncIterator.prototype.someCount(predicate, count, thisArg)
@@ -365,6 +367,8 @@ Create an AsyncIterator instance
 #### AsyncIterator.prototype.throttle(percent, min)
 
 #### AsyncIterator.prototype.enumerate()
+
+#### AsyncIterator.prototype.reverse()
 
 ### collect(expected)
 
@@ -867,6 +871,7 @@ Set timeout for asynchronous function execution
 - Timur Shemsedinov (marcusaurelius)
 - See github for full [contributors list](https://github.com/metarhia/metasync/graphs/contributors)
 
+[iterable]: https://tc39.es/ecma262/#sec-iterable-interface
 [asynciterable]: https://tc39.github.io/ecma262/#sec-asynciterable-interface
 [asynciterator]: #class-asynciterator
 [collector]: #class-collector
