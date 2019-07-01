@@ -20,6 +20,23 @@ metatests.test('reduce with initial', test => {
   );
 });
 
+metatests.test('reduce with initial and another iterable', test => {
+  const set = new Set([1, 2, 3, 4, 5]);
+  const initial = 10;
+  const expectedRes = 25;
+
+  metasync.reduce(
+    set,
+    (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
+    (err, res) => {
+      test.error(err);
+      test.strictSame(res, expectedRes);
+      test.end();
+    },
+    initial
+  );
+});
+
 metatests.test('reduce with initial and empty array', test => {
   const arr = [];
   const initial = 10;
@@ -40,28 +57,28 @@ metatests.test('reduce with initial and empty array', test => {
 metatests.test('reduce without initial and with empty array', test => {
   const arr = [];
   const expectedError = new TypeError(
-    'Reduce of empty array with no initial value'
+    'Reduce of consumed async iterator with no initial value'
   );
 
   metasync.reduce(
     arr,
     (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
     (err, res) => {
-      test.strictSame(err, expectedError);
+      test.isError(err, expectedError);
       test.strictSame(res, undefined);
       test.end();
     }
   );
 });
 
-metatests.test('reduce without initial and with single-element array', test => {
+metatests.test('reduce single-element array without initial', test => {
   const arr = [2];
 
   metasync.reduce(
     arr,
     (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
     (err, res) => {
-      test.strictSame(err, null);
+      test.error(err);
       test.strictSame(res, 2);
       test.end();
     }
@@ -83,12 +100,12 @@ metatests.test('reduce without initial', test => {
   );
 });
 
-metatests.test('reduce with asymetric function', test => {
-  const arr = '10110011';
+metatests.test('reduce with asymmetric function', test => {
+  const str = '10110011';
   const expectedRes = 179;
 
   metasync.reduce(
-    arr,
+    str,
     (prev, cur, callback) =>
       process.nextTick(() => callback(null, prev * 2 + +cur)),
     (err, res) => {
@@ -100,11 +117,11 @@ metatests.test('reduce with asymetric function', test => {
 });
 
 metatests.test('reduce with error', test => {
-  const arr = '10120011';
+  const str = '10120011';
   const reduceError = new Error('Reduce error');
 
   metasync.reduce(
-    arr,
+    str,
     (prev, cur, callback) =>
       process.nextTick(() => {
         const digit = +cur;
@@ -115,7 +132,7 @@ metatests.test('reduce with error', test => {
         callback(null, prev * 2 + digit);
       }),
     (err, res) => {
-      test.strictSame(err, reduceError);
+      test.isError(err, reduceError);
       test.strictSame(res, undefined);
       test.end();
     }

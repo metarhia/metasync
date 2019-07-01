@@ -7,11 +7,11 @@ metatests.test('firstOf', test => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
-  const execUnlessDataReturned = data => callback => {
+  const execUnlessDataReturned = (data, callback) => {
     if (dataReturned) {
       callback(null, data);
     } else {
-      process.nextTick(execUnlessDataReturned);
+      process.nextTick(() => execUnlessDataReturned(data, callback));
     }
   };
   const makeIFn = i => callback =>
@@ -21,7 +21,7 @@ metatests.test('firstOf', test => {
         dataReturned = true;
         callback(null, iData);
       } else {
-        execUnlessDataReturned(iData);
+        execUnlessDataReturned(iData, callback);
       }
     });
 

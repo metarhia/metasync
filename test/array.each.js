@@ -45,29 +45,35 @@ metatests.test('each with empty array', test => {
   );
 });
 
+metatests.test('successful each with another iterable', test => {
+  const map = new Map([[1, 'a'], [2, 'b'], [3, 'c']]);
+  const mapCopy = new Map();
+
+  metasync.each(
+    map,
+    (entry, callback) =>
+      process.nextTick(() => {
+        mapCopy.set(...entry);
+        callback(null);
+      }),
+    err => {
+      test.error(err);
+      test.strictSame([...mapCopy], [...map]);
+      test.end();
+    }
+  );
+});
+
 metatests.test('each with error', test => {
   const arr = [1, 2, 3, 4];
-  let count = 0;
-
-  const elementsSet = new Set();
-  const expectedElementsCount = 2;
   const eachError = new Error('Each error');
 
   metasync.each(
     arr,
-    (el, callback) =>
-      process.nextTick(() => {
-        elementsSet.add(el);
-        count++;
-        if (count === expectedElementsCount) {
-          callback(eachError);
-        } else {
-          callback(null);
-        }
-      }),
+    (item, callback) =>
+      process.nextTick(() => callback(item === 2 ? eachError : null)),
     err => {
-      test.strictSame(err, eachError);
-      test.strictSame(elementsSet.size, expectedElementsCount);
+      test.isError(err, eachError);
       test.end();
     }
   );

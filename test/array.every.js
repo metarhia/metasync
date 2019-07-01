@@ -35,7 +35,7 @@ metatests.test('every with error', test => {
   };
 
   metasync.every(data, predicate, err => {
-    test.strictSame(err, everyErr);
+    test.isError(err, everyErr);
     test.end();
   });
 });
@@ -60,14 +60,26 @@ metatests.test('every with two-element arrays', test =>
   )
 );
 
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
 metatests.test('every', test => {
-  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-
-  const predicate = (item, callback) => {
+  const predicate = (item, callback) =>
     process.nextTick(() => callback(null, item > 0));
-  };
 
-  metasync.every(data, predicate, (err, result) => {
+  metasync.every(arr, predicate, (err, result) => {
+    test.error(err);
+    test.strictSame(result, true);
+    test.end();
+  });
+});
+
+metatests.test('every with another iterable', test => {
+  const set = new Set(arr);
+
+  const predicate = (item, callback) =>
+    process.nextTick(() => callback(null, item > 0));
+
+  metasync.every(set, predicate, (err, result) => {
     test.error(err);
     test.strictSame(result, true);
     test.end();
