@@ -7,11 +7,11 @@ metatests.test('firstOf', test => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
-  const execUnlessDataReturned = data => callback => {
+  const execUnlessDataReturned = (data, callback) => {
     if (dataReturned) {
       callback(null, data);
     } else {
-      process.nextTick(execUnlessDataReturned);
+      process.nextTick(() => execUnlessDataReturned(data, callback));
     }
   };
   const makeIFn = i => callback =>
@@ -21,7 +21,7 @@ metatests.test('firstOf', test => {
         dataReturned = true;
         callback(null, iData);
       } else {
-        execUnlessDataReturned(iData);
+        execUnlessDataReturned(iData, callback);
       }
     });
 
@@ -136,7 +136,6 @@ metatests.test('runIf forward an error', test => {
 });
 
 metatests.test('runIfFn', test => {
-  test.plan(5);
   const value = 42;
   const asyncFn = cb => {
     cb(null, value);
@@ -145,10 +144,14 @@ metatests.test('runIfFn', test => {
   metasync.runIfFn(test.mustCall(asyncFn), (err, res) => {
     test.error(err);
     test.strictSame(res, value);
+    test.end();
   });
+});
 
+metatests.test('runIfFn without fn', test => {
   metasync.runIfFn(null, (err, res) => {
     test.error(err);
     test.assertNot(res);
+    test.end();
   });
 });
