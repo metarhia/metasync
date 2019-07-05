@@ -52,3 +52,19 @@ metatests.test('Non-blocking', test => {
     }
   );
 });
+
+metatests.test('asyncMap with iterable', test => {
+  test.plan(2);
+
+  const set = new Set([1, 2, 3]);
+  const expectedSet = new Set([2, 4, 6]);
+
+  metasync.asyncMap(
+    set,
+    item => item * 2,
+    (err, newSet) => {
+      test.error(err);
+      test.strictSame(newSet, expectedSet);
+    }
+  );
+});

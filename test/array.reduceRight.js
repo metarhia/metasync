@@ -125,3 +125,20 @@ metatests.test('reduceRight with error', test => {
     }
   );
 });
+
+metatests.test('reduceRight with iterable', test => {
+  const set = new Set([1, 2, 3, 4, 5]);
+  const initial = 10;
+  const expectedRes = 25;
+
+  metasync.reduceRight(
+    set,
+    (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
+    (err, res) => {
+      test.error(err);
+      test.strictSame(res, expectedRes);
+      test.end();
+    },
+    initial
+  );
+});

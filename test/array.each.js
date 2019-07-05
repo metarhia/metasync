@@ -72,3 +72,22 @@ metatests.test('each with error', test => {
     }
   );
 });
+
+metatests.test('each with iterable', test => {
+  const set = new Set([1, 2, 3, 4]);
+  const elementsSet = new Set();
+
+  metasync.each(
+    set,
+    (el, callback) =>
+      process.nextTick(() => {
+        elementsSet.add(el);
+        callback(null);
+      }),
+    err => {
+      test.error(err);
+      test.strictSame([...elementsSet], [...set]);
+      test.end();
+    }
+  );
+});

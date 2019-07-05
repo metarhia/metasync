@@ -48,3 +48,20 @@ metatests.test('series with error', test => {
     }
   );
 });
+
+metatests.test('series with iterable', test => {
+  const set = new Set([1, 2, 3, 4]);
+  const result = [];
+  metasync.series(
+    set,
+    (el, callback) => {
+      result.push(el);
+      callback(null);
+    },
+    err => {
+      test.error(err);
+      test.strictSame(result, [...set]);
+      test.end();
+    }
+  );
+});

@@ -73,3 +73,17 @@ metatests.test('every', test => {
     test.end();
   });
 });
+
+metatests.test('every with iterable', test => {
+  const data = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+
+  const predicate = (item, callback) => {
+    process.nextTick(() => callback(null, item > 0));
+  };
+
+  metasync.every(data, predicate, (err, result) => {
+    test.error(err);
+    test.strictSame(result, true);
+    test.end();
+  });
+});

@@ -40,14 +40,14 @@ metatests.test('reduce with initial and empty array', test => {
 metatests.test('reduce without initial and with empty array', test => {
   const arr = [];
   const expectedError = new TypeError(
-    'Reduce of empty array with no initial value'
+    'Metasync: reduce of empty iterable with no initial value'
   );
 
   metasync.reduce(
     arr,
     (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
     (err, res) => {
-      test.strictSame(err, expectedError);
+      test.isError(err, expectedError);
       test.strictSame(res, undefined);
       test.end();
     }
@@ -115,9 +115,26 @@ metatests.test('reduce with error', test => {
         callback(null, prev * 2 + digit);
       }),
     (err, res) => {
-      test.strictSame(err, reduceError);
+      test.isError(err, reduceError);
       test.strictSame(res, undefined);
       test.end();
     }
+  );
+});
+
+metatests.test('reduce with iterable', test => {
+  const set = new Set([1, 2, 3, 4, 5]);
+  const initial = 10;
+  const expectedRes = 25;
+
+  metasync.reduce(
+    set,
+    (prev, cur, callback) => process.nextTick(() => callback(null, prev + cur)),
+    (err, res) => {
+      test.error(err);
+      test.strictSame(res, expectedRes);
+      test.end();
+    },
+    initial
   );
 });

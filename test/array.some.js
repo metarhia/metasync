@@ -48,3 +48,14 @@ metatests.test('some with empty array', test => {
     test.end();
   });
 });
+
+metatests.test('successful some', test => {
+  const set = new Set([1, 2, 3]);
+
+  const predicate = (x, callback) => callback(null, x % 2 === 0);
+  metasync.some(set, predicate, (err, accepted) => {
+    test.error(err);
+    test.strictSame(accepted, true);
+    test.end();
+  });
+});

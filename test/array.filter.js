@@ -65,8 +65,8 @@ metatests.test('filter with empty array', test => {
   );
 });
 
-metatests.test('successful filter', test => {
-  const arr = [
+metatests.test('filter with iterable', test => {
+  const set = new Set([
     'Lorem',
     'ipsum',
     'dolor',
@@ -86,9 +86,8 @@ metatests.test('successful filter', test => {
     'dolore',
     'magna',
     'aliqua',
-  ];
-  const filterError = new Error('Filter error');
-  const expectedArr = [
+  ]);
+  const expectedSet = new Set([
     'Lorem',
     'ipsum',
     'dolor',
@@ -96,22 +95,18 @@ metatests.test('successful filter', test => {
     'amet',
     'elit',
     'sed',
+    'do',
+    'ut',
+    'et',
     'magna',
-  ];
+  ]);
 
   metasync.filter(
-    arr,
-    (str, callback) =>
-      process.nextTick(() => {
-        if (str.length === 2) {
-          callback(filterError);
-          return;
-        }
-        callback(null, str.length < 6);
-      }),
+    set,
+    (str, callback) => process.nextTick(() => callback(null, str.length < 6)),
     (err, res) => {
       test.error(err);
-      test.same(res.join(), expectedArr.join());
+      test.same([...res], [...expectedSet]);
       test.end();
     }
   );

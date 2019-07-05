@@ -56,3 +56,18 @@ metatests.test('map with error', test => {
     }
   );
 });
+
+metatests.test('map with iterable', test => {
+  const set = new Set([1, 2, 3]);
+  const expectedSet = new Set([1, 4, 9]);
+
+  metasync.map(
+    set,
+    (x, callback) => process.nextTick(() => callback(null, x * x)),
+    (err, res) => {
+      test.error(err);
+      test.strictSame([...res], [...expectedSet]);
+      test.end();
+    }
+  );
+});

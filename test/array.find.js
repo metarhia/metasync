@@ -59,3 +59,16 @@ metatests.test('with array without element which is searching', test => {
     }
   );
 });
+
+metatests.test('find with iterable', test => {
+  const set = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  const expected = 15;
+  const predicate = (item, callback) =>
+    process.nextTick(() => callback(null, item % 3 === 0 && item % 5 === 0));
+
+  metasync.find(set, predicate, (err, result) => {
+    test.error(err, 'must not return an error');
+    test.strictSame(result, expected, `result should be: ${expected}`);
+    test.end();
+  });
+});
