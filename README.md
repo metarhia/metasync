@@ -232,6 +232,32 @@ metasync.series(
 );
 ```
 
+### findIndex(items, fn, done)
+
+- `items`: [`<Array>`][array] incoming
+- `fn`: [`<Function>`][function]
+  - `value`: `<any>` item from items array
+  - `callback`: [`<Function>`][function]
+    - `err`: [`<Error>`][error]|[`<null>`][null]
+    - `accepted`: [`<boolean>`][boolean]
+- `done`: [`<Function>`][function] on done
+  - `err`: [`<Error>`][error]|[`<null>`][null]
+  - `index`: `<int>`
+
+Asynchronous findIndex (iterate in series)
+
+_Example:_
+
+```js
+metasync.findIndex(
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  (item, callback) => callback(null, item % 3 === 0 && item % 5 === 0),
+  (err, index) => {
+    console.dir(result);
+  }
+);
+```
+
 ### find(items, fn, done)
 
 - `items`: [`<Array>`][array] incoming
