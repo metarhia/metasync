@@ -45,7 +45,13 @@ metatests.test('every with empty array', test =>
 );
 
 metatests.test('every with one-element arrays', test =>
-  fewStrictSameResult([[[false], false], [[true], true]], test)
+  fewStrictSameResult(
+    [
+      [[false], false],
+      [[true], true],
+    ],
+    test
+  )
 );
 
 metatests.test('every with two-element arrays', test =>

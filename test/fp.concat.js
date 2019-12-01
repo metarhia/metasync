@@ -14,7 +14,10 @@ const asyncTransformErrorCb = (str, callback) =>
   process.nextTick(() => callback(asyncError));
 
 metatests.test('two successful functions', test => {
-  metasync.concat(asyncDataCb, asyncTwice)((err, res) => {
+  metasync.concat(
+    asyncDataCb,
+    asyncTwice
+  )((err, res) => {
     test.error(err);
     test.strictSame(res, 'datadata');
     test.end();
@@ -22,7 +25,10 @@ metatests.test('two successful functions', test => {
 });
 
 metatests.test('first function error', test => {
-  metasync.concat(asyncErrorCb, asyncTwice)((err, res) => {
+  metasync.concat(
+    asyncErrorCb,
+    asyncTwice
+  )((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
@@ -30,7 +36,10 @@ metatests.test('first function error', test => {
 });
 
 metatests.test('second function error', test => {
-  metasync.concat(asyncDataCb, asyncTransformErrorCb)((err, res) => {
+  metasync.concat(
+    asyncDataCb,
+    asyncTransformErrorCb
+  )((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();

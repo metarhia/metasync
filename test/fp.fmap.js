@@ -20,7 +20,10 @@ const twiceAndColon = str => appendColon(repeatStringTwice(str));
 
 metatests.test('Result transformation', test => {
   const expected = 'data:';
-  metasync.fmap(asyncDataCb, appendColon)((err, res) => {
+  metasync.fmap(
+    asyncDataCb,
+    appendColon
+  )((err, res) => {
     test.error(err);
     test.strictSame(expected, res);
     test.end();
@@ -28,7 +31,10 @@ metatests.test('Result transformation', test => {
 });
 
 metatests.test('Getting asynchronous error', test => {
-  metasync.fmap(asyncErrorCb, appendColon)((err, res) => {
+  metasync.fmap(
+    asyncErrorCb,
+    appendColon
+  )((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
     test.end();
@@ -48,7 +54,10 @@ metatests.test(FP1, test => {
 });
 
 metatests.test('functor law I', test => {
-  metasync.fmap(asyncDataCb, identity)((err, res) => {
+  metasync.fmap(
+    asyncDataCb,
+    identity
+  )((err, res) => {
     test.error(err);
     test.strictSame(asyncData, res);
     test.end();
@@ -61,7 +70,10 @@ metatests.test('functor law II', test => {
   const asyncTwiceAndColon = fmap(asyncTwice, appendColon);
 
   asyncTwiceAndColon((err1, res1) => {
-    fmap(asyncDataCb, twiceAndColon)((err2, res2) => {
+    fmap(
+      asyncDataCb,
+      twiceAndColon
+    )((err2, res2) => {
       test.error(err1);
       test.error(err2);
       test.strictSame(res1, res2);
