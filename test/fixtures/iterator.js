@@ -2,6 +2,7 @@
 
 const path = require('path');
 const { fork } = require('child_process');
+const { once } = require('events');
 
 const metatests = require('metatests');
 const { AsyncIterator, asyncIter } = require('../../');
@@ -139,18 +140,12 @@ metatests.test(
   'AsyncIterator.reduce with no initialValue on consumed iterator',
   async test => {
     const iterator = asyncIter(array);
-    iterator
-      .reduce(() => {})
-      .then(() => iterator.reduce((acc, current) => acc + current))
-      .catch(error => {
-        test.isError(
-          error,
-          new TypeError(
-            'Reduce of consumed async iterator with no initial value'
-          )
-        );
-        test.end();
-      });
+    await test.rejects(
+      iterator
+        .reduce(() => {})
+        .then(() => iterator.reduce((acc, current) => acc + current)),
+      new TypeError('Reduce of consumed async iterator with no initial value')
+    );
   }
 );
 
@@ -278,7 +273,10 @@ metatests.test('AsyncIterator.zip', async test => {
   const iterator = asyncIter(array).take(2);
 
   const zipIter = it.zip(itr, iterator);
-  test.strictSame(await zipIter.toArray(), [[1, 1, 1], [2, 2, 2]]);
+  test.strictSame(await zipIter.toArray(), [
+    [1, 1, 1],
+    [2, 2, 2],
+  ]);
   test.end();
 });
 
@@ -459,11 +457,9 @@ metatests.test('AsyncIterator.throttle', async test => {
   const pathThrottleFile = path.join(__dirname, './throttle.js');
   const child = fork(pathThrottleFile);
 
-  child.on('message', ({ sum, actualDeviation, ARRAY_SIZE }) => {
-    test.strictSame(sum, ARRAY_SIZE);
-    test.assert(actualDeviation <= EXPECTED_DEVIATION);
-    test.end();
-  });
+  const [{ sum, actualDeviation, ARRAY_SIZE }] = await once(child, 'message');
+  test.strictSame(sum, ARRAY_SIZE);
+  test.assert(actualDeviation <= EXPECTED_DEVIATION);
 });
 
 metatests.testSync('AsyncIterator.enumerate must return tuples', async test => {
