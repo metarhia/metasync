@@ -21,5 +21,9 @@ if (nodeVerion >= 10) {
   submodules.push(require('./lib/async-iterator'));
 }
 
+if (nodeVerion >= 11) {
+  submodules.push(require('./lib/locks'));
+}
+
 const { compose } = submodules[0];
 module.exports = Object.assign(compose, ...submodules);
