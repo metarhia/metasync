@@ -5,7 +5,7 @@ const COUNT = 1000000;
 const benchmark = require('./benchmark.js');
 const metasync = require('../../lib/collector.js');
 
-const CollectPrototype = done => {
+const Collect = done => {
   const dc = metasync.collect(6);
   dc.done(done);
   let i = 0;
@@ -17,4 +17,4 @@ const CollectPrototype = done => {
   setImmediate(() => dc.pick('6th', 'key' + ++i * 2));
 };
 
-benchmark.do(COUNT, [CollectPrototype]);
+benchmark.do(COUNT, [Collect]);

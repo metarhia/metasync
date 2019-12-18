@@ -15,5 +15,4 @@ echo
 echo Collector: 1mnl
 node tests/load/collect.js
 node tests/load/collect.class.js
-node tests/load/collect.prototype.js
 node tests/load/collect.functor.js
