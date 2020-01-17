@@ -242,7 +242,7 @@ metasync.series(
     - `accepted`: [`<boolean>`][boolean]
 - `done`: [`<Function>`][function] on done
   - `err`: [`<Error>`][error]|[`<null>`][null]
-  - `index`: `<int>`
+  - `index`: `<number>`
 
 Asynchronous findIndex (iterate in series)
 
