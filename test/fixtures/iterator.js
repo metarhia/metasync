@@ -65,9 +65,7 @@ metatests.test('AsyncIterator.count', async test => {
 });
 
 metatests.test('AsyncIterator.count on consumed iterator', async test => {
-  const count = await asyncIter(array)
-    .skip(array.length)
-    .count();
+  const count = await asyncIter(array).skip(array.length).count();
   test.strictSame(count, 0);
   test.end();
 });
@@ -167,12 +165,12 @@ metatests.test('AsyncIterator.map with thisArg', async test => {
     },
   };
 
-  test.strictSame(
-    await asyncIter(array)
-      .map(obj.mapper, obj)
-      .toArray(),
-    [2, 4, 6, 8]
-  );
+  test.strictSame(await asyncIter(array).map(obj.mapper, obj).toArray(), [
+    2,
+    4,
+    6,
+    8,
+  ]);
   test.end();
 });
 
@@ -194,21 +192,17 @@ metatests.test('AsyncIterator.filter with thisArg', async test => {
     },
   };
 
-  test.strictSame(
-    await asyncIter(array)
-      .filter(obj.predicate, obj)
-      .toArray(),
-    [2, 4]
-  );
+  test.strictSame(await asyncIter(array).filter(obj.predicate, obj).toArray(), [
+    2,
+    4,
+  ]);
   test.end();
 });
 
 metatests.test('AsyncIterator.flat', async test => {
   const array = [[[[1], 2], 3], 4];
   const flatArray = [1, 2, 3, 4];
-  const newArray = await asyncIter(array)
-    .flat(3)
-    .toArray();
+  const newArray = await asyncIter(array).flat(3).toArray();
   test.strictSame(newArray, flatArray);
   test.end();
 });
@@ -216,9 +210,7 @@ metatests.test('AsyncIterator.flat', async test => {
 metatests.test('AsyncIterator.flat with no depth', async test => {
   const array = [[[[1], 2], 3], 4];
   const flatArray = [[[1], 2], 3, 4];
-  const newArray = await asyncIter(array)
-    .flat()
-    .toArray();
+  const newArray = await asyncIter(array).flat().toArray();
   test.strictSame(newArray, flatArray);
   test.end();
 });
@@ -259,9 +251,7 @@ metatests.test('AsyncIterator.flatMap with thisArg', async test => {
   const array = [1, 2, 3];
   const result = [1, 1, 2, 1, 3, 1];
   test.strictSame(
-    await asyncIter(array)
-      .flatMap(obj.mapper, obj)
-      .toArray(),
+    await asyncIter(array).flatMap(obj.mapper, obj).toArray(),
     result
   );
   test.end();
@@ -282,12 +272,8 @@ metatests.test('AsyncIterator.zip', async test => {
 
 metatests.test('AsyncIterator.chain', async test => {
   const it = asyncIter(array).take(1);
-  const itr = await asyncIter(array)
-    .skip(1)
-    .take(1);
-  const iterator = await asyncIter(array)
-    .skip(2)
-    .take(2);
+  const itr = await asyncIter(array).skip(1).take(1);
+  const iterator = await asyncIter(array).skip(2).take(2);
   test.strictSame(await it.chain(itr, iterator).toArray(), [1, 2, 3, 4]);
   test.end();
 });

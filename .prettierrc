@@ -6,5 +6,6 @@
       "files": [".babelrc", ".prettierrc", ".metadocrc"],
       "options": { "parser": "json" }
     }
-  ]
+  ],
+  "arrowParens": "avoid"
 }
