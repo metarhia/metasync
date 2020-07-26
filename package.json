@@ -48,7 +48,7 @@
     "prepublish": "npm run -s build"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
     "@metarhia/common": "^2.1.0"
@@ -57,10 +57,10 @@
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
-    "@metarhia/doc": "^0.5.6",
-    "eslint": "^6.7.2",
+    "@metarhia/doc": "^0.6.1",
+    "eslint": "^7.5.0",
     "eslint-config-metarhia": "^7.0.0",
-    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.1",
     "metatests": "^0.7.1",
