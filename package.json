@@ -1,6 +1,6 @@
 {
   "name": "metasync",
-  "version": "0.3.31",
+  "version": "0.3.32",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "description": "Asynchronous Programming Library",
   "license": "MIT",
@@ -63,7 +63,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.1",
-    "metatests": "^0.7.1",
+    "metatests": "^0.7.2",
     "prettier": "^2.0.5"
   }
 }
