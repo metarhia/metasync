@@ -165,12 +165,10 @@ metatests.test('AsyncIterator.map with thisArg', async test => {
     },
   };
 
-  test.strictSame(await asyncIter(array).map(obj.mapper, obj).toArray(), [
-    2,
-    4,
-    6,
-    8,
-  ]);
+  test.strictSame(
+    await asyncIter(array).map(obj.mapper, obj).toArray(),
+    [2, 4, 6, 8]
+  );
   test.end();
 });
 
@@ -192,10 +190,10 @@ metatests.test('AsyncIterator.filter with thisArg', async test => {
     },
   };
 
-  test.strictSame(await asyncIter(array).filter(obj.predicate, obj).toArray(), [
-    2,
-    4,
-  ]);
+  test.strictSame(
+    await asyncIter(array).filter(obj.predicate, obj).toArray(),
+    [2, 4]
+  );
   test.end();
 });
 
