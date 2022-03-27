@@ -3,7 +3,7 @@
 const metatests = require('metatests');
 const metasync = require('..');
 
-metatests.test('sequential functions', test => {
+metatests.test('sequential functions', (test) => {
   const f1 = test.mustCall((c, cb) => cb());
   const f2 = test.mustCall((c, cb) => cb());
   const f3 = test.mustCall((c, cb) => cb());

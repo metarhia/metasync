@@ -5,7 +5,7 @@ const count = 100000;
 const benchmark = require('./benchmark.js');
 const metasync = require('../..');
 
-const composeSequential = done => {
+const composeSequential = (done) => {
   let i = 0;
   const p1 = (context, callback) => {
     setImmediate(() => callback(null, ++i * 2));

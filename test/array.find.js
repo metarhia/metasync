@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('find with error', test => {
+metatests.test('find with error', (test) => {
   const data = [1, 2, 3];
   const expectedErrorMessage = 'Intentional error';
   const predicate = (item, callback) =>
@@ -15,14 +15,14 @@ metatests.test('find with error', test => {
       }
     });
 
-  metasync.find(data, predicate, err => {
+  metasync.find(data, predicate, (err) => {
     test.type(err, 'Error', 'err must be an instance of Error');
     test.strictSame(err.message, expectedErrorMessage);
     test.end();
   });
 });
 
-metatests.test('find', test => {
+metatests.test('find', (test) => {
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   const expected = 15;
   const predicate = (item, callback) =>
@@ -35,7 +35,7 @@ metatests.test('find', test => {
   });
 });
 
-metatests.test('with empty array', test => {
+metatests.test('with empty array', (test) => {
   metasync.find(
     [],
     (el, callback) => process.nextTick(() => callback(null, true)),
@@ -47,7 +47,7 @@ metatests.test('with empty array', test => {
   );
 });
 
-metatests.test('with array without element which is searching', test => {
+metatests.test('with array without element which is searching', (test) => {
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   metasync.find(
     data,

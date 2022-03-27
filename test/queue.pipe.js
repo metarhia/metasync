@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('priority / pipe', test => {
+metatests.test('priority / pipe', (test) => {
   const expectedResult = [2, 8, 6, 4];
   const result = [];
 

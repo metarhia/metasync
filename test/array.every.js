@@ -24,7 +24,7 @@ const fewStrictSameResult = (inOutPairs, test) => {
   }
 };
 
-metatests.test('every with error', test => {
+metatests.test('every with error', (test) => {
   const data = [1, 2, 3];
   const everyErr = new Error('Every error');
 
@@ -34,17 +34,17 @@ metatests.test('every with error', test => {
     );
   };
 
-  metasync.every(data, predicate, err => {
+  metasync.every(data, predicate, (err) => {
     test.strictSame(err, everyErr);
     test.end();
   });
 });
 
-metatests.test('every with empty array', test =>
+metatests.test('every with empty array', (test) =>
   strictSameResult([], true, test, () => test.end())
 );
 
-metatests.test('every with one-element arrays', test =>
+metatests.test('every with one-element arrays', (test) =>
   fewStrictSameResult(
     [
       [[false], false],
@@ -54,7 +54,7 @@ metatests.test('every with one-element arrays', test =>
   )
 );
 
-metatests.test('every with two-element arrays', test =>
+metatests.test('every with two-element arrays', (test) =>
   fewStrictSameResult(
     [
       [[false, false], false],
@@ -66,7 +66,7 @@ metatests.test('every with two-element arrays', test =>
   )
 );
 
-metatests.test('every', test => {
+metatests.test('every', (test) => {
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
   const predicate = (item, callback) => {

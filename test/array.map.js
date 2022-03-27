@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('succesfull map', test => {
+metatests.test('succesfull map', (test) => {
   const arr = [1, 2, 3];
   const expectedArr = [1, 4, 9];
 
@@ -18,7 +18,7 @@ metatests.test('succesfull map', test => {
   );
 });
 
-metatests.test('map with empty array', test => {
+metatests.test('map with empty array', (test) => {
   const arr = [];
   const expectedArr = [];
 
@@ -33,7 +33,7 @@ metatests.test('map with empty array', test => {
   );
 });
 
-metatests.test('map with error', test => {
+metatests.test('map with error', (test) => {
   const arr = [1, 2, 3];
   const mapError = new Error('Map error');
   let count = 0;

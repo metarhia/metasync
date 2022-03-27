@@ -5,11 +5,11 @@ const metatests = require('metatests');
 
 // Emulate Asynchronous calls of function
 //   callback - function
-const wrapAsync = callback => {
+const wrapAsync = (callback) => {
   setTimeout(callback, Math.floor(Math.random() * 500));
 };
 
-metatests.test('async functions composition cancel in the middle', test => {
+metatests.test('async functions composition cancel in the middle', (test) => {
   let fc = null;
   const fn1 = test.mustCall((data, cb) => {
     wrapAsync(() => {

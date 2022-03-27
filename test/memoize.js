@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('memoize', test => {
+metatests.test('memoize', (test) => {
   const storage = {
     file1: Buffer.from('file1'),
     file2: Buffer.from('file2'),
@@ -20,7 +20,7 @@ metatests.test('memoize', test => {
   const memoizedGetData = metasync.memoize(getData);
 
   const keys = [];
-  memoizedGetData.on('memoize', key => {
+  memoizedGetData.on('memoize', (key) => {
     keys.push(key);
   });
 
@@ -44,7 +44,7 @@ metatests.test('memoize', test => {
   });
 });
 
-metatests.test('memoize clear cache', test => {
+metatests.test('memoize clear cache', (test) => {
   const storage = {
     file1: Buffer.from('file1'),
   };
@@ -78,7 +78,7 @@ metatests.test('memoize clear cache', test => {
   });
 });
 
-metatests.test('memoize cache del', test => {
+metatests.test('memoize cache del', (test) => {
   const storage = {
     file1: Buffer.from('file1'),
   };
@@ -112,7 +112,7 @@ metatests.test('memoize cache del', test => {
   });
 });
 
-metatests.test('memoize cache add', test => {
+metatests.test('memoize cache add', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = Buffer.from('added');
@@ -137,7 +137,7 @@ metatests.test('memoize cache add', test => {
   });
 });
 
-metatests.test('memoize cache get', test => {
+metatests.test('memoize cache get', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = Buffer.from('added');

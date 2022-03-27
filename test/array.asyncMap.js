@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('succesfull map', test => {
+metatests.test('succesfull map', (test) => {
   test.plan(2);
 
   const arr = [1, 2, 3];
@@ -11,7 +11,7 @@ metatests.test('succesfull map', test => {
 
   metasync.asyncMap(
     arr,
-    item => item * 2,
+    (item) => item * 2,
     (err, newArr) => {
       test.error(err);
       test.strictSame(newArr, expectedArr);
@@ -19,12 +19,12 @@ metatests.test('succesfull map', test => {
   );
 });
 
-const doSmth = time => {
+const doSmth = (time) => {
   const begin = Date.now();
   while (Date.now() - begin < time);
 };
 
-metatests.test('Non-blocking', test => {
+metatests.test('Non-blocking', (test) => {
   const ITEM_TIME = 1;
   const TIMER_TIME = 9;
   const ARRAY_SIZE = 1000;

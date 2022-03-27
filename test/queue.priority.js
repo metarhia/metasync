@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('fifo / priority', test => {
+metatests.test('fifo / priority', (test) => {
   const expectedResult = [1, 2, 3, 8, 6, 4, 5, 7, 9];
   const result = [];
 

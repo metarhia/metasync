@@ -3,18 +3,18 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('firstOf', test => {
+metatests.test('firstOf', (test) => {
   const returningFnIndex = 2;
   let dataReturned = false;
 
-  const execUnlessDataReturned = data => callback => {
+  const execUnlessDataReturned = (data) => (callback) => {
     if (dataReturned) {
       callback(null, data);
     } else {
       process.nextTick(execUnlessDataReturned);
     }
   };
-  const makeIFn = i => callback =>
+  const makeIFn = (i) => (callback) =>
     process.nextTick(() => {
       const iData = 'data' + i;
       if (i === returningFnIndex) {
@@ -34,7 +34,7 @@ metatests.test('firstOf', test => {
   });
 });
 
-metatests.test('parallel with error', test => {
+metatests.test('parallel with error', (test) => {
   const parallelError = new Error('Parallel error');
 
   const fn1 = (data, cb) => {
@@ -56,7 +56,7 @@ metatests.test('parallel with error', test => {
   });
 });
 
-metatests.test('sequential with error', test => {
+metatests.test('sequential with error', (test) => {
   const sequentialError = new Error('Sequential error');
   const expectedDataInFn2 = { data1: 'data 1' };
 
@@ -80,7 +80,7 @@ metatests.test('sequential with error', test => {
   });
 });
 
-metatests.test('runIf run asyncFn', test => {
+metatests.test('runIf run asyncFn', (test) => {
   const asyncFn = test.mustCall((arg1, arg2, cb) => {
     process.nextTick(() => {
       cb(null, { arg1, arg2 });
@@ -94,7 +94,7 @@ metatests.test('runIf run asyncFn', test => {
   });
 });
 
-metatests.test('runIf do not run asyncFn', test => {
+metatests.test('runIf do not run asyncFn', (test) => {
   const asyncFn = test.mustNotCall((arg1, arg2, cb) => {
     process.nextTick(() => {
       cb(null, { arg1, arg2 });
@@ -108,7 +108,7 @@ metatests.test('runIf do not run asyncFn', test => {
   });
 });
 
-metatests.test('runIf default value', test => {
+metatests.test('runIf default value', (test) => {
   const asyncFn = test.mustNotCall((val, cb) => {
     process.nextTick(() => {
       cb(null, val);
@@ -122,23 +122,23 @@ metatests.test('runIf default value', test => {
   });
 });
 
-metatests.test('runIf forward an error', test => {
-  const asyncFn = test.mustCall(cb => {
+metatests.test('runIf forward an error', (test) => {
+  const asyncFn = test.mustCall((cb) => {
     process.nextTick(() => {
       cb(new Error());
     });
   });
 
-  metasync.runIf(true, asyncFn, err => {
+  metasync.runIf(true, asyncFn, (err) => {
     test.isError(err);
     test.end();
   });
 });
 
-metatests.test('runIfFn', test => {
+metatests.test('runIfFn', (test) => {
   test.plan(5);
   const value = 42;
-  const asyncFn = cb => {
+  const asyncFn = (cb) => {
     cb(null, value);
   };
 

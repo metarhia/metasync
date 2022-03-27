@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('successful series', test => {
+metatests.test('successful series', (test) => {
   const arr = [1, 2, 3, 4];
   const expectedElements = arr;
   const elements = [];
@@ -13,7 +13,7 @@ metatests.test('successful series', test => {
       elements.push(el);
       callback(null);
     },
-    err => {
+    (err) => {
       test.error(err);
       test.strictSame(elements, expectedElements);
       test.end();
@@ -21,7 +21,7 @@ metatests.test('successful series', test => {
   );
 });
 
-metatests.test('series with error', test => {
+metatests.test('series with error', (test) => {
   const arr = [1, 2, 3, 4];
   const expectedElements = [1, 2];
   const expectedElementsCount = 2;
@@ -41,7 +41,7 @@ metatests.test('series with error', test => {
         callback(null);
       }
     },
-    err => {
+    (err) => {
       test.strictSame(err, seriesError);
       test.strictSame(elements, expectedElements);
       test.end();
