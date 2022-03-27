@@ -1,10 +1,11 @@
 # Asynchronous Programming Library
 
-[![TravisCI](https://travis-ci.org/metarhia/metasync.svg?branch=master)](https://travis-ci.org/metarhia/metasync)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/60fe108b31614b4191cd557d49112169)](https://www.codacy.com/app/metarhia/metasync)
-[![NPM Version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
-[![NPM Downloads/Month](https://img.shields.io/npm/dm/metasync.svg)](https://www.npmjs.com/package/metasync)
-[![NPM Downloads](https://img.shields.io/npm/dt/metasync.svg)](https://www.npmjs.com/package/metasync)
+[![travis](https://travis-ci.org/metarhia/metasync.svg?branch=master)](https://travis-ci.org/metarhia/metasync)
+[![snyk](https://snyk.io/test/github/metarhia/metasync/badge.svg)](https://snyk.io/test/github/metarhia/metasync)
+[![npm version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
+[![npm downloads/month](https://img.shields.io/npm/dm/metasync.svg)](https://www.npmjs.com/package/metasync)
+[![npm downloads](https://img.shields.io/npm/dt/metasync.svg)](https://www.npmjs.com/package/metasync)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/metarhia/metasync/blob/master/LICENSE)
 
 ## Installation
 
