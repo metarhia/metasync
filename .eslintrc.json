@@ -1,0 +1,17 @@
+{
+  "extends": "metarhia",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "rules": {
+    "arrow-parens": ["error", "always"],
+    "comma-dangle": "off",
+    "handle-callback-err": "off",
+    "consistent-return": "off"
+  }
+}
