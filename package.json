@@ -54,16 +54,16 @@
     "@metarhia/common": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.8",
-    "@babel/core": "^7.16.7",
-    "@babel/preset-env": "^7.16.8",
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
     "@metarhia/doc": "^0.7.0",
-    "eslint": "^8.6.0",
+    "eslint": "^8.12.0",
     "eslint-config-metarhia": "^7.0.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
-    "metatests": "^0.7.2",
-    "prettier": "^2.5.1"
+    "metatests": "^0.8.2",
+    "prettier": "^2.6.1"
   }
 }
