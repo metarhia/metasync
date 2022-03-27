@@ -40,7 +40,7 @@ metatests.test('reduce with initial and empty array', test => {
 metatests.test('reduce without initial and with empty array', test => {
   const arr = [];
   const expectedError = new TypeError(
-    'Reduce of empty array with no initial value'
+    'Metasync: reduce of empty array with no initial value'
   );
 
   metasync.reduce(

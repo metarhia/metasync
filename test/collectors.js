@@ -172,7 +172,7 @@ metatests.test('collect with take', test => {
 });
 
 metatests.test('collect with timeout error', test => {
-  const timeoutErr = new Error('Collector timeout');
+  const timeoutErr = new Error('Metasync: Collector timed out');
   const col = metasync
     .collect(1)
     .done((err, res) => {
