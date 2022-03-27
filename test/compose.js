@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('async parallel functions composition', test => {
+metatests.test('async parallel functions composition', (test) => {
   const data = { test: 'data' };
   const expectedData = { test: 'data', data1: 'data 1', data2: 'data 2' };
 
@@ -28,7 +28,7 @@ metatests.test('async parallel functions composition', test => {
   });
 });
 
-metatests.test('async complex functions composition', test => {
+metatests.test('async complex functions composition', (test) => {
   const data = { test: 'data' };
   const expectedDataInFn1 = { test: 'data' };
   const expectedDataInFn2 = { test: 'data', data1: 'data 1' };
@@ -84,7 +84,7 @@ metatests.test('async complex functions composition', test => {
 });
 
 const AC1 = 'async functions composition cancel before start';
-metatests.test(AC1, test => {
+metatests.test(AC1, (test) => {
   let count = 0;
 
   const fn1 = (data, cb) => {
@@ -118,7 +118,7 @@ metatests.test(AC1, test => {
 });
 
 const AC2 = 'async functions composition cancel in the middle';
-metatests.test(AC2, test => {
+metatests.test(AC2, (test) => {
   let count = 0;
   let finished = 0;
 
@@ -168,7 +168,7 @@ metatests.test(AC2, test => {
   }, 100);
 });
 
-metatests.test('async functions composition cancel after end', test => {
+metatests.test('async functions composition cancel after end', (test) => {
   let count = 0;
 
   const fn1 = (data, cb) => {
@@ -217,7 +217,7 @@ metatests.test('async functions composition cancel after end', test => {
   }, 100);
 });
 
-metatests.test('async functions composition to array', test => {
+metatests.test('async functions composition to array', (test) => {
   let count = 0;
 
   const fn1 = (data, cb) => {

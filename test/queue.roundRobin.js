@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('roundRobin', test => {
+metatests.test('roundRobin', (test) => {
   const expectedResult = [
     1, 2, 3, 4, 5, 6, 7, 8, 20, 9, 21, 10, 22, 11, 23, 12, 13, 14, 15, 16, 17,
     18, 19,

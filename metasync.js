@@ -15,7 +15,7 @@ const submodules = [
   'poolify', // Create pool from factory
   'queue', // Concurrent queue
   'throttle', // Throttling utilities
-].map(path => require('./lib/' + path));
+].map((path) => require('./lib/' + path));
 
 if (nodeVerion >= 10) {
   submodules.push(require('./lib/async-iterator'));

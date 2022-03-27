@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('throttle', test => {
+metatests.test('throttle', (test) => {
   let callCount = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -25,7 +25,7 @@ metatests.test('throttle', test => {
   test.strictSame(callCount, 1);
 });
 
-metatests.test('throttle merge args', test => {
+metatests.test('throttle merge args', (test) => {
   let callCount = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -47,7 +47,7 @@ metatests.test('throttle merge args', test => {
   test.strictSame(callCount, 1);
 });
 
-metatests.test('throttle without arguments for function', test => {
+metatests.test('throttle without arguments for function', (test) => {
   let callCount = 0;
 
   const fn = (...args) => {
@@ -67,7 +67,7 @@ metatests.test('throttle without arguments for function', test => {
   test.strictSame(callCount, 1);
 });
 
-metatests.test('debounce', test => {
+metatests.test('debounce', (test) => {
   let count = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -85,7 +85,7 @@ metatests.test('debounce', test => {
   test.strictSame(count, 0);
 });
 
-metatests.test('debounce without arguments for function', test => {
+metatests.test('debounce without arguments for function', (test) => {
   let count = 0;
 
   const fn = (...args) => {
@@ -101,8 +101,8 @@ metatests.test('debounce without arguments for function', test => {
   test.strictSame(count, 0);
 });
 
-metatests.test('timeout with sync function', test => {
-  const syncFn = callback => callback(null, 'someVal');
+metatests.test('timeout with sync function', (test) => {
+  const syncFn = (callback) => callback(null, 'someVal');
   metasync.timeout(1, syncFn, (err, res, ...args) => {
     test.error(err);
     test.strictSame(res, 'someVal');
@@ -111,10 +111,10 @@ metatests.test('timeout with sync function', test => {
   });
 });
 
-metatests.test('timeout', test => {
+metatests.test('timeout', (test) => {
   metasync.timeout(
     10,
-    callback => {
+    (callback) => {
       setTimeout(() => {
         callback(null, 'someVal');
       }, 0);

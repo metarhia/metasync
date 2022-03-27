@@ -8,7 +8,7 @@ const ASYNC_TIMEOUT = 200;
 
 // Data Collector
 
-metatests.test('dataCollector / simple', test => {
+metatests.test('dataCollector / simple', (test) => {
   const dataCollector = metasync.collect(4).done((err, data) => {
     test.error(err);
     test.strictSame(Object.keys(data).length, 4);
@@ -30,7 +30,7 @@ metatests.test('dataCollector / simple', test => {
   }, ASYNC_TIMEOUT);
 });
 
-metatests.test('data collector / timeout', test => {
+metatests.test('data collector / timeout', (test) => {
   const expectedErr = new Error('Metasync: Collector timed out');
   const expectedData = { user: { name: 'Marcus Aurelius' } };
 
@@ -46,7 +46,7 @@ metatests.test('data collector / timeout', test => {
   dataCollector.pick('user', { name: 'Marcus Aurelius' });
 });
 
-metatests.test('data collector / error', test => {
+metatests.test('data collector / error', (test) => {
   const expectedErr = new Error('User not found');
   const expectedData = { file: 'file content' };
 
@@ -64,7 +64,7 @@ metatests.test('data collector / error', test => {
 
 // Key Collector
 
-metatests.test('key collector / simple', test => {
+metatests.test('key collector / simple', (test) => {
   const keyCollector = metasync
     .collect(['user', 'readme'])
     .timeout(1000)
@@ -84,7 +84,7 @@ metatests.test('key collector / simple', test => {
 
 // Parallel execution
 
-metatests.test('parallel', test => {
+metatests.test('parallel', (test) => {
   test.plan(5);
 
   const expectedData = {
@@ -117,7 +117,7 @@ metatests.test('parallel', test => {
 
 // Sequential execution
 
-metatests.test('sequential', test => {
+metatests.test('sequential', (test) => {
   test.plan(5);
 
   const sf1 = (data, callback) => {
@@ -143,7 +143,7 @@ metatests.test('sequential', test => {
 
 // Asynchrous filter
 
-metatests.test('asynchronus filter', test => {
+metatests.test('asynchronus filter', (test) => {
   const dataToFilter = [
     'Lorem',
     'ipsum',
@@ -204,7 +204,7 @@ metatests.test('asynchronus filter', test => {
 
 // Asynchrous find
 
-metatests.test('asynchronus find', test => {
+metatests.test('asynchronus find', (test) => {
   metasync.find(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     (item, callback) => callback(null, item % 3 === 0 && item % 5 === 0),
@@ -217,7 +217,7 @@ metatests.test('asynchronus find', test => {
 });
 
 // Asynchrous some
-metatests.test('asynchronus some', test => {
+metatests.test('asynchronus some', (test) => {
   metasync.some(
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
     (item, callback) => {
@@ -234,7 +234,7 @@ metatests.test('asynchronus some', test => {
 
 // Asyncronous each in parallel
 
-metatests.test('asyncronous each', test => {
+metatests.test('asyncronous each', (test) => {
   const result = {};
   metasync.each(
     ['a', 'b', 'c'],
@@ -242,7 +242,7 @@ metatests.test('asyncronous each', test => {
       result[item] = item;
       callback(null);
     },
-    err => {
+    (err) => {
       test.error(err);
       test.strictSame(result, { a: 'a', b: 'b', c: 'c' });
       test.end();
@@ -252,7 +252,7 @@ metatests.test('asyncronous each', test => {
 
 // Asyncronous series (sequential)
 
-metatests.test('asynchronus series', test => {
+metatests.test('asynchronus series', (test) => {
   const result = [];
   metasync.series(
     ['a', 'b', 'c', 'd'],
@@ -260,7 +260,7 @@ metatests.test('asynchronus series', test => {
       result.push(item.toUpperCase());
       callback(null);
     },
-    err => {
+    (err) => {
       test.error(err);
       test.strictSame(result, ['A', 'B', 'C', 'D']);
       test.end();
@@ -270,7 +270,7 @@ metatests.test('asynchronus series', test => {
 
 // Asyncronous reduce (sequential)
 
-metatests.test('asynchronus reduce', test => {
+metatests.test('asynchronus reduce', (test) => {
   metasync.reduce(
     ['a', 'b', 'c', 'd'],
     (prev, curr, callback) => {
@@ -286,7 +286,7 @@ metatests.test('asynchronus reduce', test => {
 
 // Queue
 
-metatests.test('queue / simple', test => {
+metatests.test('queue / simple', (test) => {
   const expectedResult = [1, 2, 3, 4, 5, 6, 8, 9];
   const result = [];
 
@@ -311,7 +311,7 @@ metatests.test('queue / simple', test => {
   queue.add({ id: 9 });
 });
 
-metatests.test('queue / pause', test => {
+metatests.test('queue / pause', (test) => {
   const expectedResult = [1, 3, 4, 7, 8, 9];
   const result = [];
 
@@ -347,7 +347,7 @@ metatests.test('queue / pause', test => {
 
 // Trottle
 
-metatests.test('trottle', test => {
+metatests.test('trottle', (test) => {
   const expectedResult = ['A', 'E', 'F', 'I'];
   const result = [];
   let state;
@@ -396,7 +396,7 @@ metatests.test('trottle', test => {
 
 // Debounce
 
-metatests.test('debounce', test => {
+metatests.test('debounce', (test) => {
   const expectedResult = ['E', 'I'];
   const result = [];
   let state;
@@ -445,7 +445,7 @@ metatests.test('debounce', test => {
 
 // Map
 
-metatests.test('asynchronus map / simple', test => {
+metatests.test('asynchronus map / simple', (test) => {
   metasync.map(
     [1, 2, 3],
     (item, callback) => {
@@ -461,7 +461,7 @@ metatests.test('asynchronus map / simple', test => {
   );
 });
 
-metatests.test('asynchronus map / error', test => {
+metatests.test('asynchronus map / error', (test) => {
   metasync.map(
     [1, 2, 3],
     (item, callback) => {
@@ -483,13 +483,13 @@ metatests.test('asynchronus map / error', test => {
 
 // Timeout
 
-metatests.test('timeout', test => {
+metatests.test('timeout', (test) => {
   metasync.timeout(
     200,
-    done => {
+    (done) => {
       setTimeout(done, 300);
     },
-    err => {
+    (err) => {
       const expectedErr = new Error(
         'Metasync: asynchronous function timed out'
       );

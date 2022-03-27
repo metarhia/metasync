@@ -12,6 +12,20 @@
     "arrow-parens": ["error", "always"],
     "comma-dangle": "off",
     "handle-callback-err": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-confusing-arrow": "off",
+    "operator-linebreak": [
+      "error",
+      "after",
+      { "overrides": { "?": "before", ":": "before" } }
+    ],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ]
   }
 }

@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('successful filter', test => {
+metatests.test('successful filter', (test) => {
   const arr = [
     'Lorem',
     'ipsum',
@@ -50,7 +50,7 @@ metatests.test('successful filter', test => {
   );
 });
 
-metatests.test('filter with empty array', test => {
+metatests.test('filter with empty array', (test) => {
   const arr = [];
   const expectedArr = [];
 
@@ -65,7 +65,7 @@ metatests.test('filter with empty array', test => {
   );
 });
 
-metatests.test('successful filter', test => {
+metatests.test('successful filter', (test) => {
   const arr = [
     'Lorem',
     'ipsum',

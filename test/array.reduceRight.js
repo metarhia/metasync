@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('reduceRight with initial', test => {
+metatests.test('reduceRight with initial', (test) => {
   const arr = [1, 2, 3, 4, 5];
   const initial = 10;
   const expectedRes = 25;
@@ -20,7 +20,7 @@ metatests.test('reduceRight with initial', test => {
   );
 });
 
-metatests.test('reduceRight with initial and empty array', test => {
+metatests.test('reduceRight with initial and empty array', (test) => {
   const arr = [];
   const initial = 10;
   const expectedRes = 10;
@@ -37,7 +37,7 @@ metatests.test('reduceRight with initial and empty array', test => {
   );
 });
 
-metatests.test('reduceRight without initial and with empty array', test => {
+metatests.test('reduceRight without initial and with empty array', (test) => {
   const arr = [];
   const expectedError = new TypeError(
     'Metasync: reduceRight of empty array with no initial value'
@@ -56,7 +56,7 @@ metatests.test('reduceRight without initial and with empty array', test => {
 
 metatests.test(
   'reduceRight without initial and with single-element array',
-  test => {
+  (test) => {
     const arr = [2];
 
     metasync.reduceRight(
@@ -72,7 +72,7 @@ metatests.test(
   }
 );
 
-metatests.test('reduceRight without initial', test => {
+metatests.test('reduceRight without initial', (test) => {
   const arr = [1, 2, 3, 4, 5];
   const expectedRes = 15;
 
@@ -87,7 +87,7 @@ metatests.test('reduceRight without initial', test => {
   );
 });
 
-metatests.test('reduceRight with asymetric function', test => {
+metatests.test('reduceRight with asymetric function', (test) => {
   const arr = '10110011';
   const expectedRes = 205;
 
@@ -103,7 +103,7 @@ metatests.test('reduceRight with asymetric function', test => {
   );
 });
 
-metatests.test('reduceRight with error', test => {
+metatests.test('reduceRight with error', (test) => {
   const arr = '10120011';
   const reduceError = new Error('Reduce error');
 

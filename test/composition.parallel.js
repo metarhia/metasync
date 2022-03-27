@@ -5,11 +5,11 @@ const metasync = require('..');
 
 // Emulate Asynchronous calls of function
 //   callback - function
-const wrapAsync = callback => {
+const wrapAsync = (callback) => {
   setTimeout(callback, Math.floor(Math.random() * 500));
 };
 
-metatests.test('async complex functions composition', test => {
+metatests.test('async complex functions composition', (test) => {
   const fn1 = test.mustCall((data, cb) => {
     wrapAsync(() => {
       cb(null, 1);

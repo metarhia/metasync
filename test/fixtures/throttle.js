@@ -2,7 +2,7 @@
 
 const { asyncIter } = require('../../');
 
-const doSmth = time => {
+const doSmth = (time) => {
   const begin = Date.now();
   while (Date.now() - begin < time);
 };
@@ -16,7 +16,7 @@ let sum = 0;
 const arr = new Array(ARRAY_SIZE).fill(1);
 
 const iter = asyncIter(arr)
-  .map(number => {
+  .map((number) => {
     doSmth(ITEM_TIME);
     sum += number;
   })

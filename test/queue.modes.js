@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('queue default FIFO', test => {
+metatests.test('queue default FIFO', (test) => {
   const queue = metasync.queue(3).timeout(1);
   const res = [];
 
@@ -24,7 +24,7 @@ metatests.test('queue default FIFO', test => {
   }
 });
 
-metatests.test('queue FIFO', test => {
+metatests.test('queue FIFO', (test) => {
   const queue = metasync.queue(3).fifo().timeout(1);
   const res = [];
 
@@ -45,7 +45,7 @@ metatests.test('queue FIFO', test => {
   }
 });
 
-metatests.test('queue LIFO', test => {
+metatests.test('queue LIFO', (test) => {
   const queue = metasync.queue(3).lifo().timeout(1);
   const res = [];
 
@@ -66,7 +66,7 @@ metatests.test('queue LIFO', test => {
   }
 });
 
-metatests.test('queue priority', test => {
+metatests.test('queue priority', (test) => {
   const queue = metasync.queue(3).priority();
   const res = [];
 
@@ -93,7 +93,7 @@ metatests.test('queue priority', test => {
   queue.add({ id: 9 }, 3);
 });
 
-metatests.test('queue round robin', test => {
+metatests.test('queue round robin', (test) => {
   const queue = metasync.queue(3).roundRobin();
   const res = [];
 
@@ -120,7 +120,7 @@ metatests.test('queue round robin', test => {
   queue.add({ id: 9 }, 2);
 });
 
-metatests.test('queue round robin with priority', test => {
+metatests.test('queue round robin with priority', (test) => {
   const queue = metasync.queue(3).roundRobin().priority();
   const res = [];
 

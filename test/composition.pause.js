@@ -9,7 +9,7 @@ const getPerson = (context, cb) => {
     { name: 'Marcus Aurelius', city: 'Rome', born: 121 },
     { name: 'Mao Zedong', city: 'Shaoshan', born: 1893 },
   ];
-  const person = persons.find(p => p.name === context.name);
+  const person = persons.find((p) => p.name === context.name);
   cb(null, { person });
 };
 
@@ -30,7 +30,7 @@ const prepareResult = (context, cb) => {
   cb(null, { result });
 };
 
-metatests.test('async functions composition pause in the middle', test => {
+metatests.test('async functions composition pause in the middle', (test) => {
   const readFile = (context, cb) => {
     fs.readFile(context.file, (err, buffer) => {
       test.error(err);

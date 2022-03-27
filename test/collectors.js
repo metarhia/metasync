@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('data collector', test => {
+metatests.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
@@ -24,7 +24,7 @@ metatests.test('data collector', test => {
   dc.collect('key3', null, 3);
 });
 
-metatests.test('data collector', test => {
+metatests.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
@@ -45,7 +45,7 @@ metatests.test('data collector', test => {
   kc.collect('key3', null, 3);
 });
 
-metatests.test('distinct data collector', test => {
+metatests.test('distinct data collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
@@ -67,7 +67,7 @@ metatests.test('distinct data collector', test => {
   dc.pick('key3', 3);
 });
 
-metatests.test('distinct key collector', test => {
+metatests.test('distinct key collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
@@ -89,11 +89,11 @@ metatests.test('distinct key collector', test => {
   kc.pick('key3', 3);
 });
 
-metatests.test('data collector with repeated keys', test => {
+metatests.test('data collector with repeated keys', (test) => {
   const dc = metasync
     .collect(3)
     .timeout(100)
-    .done(err => {
+    .done((err) => {
       test.assert(err);
       test.end();
     });
@@ -103,11 +103,11 @@ metatests.test('data collector with repeated keys', test => {
   dc.collect('key2', null, 2);
 });
 
-metatests.test('key collector with repeated keys', test => {
+metatests.test('key collector with repeated keys', (test) => {
   const kc = metasync
     .collect(['key1', 'key2', 'key3'])
     .timeout(100)
-    .done(err => {
+    .done((err) => {
       test.assert(err);
       test.end();
     });
@@ -117,7 +117,7 @@ metatests.test('key collector with repeated keys', test => {
   kc.collect('key2', null, 2);
 });
 
-metatests.test('collect with error', test => {
+metatests.test('collect with error', (test) => {
   const testErr = new Error('Test error');
   const col = metasync.collect(1);
   col.done((err, res) => {
@@ -128,7 +128,7 @@ metatests.test('collect with error', test => {
   col.fail('someKey', testErr);
 });
 
-metatests.test("collect method calling after it's done", test => {
+metatests.test(`collect method calling after it's done`, (test) => {
   const col = metasync.collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -139,7 +139,7 @@ metatests.test("collect method calling after it's done", test => {
   col.pick('someKey2', 'someVal2');
 });
 
-metatests.test('keys collector receives wrong key', test => {
+metatests.test('keys collector receives wrong key', (test) => {
   const col = metasync.collect(['rightKey']);
   col.done((err, res) => {
     test.error(err);
@@ -150,9 +150,9 @@ metatests.test('keys collector receives wrong key', test => {
   col.pick('rightKey', 'someVal');
 });
 
-metatests.test('distinct keys collector receives wrong key', test => {
+metatests.test('distinct keys collector receives wrong key', (test) => {
   const col = metasync.collect(['rightKey']).distinct();
-  col.done(err => {
+  col.done((err) => {
     test.assert(err);
     test.end();
   });
@@ -160,7 +160,7 @@ metatests.test('distinct keys collector receives wrong key', test => {
   col.pick('rightKey', 'someVal');
 });
 
-metatests.test('collect with take', test => {
+metatests.test('collect with take', (test) => {
   const col = metasync.collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -171,7 +171,7 @@ metatests.test('collect with take', test => {
   col.take('someKey', af, 'someVal');
 });
 
-metatests.test('collect with timeout error', test => {
+metatests.test('collect with timeout error', (test) => {
   const timeoutErr = new Error('Metasync: Collector timed out');
   const col = metasync
     .collect(1)
@@ -185,7 +185,7 @@ metatests.test('collect with timeout error', test => {
   col.take('someKey', af, 'someVal');
 });
 
-metatests.test('collect with take calls bigger than expected', test => {
+metatests.test('collect with take calls bigger than expected', (test) => {
   const col = metasync.collect(1).done((err, res) => {
     test.error(err);
     test.strictSame(Object.keys(res).length, 1);
@@ -196,8 +196,8 @@ metatests.test('collect with take calls bigger than expected', test => {
   col.take('someKey2', af, 'someVal2');
 });
 
-metatests.test('cancel data collector', test => {
-  const dc = metasync.collect(3).done(err => {
+metatests.test('cancel data collector', (test) => {
+  const dc = metasync.collect(3).done((err) => {
     test.assert(err);
     test.end();
   });
@@ -206,8 +206,8 @@ metatests.test('cancel data collector', test => {
   dc.cancel();
 });
 
-metatests.test('cancel key collector', test => {
-  const dc = metasync.collect(['uno', 'due']).done(err => {
+metatests.test('cancel key collector', (test) => {
+  const dc = metasync.collect(['uno', 'due']).done((err) => {
     test.assert(err);
     test.end();
   });
@@ -216,13 +216,13 @@ metatests.test('cancel key collector', test => {
   dc.cancel();
 });
 
-metatests.test('collect then success', test => {
+metatests.test('collect then success', (test) => {
   const col = metasync.collect(1).then(
-    result => {
+    (result) => {
       test.assert(result);
       test.end();
     },
-    err => {
+    (err) => {
       test.error(err);
       test.end();
     }
@@ -230,16 +230,16 @@ metatests.test('collect then success', test => {
   col.pick('Key', 'value');
 });
 
-metatests.test('collect then fail', test => {
+metatests.test('collect then fail', (test) => {
   metasync
     .collect(5)
     .timeout(10)
     .then(
-      result => {
+      (result) => {
         test.error(result);
         test.end();
       },
-      err => {
+      (err) => {
         test.assert(err);
         test.end();
       }

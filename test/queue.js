@@ -3,7 +3,7 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
-metatests.test('queue add', test => {
+metatests.test('queue add', (test) => {
   const queue = metasync.queue(3).timeout(2000);
   let taskIndex = 1;
 
@@ -25,7 +25,7 @@ metatests.test('queue add', test => {
   }
 });
 
-metatests.test('queue pause resume clear', test => {
+metatests.test('queue pause resume clear', (test) => {
   const queue = metasync.queue(3);
   queue.pause();
   queue.add({ id: 1 });
@@ -48,7 +48,7 @@ metatests.test('queue pause resume clear', test => {
   test.end();
 });
 
-metatests.test('queue with no process function and no timeout', test => {
+metatests.test('queue with no process function and no timeout', (test) => {
   const queue = metasync.queue(3);
   queue.add({ id: 1 });
   queue.add({ id: 2 });
@@ -58,7 +58,7 @@ metatests.test('queue with no process function and no timeout', test => {
   test.end();
 });
 
-metatests.test('queue with timeout event', test => {
+metatests.test('queue with timeout event', (test) => {
   const timeoutErr = new Error('Metasync: Queue timed out');
 
   const queue = metasync.queue(3);

@@ -5,7 +5,7 @@ const COUNT = 1000000;
 const benchmark = require('./benchmark.js');
 const metasync = require('../../lib/collector.prototype.js');
 
-const CollectOldPrototype = done => {
+const CollectOldPrototype = (done) => {
   const dc = new metasync.DataCollector(6);
   dc.on('done', done);
   let i = 0;
