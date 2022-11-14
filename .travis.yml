@@ -4,6 +4,6 @@ node_js:
   - 12
   - 14
   - 16
-  - 17
+  - 18
 script:
   - npm test
