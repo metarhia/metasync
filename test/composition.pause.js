@@ -56,7 +56,7 @@ metatests.test('async functions composition pause in the middle', (test) => {
       };
       test.strictSame(context.result, expected);
       test.end();
-    }
+    },
   );
 
   process.nextTick(() => {

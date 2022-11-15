@@ -30,7 +30,7 @@ metatests.test('every with error', (test) => {
 
   const predicate = (item, callback) => {
     process.nextTick(() =>
-      item % 2 === 0 ? callback(everyErr) : callback(null, true)
+      item % 2 === 0 ? callback(everyErr) : callback(null, true),
     );
   };
 
@@ -41,7 +41,7 @@ metatests.test('every with error', (test) => {
 });
 
 metatests.test('every with empty array', (test) =>
-  strictSameResult([], true, test, () => test.end())
+  strictSameResult([], true, test, () => test.end()),
 );
 
 metatests.test('every with one-element arrays', (test) =>
@@ -50,8 +50,8 @@ metatests.test('every with one-element arrays', (test) =>
       [[false], false],
       [[true], true],
     ],
-    test
-  )
+    test,
+  ),
 );
 
 metatests.test('every with two-element arrays', (test) =>
@@ -62,8 +62,8 @@ metatests.test('every with two-element arrays', (test) =>
       [[true, false], false],
       [[true, true], true],
     ],
-    test
-  )
+    test,
+  ),
 );
 
 metatests.test('every', (test) => {

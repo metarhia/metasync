@@ -124,6 +124,6 @@ metatests.test('timeout', (test) => {
       test.strictSame(res, 'someVal');
       test.strictSame(args, []);
       test.end();
-    }
+    },
   );
 });

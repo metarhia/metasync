@@ -14,7 +14,7 @@ metatests.test('succesfull map', (test) => {
       test.error(err);
       test.strictSame(res, expectedArr);
       test.end();
-    }
+    },
   );
 });
 
@@ -29,7 +29,7 @@ metatests.test('map with empty array', (test) => {
       test.error(err);
       test.strictSame(res, expectedArr);
       test.end();
-    }
+    },
   );
 });
 
@@ -53,6 +53,6 @@ metatests.test('map with error', (test) => {
       test.strictSame(err, mapError);
       test.strictSame(res, undefined);
       test.end();
-    }
+    },
   );
 });

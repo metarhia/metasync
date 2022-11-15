@@ -121,7 +121,7 @@ metatests.test('AsyncIterator.forEach with thisArg ', async (test) => {
 metatests.test('AsyncIterator.reduce', async (test) => {
   test.strictSame(
     await asyncIter(array).reduce((acc, current) => acc + current, 0),
-    10
+    10,
   );
   test.end();
 });
@@ -129,7 +129,7 @@ metatests.test('AsyncIterator.reduce', async (test) => {
 metatests.test('AsyncIterator.reduce with no initialValue', async (test) => {
   test.strictSame(
     await asyncIter(array).reduce((acc, current) => acc + current),
-    10
+    10,
   );
   test.end();
 });
@@ -142,9 +142,9 @@ metatests.test(
       iterator
         .reduce(() => {})
         .then(() => iterator.reduce((acc, current) => acc + current)),
-      new TypeError('Reduce of consumed async iterator with no initial value')
+      new TypeError('Reduce of consumed async iterator with no initial value'),
     );
-  }
+  },
 );
 
 metatests.test('AsyncIterator.map', async (test) => {
@@ -152,7 +152,7 @@ metatests.test('AsyncIterator.map', async (test) => {
     await asyncIter(array)
       .map((value) => value * 2)
       .toArray(),
-    [2, 4, 6, 8]
+    [2, 4, 6, 8],
   );
   test.end();
 });
@@ -167,7 +167,7 @@ metatests.test('AsyncIterator.map with thisArg', async (test) => {
 
   test.strictSame(
     await asyncIter(array).map(obj.mapper, obj).toArray(),
-    [2, 4, 6, 8]
+    [2, 4, 6, 8],
   );
   test.end();
 });
@@ -177,7 +177,7 @@ metatests.test('AsyncIterator.filter', async (test) => {
     await asyncIter(array)
       .filter((value) => !(value % 2))
       .toArray(),
-    [2, 4]
+    [2, 4],
   );
   test.end();
 });
@@ -192,7 +192,7 @@ metatests.test('AsyncIterator.filter with thisArg', async (test) => {
 
   test.strictSame(
     await asyncIter(array).filter(obj.predicate, obj).toArray(),
-    [2, 4]
+    [2, 4],
   );
   test.end();
 });
@@ -235,7 +235,7 @@ metatests.test(
 
     test.strictSame(newArray, result);
     test.end();
-  }
+  },
 );
 
 metatests.test('AsyncIterator.flatMap with thisArg', async (test) => {
@@ -250,7 +250,7 @@ metatests.test('AsyncIterator.flatMap with thisArg', async (test) => {
   const result = [1, 1, 2, 1, 3, 1];
   test.strictSame(
     await asyncIter(array).flatMap(obj.mapper, obj).toArray(),
-    result
+    result,
   );
   test.end();
 });
@@ -346,7 +346,7 @@ metatests.testSync(
   'AsyncIterator.someCount that must return true',
   async (test) => {
     test.assert(await asyncIter(array).someCount((item) => item % 2, 2));
-  }
+  },
 );
 
 metatests.testSync(
@@ -354,7 +354,7 @@ metatests.testSync(
   async (test) => {
     test.assertNot(await asyncIter(array).someCount((item) => item % 2, 3));
     test.assertNot(await asyncIter(array).someCount((item) => item < 0, 1));
-  }
+  },
 );
 
 metatests.testSync('AsyncIterator.someCount with thisArg', async (test) => {
@@ -378,7 +378,7 @@ metatests.test(
   async (test) => {
     test.strictSame(await asyncIter(array).find((item) => item > 4), undefined);
     test.end();
-  }
+  },
 );
 
 metatests.test('AsyncIterator.find with thisArg', async (test) => {
@@ -414,7 +414,7 @@ metatests.test(
     const set = await asyncIter(array).collectTo(Set);
     test.strictSame([...set.values()], array);
     test.end();
-  }
+  },
 );
 
 metatests.test('AsyncIterator.toArray must convert to array', async (test) => {
@@ -429,7 +429,7 @@ metatests.test(
     await asyncIter(array).collectWith(set, (obj, item) => obj.add(item));
     test.strictSame([...set.values()], array);
     test.end();
-  }
+  },
 );
 
 metatests.test('AsyncIterator.throttle', async (test) => {
@@ -453,7 +453,7 @@ metatests.testSync(
         test.strictSame(t, [i, array[i]]);
         i++;
       });
-  }
+  },
 );
 
 metatests.testSync(
@@ -466,7 +466,7 @@ metatests.testSync(
       test.strictSame(t, [i, array[i + 1]]);
       i++;
     });
-  }
+  },
 );
 
 metatests.testSync('AsyncIterator.join default', async (test) => {
@@ -494,5 +494,5 @@ metatests.testSync(
   async (test) => {
     const actual = await asyncIter(array).join(', ', '[', ']');
     test.strictSame(actual, '[1, 2, 3, 4]');
-  }
+  },
 );

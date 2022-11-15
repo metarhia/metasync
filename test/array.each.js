@@ -20,7 +20,7 @@ metatests.test('successful each', (test) => {
       test.error(err);
       test.strictSame(elementsSet, expectedElementsSet);
       test.end();
-    }
+    },
   );
 });
 
@@ -41,7 +41,7 @@ metatests.test('each with empty array', (test) => {
       test.error(err);
       test.strictSame(elementsSet, expectedElementsSet);
       test.end();
-    }
+    },
   );
 });
 
@@ -69,6 +69,6 @@ metatests.test('each with error', (test) => {
       test.strictSame(err, eachError);
       test.strictSame(elementsSet.size, expectedElementsCount);
       test.end();
-    }
+    },
   );
 });

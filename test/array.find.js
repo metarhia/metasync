@@ -43,7 +43,7 @@ metatests.test('with empty array', (test) => {
       test.error(err);
       test.strictSame(result, undefined);
       test.end();
-    }
+    },
   );
 });
 
@@ -56,6 +56,6 @@ metatests.test('with array without element which is searching', (test) => {
       test.error(err);
       test.strictSame(result, undefined);
       test.end();
-    }
+    },
   );
 });
