@@ -56,6 +56,6 @@ metatests.test('sync complex functions composition', (test) => {
       };
       test.strictSame(context.result, expected);
       test.end();
-    }
+    },
   );
 });

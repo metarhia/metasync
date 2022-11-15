@@ -191,7 +191,7 @@ metatests.test('asynchronus filter', (test) => {
 
     setTimeout(
       () => callback(null, letters.length === item.length),
-      ASYNC_TIMEOUT
+      ASYNC_TIMEOUT,
     );
   };
 
@@ -212,7 +212,7 @@ metatests.test('asynchronus find', (test) => {
       test.error(err);
       test.strictSame(result, 15);
       test.end();
-    }
+    },
   );
 });
 
@@ -228,7 +228,7 @@ metatests.test('asynchronus some', (test) => {
       test.error(err);
       test.strictSame(result, true);
       test.end();
-    }
+    },
   );
 });
 
@@ -246,7 +246,7 @@ metatests.test('asyncronous each', (test) => {
       test.error(err);
       test.strictSame(result, { a: 'a', b: 'b', c: 'c' });
       test.end();
-    }
+    },
   );
 });
 
@@ -264,7 +264,7 @@ metatests.test('asynchronus series', (test) => {
       test.error(err);
       test.strictSame(result, ['A', 'B', 'C', 'D']);
       test.end();
-    }
+    },
   );
 });
 
@@ -280,7 +280,7 @@ metatests.test('asynchronus reduce', (test) => {
       test.error(err);
       test.strictSame(data, 'abcd');
       test.end();
-    }
+    },
   );
 });
 
@@ -457,7 +457,7 @@ metatests.test('asynchronus map / simple', (test) => {
       test.error(error);
       test.strictSame(result, [1, 4, 9]);
       test.end();
-    }
+    },
   );
 });
 
@@ -477,7 +477,7 @@ metatests.test('asynchronus map / error', (test) => {
       test.isError(error);
       test.strictSame(result, undefined);
       test.end();
-    }
+    },
   );
 });
 
@@ -491,10 +491,10 @@ metatests.test('timeout', (test) => {
     },
     (err) => {
       const expectedErr = new Error(
-        'Metasync: asynchronous function timed out'
+        'Metasync: asynchronous function timed out',
       );
       test.isError(err, expectedErr);
       test.end();
-    }
+    },
   );
 });

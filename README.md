@@ -133,7 +133,7 @@ _Example:_
 metasync.filter(
   ['data', 'to', 'filter'],
   (item, callback) => callback(item.length > 2),
-  (err, result) => console.dir(result)
+  (err, result) => console.dir(result),
 );
 ```
 
@@ -201,7 +201,7 @@ metasync.each(
     console.dir({ each: item });
     callback();
   },
-  (err, data) => console.dir('each done')
+  (err, data) => console.dir('each done'),
 );
 ```
 
@@ -229,7 +229,7 @@ metasync.series(
   },
   (err, data) => {
     console.dir('series done');
-  }
+  },
 );
 ```
 
@@ -255,7 +255,7 @@ metasync.find(
   (item, callback) => callback(null, item % 3 === 0 && item % 5 === 0),
   (err, result) => {
     console.dir(result);
-  }
+  },
 );
 ```
 

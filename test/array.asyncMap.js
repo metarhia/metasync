@@ -15,7 +15,7 @@ metatests.test('succesfull map', (test) => {
     (err, newArr) => {
       test.error(err);
       test.strictSame(newArr, expectedArr);
-    }
+    },
   );
 });
 
@@ -49,6 +49,6 @@ metatests.test('Non-blocking', (test) => {
       const actualDeviation = Math.abs(actualPercent - EXPECTED_PERCENT);
       test.assert(actualDeviation <= EXPECTED_DEVIATION);
       test.end();
-    }
+    },
   );
 });

@@ -53,6 +53,6 @@ metatests.test('successful then', (test) => {
     },
     (err) => {
       test.error(err);
-    }
+    },
   );
 });

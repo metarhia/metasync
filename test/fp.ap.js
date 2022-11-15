@@ -12,7 +12,7 @@ const asyncErrorCb = (callback) => process.nextTick(() => callback(asyncError));
 metatests.test('two successful functions', (test) => {
   metasync.ap(
     asyncArgs,
-    functionInCallback
+    functionInCallback,
   )((err, res) => {
     test.error(err);
     test.strictSame(res, 9);
@@ -23,7 +23,7 @@ metatests.test('two successful functions', (test) => {
 metatests.test('first function with error', (test) => {
   metasync.ap(
     asyncErrorCb,
-    functionInCallback
+    functionInCallback,
   )((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);
@@ -34,7 +34,7 @@ metatests.test('first function with error', (test) => {
 metatests.test('second function with error', (test) => {
   metasync.ap(
     asyncArgs,
-    asyncErrorCb
+    asyncErrorCb,
   )((err, res) => {
     test.strictSame(err, asyncError);
     test.strictSame(res, undefined);

@@ -17,7 +17,7 @@ metatests.test('successful series', (test) => {
       test.error(err);
       test.strictSame(elements, expectedElements);
       test.end();
-    }
+    },
   );
 });
 
@@ -45,6 +45,6 @@ metatests.test('series with error', (test) => {
       test.strictSame(err, seriesError);
       test.strictSame(elements, expectedElements);
       test.end();
-    }
+    },
   );
 });

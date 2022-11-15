@@ -46,7 +46,7 @@ metatests.test('successful filter', (test) => {
       test.error(err);
       test.same(res.join(), expectedArr.join());
       test.end();
-    }
+    },
   );
 });
 
@@ -61,7 +61,7 @@ metatests.test('filter with empty array', (test) => {
       test.error(err);
       test.strictSame(res, expectedArr);
       test.end();
-    }
+    },
   );
 });
 
@@ -113,6 +113,6 @@ metatests.test('successful filter', (test) => {
       test.error(err);
       test.same(res.join(), expectedArr.join());
       test.end();
-    }
+    },
   );
 });

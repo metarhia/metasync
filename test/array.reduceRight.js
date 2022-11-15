@@ -16,7 +16,7 @@ metatests.test('reduceRight with initial', (test) => {
       test.strictSame(res, expectedRes);
       test.end();
     },
-    initial
+    initial,
   );
 });
 
@@ -33,14 +33,14 @@ metatests.test('reduceRight with initial and empty array', (test) => {
       test.strictSame(res, expectedRes);
       test.end();
     },
-    initial
+    initial,
   );
 });
 
 metatests.test('reduceRight without initial and with empty array', (test) => {
   const arr = [];
   const expectedError = new TypeError(
-    'Metasync: reduceRight of empty array with no initial value'
+    'Metasync: reduceRight of empty array with no initial value',
   );
 
   metasync.reduceRight(
@@ -50,7 +50,7 @@ metatests.test('reduceRight without initial and with empty array', (test) => {
       test.strictSame(err, expectedError);
       test.strictSame(res, undefined);
       test.end();
-    }
+    },
   );
 });
 
@@ -67,9 +67,9 @@ metatests.test(
         test.strictSame(err, null);
         test.strictSame(res, 2);
         test.end();
-      }
+      },
     );
-  }
+  },
 );
 
 metatests.test('reduceRight without initial', (test) => {
@@ -83,7 +83,7 @@ metatests.test('reduceRight without initial', (test) => {
       test.error(err);
       test.strictSame(res, expectedRes);
       test.end();
-    }
+    },
   );
 });
 
@@ -99,7 +99,7 @@ metatests.test('reduceRight with asymetric function', (test) => {
       test.error(err);
       test.strictSame(res, expectedRes);
       test.end();
-    }
+    },
   );
 });
 
@@ -122,6 +122,6 @@ metatests.test('reduceRight with error', (test) => {
       test.strictSame(err, reduceError);
       test.strictSame(res, undefined);
       test.end();
-    }
+    },
   );
 });
