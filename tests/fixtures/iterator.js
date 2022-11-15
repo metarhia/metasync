@@ -433,7 +433,7 @@ metatests.test(
 );
 
 metatests.test('AsyncIterator.throttle', async (test) => {
-  const EXPECTED_DEVIATION = 0.3;
+  const EXPECTED_DEVIATION = 0.4;
 
   const pathThrottleFile = path.join(__dirname, './throttle.js');
   const child = fork(pathThrottleFile);
