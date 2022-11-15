@@ -67,7 +67,7 @@ metatests.test('data collector / error', (test) => {
 metatests.test('key collector / simple', (test) => {
   const keyCollector = metasync
     .collect(['user', 'readme'])
-    .timeout(1000)
+    .timeout(2000)
     .done((err, data) => {
       test.error(err);
       test.strictSame(Object.keys(data).length, 2);
@@ -391,7 +391,7 @@ metatests.test('trottle', (test) => {
   setTimeout(() => {
     test.strictSame(result, expectedResult);
     test.end();
-  }, 2000);
+  }, 3000);
 });
 
 // Debounce
@@ -440,7 +440,7 @@ metatests.test('debounce', (test) => {
   setTimeout(() => {
     test.strictSame(result, expectedResult);
     test.end();
-  }, 2000);
+  }, 3000);
 });
 
 // Map

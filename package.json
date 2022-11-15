@@ -39,11 +39,11 @@
   ],
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run lint && metatests test/*.js",
+    "test": "npm run lint && metatests test/ &&  metatests tests/async-iterator.js",
     "perf": "tests/load/run.sh",
-    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\"",
+    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\"",
     "doc": "metadoc",
-    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\"",
+    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\"",
     "build": "babel metasync.js -d dist && babel lib -d dist/lib",
     "prepublish": "npm run -s build"
   },
