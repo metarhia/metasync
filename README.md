@@ -1,6 +1,6 @@
 # Asynchronous Programming Library
 
-[![travis](https://travis-ci.org/metarhia/metasync.svg?branch=master)](https://travis-ci.org/metarhia/metasync)
+[![ci status](https://github.com/metarhia/metasync/workflows/Testing%20CI/badge.svg)](https://github.com/metarhia/metasync/actions?query=workflow%3A%22Testing+CI%22+branch%3Amaster)
 [![snyk](https://snyk.io/test/github/metarhia/metasync/badge.svg)](https://snyk.io/test/github/metarhia/metasync)
 [![npm version](https://badge.fury.io/js/metasync.svg)](https://badge.fury.io/js/metasync)
 [![npm downloads/month](https://img.shields.io/npm/dm/metasync.svg)](https://www.npmjs.com/package/metasync)
