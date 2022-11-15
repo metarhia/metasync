@@ -391,7 +391,7 @@ metatests.test('trottle', (test) => {
   setTimeout(() => {
     test.strictSame(result, expectedResult);
     test.end();
-  }, 2000);
+  }, 3000);
 });
 
 // Debounce
@@ -440,7 +440,7 @@ metatests.test('debounce', (test) => {
   setTimeout(() => {
     test.strictSame(result, expectedResult);
     test.end();
-  }, 2000);
+  }, 3000);
 });
 
 // Map
