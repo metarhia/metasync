@@ -29,7 +29,7 @@ metatests.test('Non-blocking', (test) => {
   const TIMER_TIME = 9;
   const ARRAY_SIZE = 1000;
   const EXPECTED_PERCENT = 0.5;
-  const EXPECTED_DEVIATION = 0.3;
+  const EXPECTED_DEVIATION = 0.4;
 
   const arr = new Array(ARRAY_SIZE).fill(1);
 
