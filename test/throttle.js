@@ -101,6 +101,30 @@ metatests.test('debounce without arguments for function', (test) => {
   test.strictSame(count, 0);
 });
 
+metatests.test('debounce with proper "this" binding', (test) => {
+  let count = 0;
+  let originalThis;
+
+  class DebounceTest {
+    constructor() {
+      this.debouncedMethod = metasync.debounce(1, this.originalMethod);
+      originalThis = this;
+    }
+
+    originalMethod(...args) {
+      test.strictSame(args, []);
+      test.strictSame(this, originalThis);
+      count++;
+      test.end();
+    }
+  }
+
+  const debounceTestInstance = new DebounceTest();
+  debounceTestInstance.debouncedMethod();
+  debounceTestInstance.debouncedMethod();
+  test.strictSame(count, 0);
+});
+
 metatests.test('timeout with sync function', (test) => {
   const syncFn = (callback) => callback(null, 'someVal');
   metasync.timeout(1, syncFn, (err, res, ...args) => {
