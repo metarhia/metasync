@@ -67,7 +67,7 @@ metatests.test('throttle without arguments for function', (test) => {
   test.strictSame(callCount, 1);
 });
 
-metatests.test('debounce', (test) => {
+metatests.test('debounce with pre-populated arguments', (test) => {
   let count = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -82,6 +82,22 @@ metatests.test('debounce', (test) => {
 
   debouncedFn();
   debouncedFn();
+  test.strictSame(count, 0);
+});
+
+metatests.test('debounce with arguments', (test) => {
+  let count = 0;
+
+  const fn = (...args) => {
+    test.strictSame(args, [1, 2, 3]);
+    count++;
+    test.end();
+  };
+
+  const debouncedFn = metasync.debounce(1, fn);
+
+  debouncedFn(0, 1, 2);
+  debouncedFn(1, 2, 3);
   test.strictSame(count, 0);
 });
 
