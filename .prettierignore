@@ -1,3 +1,2 @@
-dist
-coverage
-.nyc_output
+package.json
+package-lock.json
