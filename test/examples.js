@@ -399,43 +399,25 @@ metatests.test('trottle', (test) => {
 metatests.test('debounce', (test) => {
   const expectedResult = ['E', 'I'];
   const result = [];
-  let state;
 
-  const fn = () => {
-    result.push(state);
+  const fn = (arg) => {
+    result.push(arg);
   };
 
-  const f1 = metasync.debounce(500, fn, ['I']);
+  const f1 = metasync.debounce(500, fn);
 
   // to be called one time (E)
-  state = 'A';
-  f1();
-  state = 'B';
-  f1();
-  state = 'C';
-  f1();
-  state = 'D';
-  f1();
-  state = 'E';
-  f1();
+  f1('A');
+  f1('B');
+  f1('C');
+  f1('D');
+  f1('E');
 
   // to be called one time (I)
-  setTimeout(() => {
-    state = 'F';
-    f1();
-  }, 600);
-  setTimeout(() => {
-    state = 'G';
-    f1();
-  }, 700);
-  setTimeout(() => {
-    state = 'H';
-    f1();
-  }, 1000);
-  setTimeout(() => {
-    state = 'I';
-    f1();
-  }, 1100);
+  setTimeout(() => f1('F'), 600);
+  setTimeout(() => f1('G'), 700);
+  setTimeout(() => f1('H'), 1000);
+  setTimeout(() => f1('I'), 1100);
 
   setTimeout(() => {
     test.strictSame(result, expectedResult);
