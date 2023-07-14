@@ -51,17 +51,17 @@
     "node": ">=12.0.0"
   },
   "dependencies": {
-    "@metarhia/common": "^2.1.0"
+    "@metarhia/common": "^2.2.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.2",
-    "@babel/preset-env": "^7.20.2",
+    "@babel/cli": "^7.22.9",
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
     "@metarhia/doc": "^0.7.0",
     "eslint": "^8.44.0",
     "eslint-config-metarhia": "^8.2.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^5.0.0-alpha.2",
     "metatests": "^0.8.2",
     "prettier": "^3.0.0"
