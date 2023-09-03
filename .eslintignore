@@ -1,3 +1,2 @@
 dist
-coverage
-.nyc_output
+locks.js
