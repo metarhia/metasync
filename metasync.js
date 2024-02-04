@@ -1,7 +1,7 @@
 'use strict';
 
 const common = require('@metarhia/common');
-const nodeVerion = common.between(process.version, 'v', '.');
+const nodeVersion = common.between(process.version, 'v', '.');
 
 const submodules = [
   'composition', // Unified abstraction
@@ -17,7 +17,7 @@ const submodules = [
   'throttle', // Throttling utilities
 ].map((path) => require('./lib/' + path));
 
-if (nodeVerion >= 10) {
+if (nodeVersion >= 10) {
   submodules.push(require('./lib/async-iterator'));
 }
 
