@@ -52,7 +52,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "@metarhia/common": "^2.2.1"
+    "metautil": "^5.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.2",

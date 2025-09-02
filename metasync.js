@@ -1,7 +1,7 @@
 'use strict';
 
-const common = require('@metarhia/common');
-const nodeVerion = common.between(process.version, 'v', '.');
+const { between } = require('metautil');
+const nodeVerion = between(process.version, 'v', '.');
 
 const submodules = [
   'composition', // Unified abstraction
