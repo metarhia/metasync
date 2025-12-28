@@ -41,10 +41,7 @@
   "scripts": {
     "test": "npm run lint && metatests test/ &&  metatests tests/async-iterator.js",
     "perf": "tests/load/run.sh",
-    "doc": "metadoc",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\"",
-    "build": "babel metasync.js -d dist && babel lib -d dist/lib",
-    "prepublish": "npm run -s build",
     "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\"",
     "fix": "eslint . --fix || prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\""
   },
@@ -55,13 +52,9 @@
     "metautil": "^5.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.27.2",
-    "@babel/core": "^7.27.4",
-    "@babel/preset-env": "^7.27.2",
-    "@metarhia/doc": "^0.7.0",
-    "eslint": "^9.28.0",
-    "eslint-config-metarhia": "^9.1.2",
-    "metatests": "^0.9.0",
-    "prettier": "^3.5.3"
+    "eslint": "^9.39.2",
+    "eslint-config-metarhia": "^9.1.5",
+    "prettier": "^3.7.4",
+    "metatests": "^0.9.3"
   }
 }
