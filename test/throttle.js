@@ -67,7 +67,7 @@ metatests.test('throttle without arguments for function', (test) => {
   test.strictSame(callCount, 1);
 });
 
-metatests.test('debounce', (test) => {
+metatests.test('debounce with pre-populated arguments', (test) => {
   let count = 0;
 
   const fn = (arg1, arg2, ...otherArgs) => {
@@ -85,6 +85,22 @@ metatests.test('debounce', (test) => {
   test.strictSame(count, 0);
 });
 
+metatests.test('debounce with arguments', (test) => {
+  let count = 0;
+
+  const fn = (...args) => {
+    test.strictSame(args, [1, 2, 3]);
+    count++;
+    test.end();
+  };
+
+  const debouncedFn = metasync.debounce(1, fn);
+
+  debouncedFn(0, 1, 2);
+  debouncedFn(1, 2, 3);
+  test.strictSame(count, 0);
+});
+
 metatests.test('debounce without arguments for function', (test) => {
   let count = 0;
 
@@ -98,6 +114,30 @@ metatests.test('debounce without arguments for function', (test) => {
 
   debouncedFn();
   debouncedFn();
+  test.strictSame(count, 0);
+});
+
+metatests.test('debounce with proper "this" binding', (test) => {
+  let count = 0;
+  let originalThis;
+
+  class DebounceTest {
+    constructor() {
+      this.debouncedMethod = metasync.debounce(1, this.originalMethod);
+      originalThis = this;
+    }
+
+    originalMethod(...args) {
+      test.strictSame(args, []);
+      test.strictSame(this, originalThis);
+      count++;
+      test.end();
+    }
+  }
+
+  const debounceTestInstance = new DebounceTest();
+  debounceTestInstance.debouncedMethod();
+  debounceTestInstance.debouncedMethod();
   test.strictSame(count, 0);
 });
 
