@@ -3,6 +3,11 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const Q1_DELAY_MS = 50;
+const Q2_WAIT_MS = 100;
+const Q2_TIMEOUT_MS = 200;
+const Q2_DELAY_MS = 90;
+
 metatests.test('priority / pipe', (test) => {
   const expectedResult = [2, 8, 6, 4];
   const result = [];
@@ -11,17 +16,18 @@ metatests.test('priority / pipe', (test) => {
     .queue(3)
     .priority()
     .process((item, cb) => {
-      setTimeout(cb, 50, item.id % 2 ? new Error('unexpected') : null, item);
+      const err = item.id % 2 ? new Error('unexpected') : null;
+      setTimeout(cb, Q1_DELAY_MS, err, item);
     });
 
   const q2 = metasync
     .queue(1)
-    .wait(100)
-    .timeout(200)
+    .wait(Q2_WAIT_MS)
+    .timeout(Q2_TIMEOUT_MS)
     .priority()
     .process((item, cb) => {
       result.push(item.id);
-      setTimeout(cb, 90);
+      setTimeout(cb, Q2_DELAY_MS);
     });
 
   q1.pipe(q2);

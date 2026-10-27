@@ -17,7 +17,7 @@ const { compose } = composition;
 
 const submodules = {
   ...composition, // Unified abstraction
-  ...adapters, // Adapters to convert different async contracts
+  ...adapters, // Adapters to convert async contracts
   ...array, // Array utilities
   ...collector, // DataCollector and KeyCollector
   ...control, // Control flow utilities

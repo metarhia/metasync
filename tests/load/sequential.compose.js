@@ -17,13 +17,13 @@ const composeSequential = (done) => {
     setImmediate(() => callback(null, ++i * 5));
   };
   const p4 = (context, callback) => {
-    setImmediate(() => callback(null, 'key ' + ++i));
+    setImmediate(() => callback(null, `key ${++i}`));
   };
   const p5 = (context, callback) => {
     setImmediate(() => callback(null, ++i === 5));
   };
   const p6 = (context, callback) => {
-    setImmediate(() => callback(null, 'key' + ++i * 2));
+    setImmediate(() => callback(null, `key${++i * 2}`));
   };
 
   const f1 = metasync([p1, p2, p3, p4, p5, p6]);

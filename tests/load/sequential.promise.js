@@ -16,13 +16,13 @@ const PromiseThen = (done) => {
     setImmediate(() => resolve({ p3: ++i * 5 }));
   });
   const p4 = new Promise((resolve) => {
-    setImmediate(() => resolve({ p4: 'key ' + ++i }));
+    setImmediate(() => resolve({ p4: `key ${++i}` }));
   });
   const p5 = new Promise((resolve) => {
     setImmediate(() => resolve({ p5: ++i === 5 }));
   });
   const p6 = new Promise((resolve) => {
-    setImmediate(() => resolve({ p6: 'key' + ++i * 2 }));
+    setImmediate(() => resolve({ p6: `key${++i * 2}` }));
   });
   Promise.resolve()
     .then(p1)

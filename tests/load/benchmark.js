@@ -27,14 +27,14 @@ benchmark.do = (count, tests) => {
         result.push(res);
         if (j < count) {
           nextRepeat();
-        } else {
-          const end = process.hrtime(begin);
-          const diff = end[0] * 1e9 + end[1];
-          const time = lpad(diff.toString(), '.', 15);
-          const name = rpad(fn.name, '.', 25);
-          console.log(name + time + ' nanoseconds');
-          if (i < testCount) nextTest();
+          return;
         }
+        const end = process.hrtime(begin);
+        const diff = end[0] * 1e9 + end[1];
+        const time = lpad(diff.toString(), '.', 15);
+        const name = rpad(fn.name, '.', 25);
+        console.log(`${name}${time} nanoseconds`);
+        if (i < testCount) nextTest();
       });
     };
 

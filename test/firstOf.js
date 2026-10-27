@@ -16,7 +16,7 @@ metatests.test('firstOf', (test) => {
   };
   const makeIFn = (i) => (callback) =>
     process.nextTick(() => {
-      const iData = 'data' + i;
+      const iData = `data${i}`;
       if (i === returningFnIndex) {
         dataReturned = true;
         callback(null, iData);

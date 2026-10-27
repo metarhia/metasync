@@ -6,7 +6,8 @@ const metasync = require('..');
 // Emulate Asynchronous calls of function
 //   callback - function
 const wrapAsync = (callback) => {
-  setTimeout(callback, Math.floor(Math.random() * 500));
+  const delay = Math.floor(Math.random() * 500);
+  setTimeout(callback, delay);
 };
 
 metatests.test('async complex functions composition', (test) => {

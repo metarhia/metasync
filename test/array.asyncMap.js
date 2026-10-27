@@ -47,7 +47,8 @@ metatests.test('Non-blocking', (test) => {
       const allTime = Date.now() - begin;
       const actualPercent = mapTime / allTime;
       const actualDeviation = Math.abs(actualPercent - EXPECTED_PERCENT);
-      test.assert(actualDeviation <= EXPECTED_DEVIATION);
+      const withinTolerance = actualDeviation <= EXPECTED_DEVIATION;
+      test.assert(withinTolerance);
       test.end();
     },
   );

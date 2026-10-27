@@ -11,7 +11,8 @@ const ASYNC_TIMEOUT = 200;
 metatests.test('dataCollector / simple', (test) => {
   const dataCollector = metasync.collect(4).done((err, data) => {
     test.error(err);
-    test.strictSame(Object.keys(data).length, 4);
+    const keyCount = Object.keys(data).length;
+    test.strictSame(keyCount, 4);
     test.end();
   });
 

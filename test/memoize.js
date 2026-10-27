@@ -12,8 +12,11 @@ metatests.test('memoize', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = storage[file];
-      if (result) callback(null, result);
-      else callback(new Error('File not found'));
+      if (result) {
+        callback(null, result);
+        return;
+      }
+      callback(new Error('File not found'));
     });
   };
 
@@ -52,8 +55,11 @@ metatests.test('memoize clear cache', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = storage[file];
-      if (result) callback(null, result);
-      else callback(new Error('File not found'));
+      if (result) {
+        callback(null, result);
+        return;
+      }
+      callback(new Error('File not found'));
     });
   };
 
@@ -86,8 +92,11 @@ metatests.test('memoize cache del', (test) => {
   const getData = (file, callback) => {
     process.nextTick(() => {
       const result = storage[file];
-      if (result) callback(null, result);
-      else callback(new Error('File not found'));
+      if (result) {
+        callback(null, result);
+        return;
+      }
+      callback(new Error('File not found'));
     });
   };
 

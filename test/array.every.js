@@ -18,7 +18,7 @@ const fewStrictSameResult = (inOutPairs, test) => {
   let i = 0;
   const testsEnd = metasync.collect(inOutPairs.length);
   testsEnd.done(() => test.end());
-  const cb = () => testsEnd.pick('item' + i++);
+  const cb = () => testsEnd.pick(`item${i++}`);
   for (const [input, output] of inOutPairs) {
     strictSameResult(input, output, test, cb);
   }

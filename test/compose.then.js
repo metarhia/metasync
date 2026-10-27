@@ -25,8 +25,10 @@ metatests.test('successful then', (test) => {
   const af3 = (data, callback) =>
     process.nextTick(() => {
       const keysCount = Object.keys(data).length;
-      test.ok(keysCount >= 2 && keysCount < 4);
-      test.ok(finishedFuncsCount >= 2 && finishedFuncsCount < 4);
+      const keysInRange = keysCount >= 2 && keysCount < 4;
+      const funcsInRange = finishedFuncsCount >= 2 && finishedFuncsCount < 4;
+      test.ok(keysInRange);
+      test.ok(funcsInRange);
       finishedFuncsCount++;
       callback(null, { res3 });
     });
@@ -34,8 +36,10 @@ metatests.test('successful then', (test) => {
   const af4 = (data, callback) =>
     process.nextTick(() => {
       const keysCount = Object.keys(data).length;
-      test.ok(keysCount >= 2 && keysCount < 4);
-      test.ok(finishedFuncsCount >= 2 && finishedFuncsCount < 4);
+      const keysInRange = keysCount >= 2 && keysCount < 4;
+      const funcsInRange = finishedFuncsCount >= 2 && finishedFuncsCount < 4;
+      test.ok(keysInRange);
+      test.ok(funcsInRange);
       finishedFuncsCount++;
       callback(null, { res4 });
     });

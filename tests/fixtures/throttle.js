@@ -33,7 +33,6 @@ const timer = setInterval(() => doSmth(TIMER_TIME), 0);
 
   const mapTime = ARRAY_SIZE * ITEM_TIME;
   const actualPercent = mapTime / allTime;
-
   const actualDeviation = Math.abs(actualPercent - EXPECTED_PERCENT);
   process.send({ actualDeviation, sum, ARRAY_SIZE });
 })();

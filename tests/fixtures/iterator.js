@@ -9,6 +9,8 @@ const { AsyncIterator, asyncIter } = require('../../');
 
 const array = [1, 2, 3, 4];
 
+const sumReducer = (acc, current) => acc + current;
+
 metatests.test('new AsyncIterator() on non Iterable', (test) => {
   test.throws(() => {
     new AsyncIterator(2);
@@ -119,33 +121,22 @@ metatests.test('AsyncIterator.forEach with thisArg ', async (test) => {
 });
 
 metatests.test('AsyncIterator.reduce', async (test) => {
-  test.strictSame(
-    await asyncIter(array).reduce((acc, current) => acc + current, 0),
-    10,
-  );
+  test.strictSame(await asyncIter(array).reduce(sumReducer, 0), 10);
   test.end();
 });
 
 metatests.test('AsyncIterator.reduce with no initialValue', async (test) => {
-  test.strictSame(
-    await asyncIter(array).reduce((acc, current) => acc + current),
-    10,
-  );
+  test.strictSame(await asyncIter(array).reduce(sumReducer), 10);
   test.end();
 });
 
-metatests.test(
-  'AsyncIterator.reduce with no initialValue on consumed iterator',
-  async (test) => {
-    const iterator = asyncIter(array);
-    await test.rejects(
-      iterator
-        .reduce(() => {})
-        .then(() => iterator.reduce((acc, current) => acc + current)),
-      new TypeError('Reduce of consumed async iterator with no initial value'),
-    );
-  },
-);
+metatests.test('AsyncIterator.reduce: no initialValue', async (test) => {
+  const iterator = asyncIter(array);
+  await test.rejects(
+    iterator.reduce(() => {}).then(() => iterator.reduce(sumReducer)),
+    new TypeError('Reduce of consumed async iterator with no initial value'),
+  );
+});
 
 metatests.test('AsyncIterator.map', async (test) => {
   test.strictSame(
@@ -224,19 +215,16 @@ metatests.test('AsyncIterator.flatMap', async (test) => {
   test.end();
 });
 
-metatests.test(
-  'AsyncIterator.flatMap that returns neither AsyncIterator nor Iterable',
-  async (test) => {
-    const array = [1, 2, 3];
-    const result = [2, 4, 6];
-    const newArray = await asyncIter(array)
-      .flatMap((item) => item * 2)
-      .toArray();
+metatests.test('AsyncIterator.flatMap: neither iterable', async (test) => {
+  const array = [1, 2, 3];
+  const result = [2, 4, 6];
+  const newArray = await asyncIter(array)
+    .flatMap((item) => item * 2)
+    .toArray();
 
-    test.strictSame(newArray, result);
-    test.end();
-  },
-);
+  test.strictSame(newArray, result);
+  test.end();
+});
 
 metatests.test('AsyncIterator.flatMap with thisArg', async (test) => {
   const obj = {
@@ -373,13 +361,10 @@ metatests.test('AsyncIterator.find that must find an element', async (test) => {
   test.end();
 });
 
-metatests.test(
-  'AsyncIterator.find that must not find an element',
-  async (test) => {
-    test.strictSame(await asyncIter(array).find((item) => item > 4), undefined);
-    test.end();
-  },
-);
+metatests.test('AsyncIterator.find must not find element', async (test) => {
+  test.strictSame(await asyncIter(array).find((item) => item > 4), undefined);
+  test.end();
+});
 
 metatests.test('AsyncIterator.find with thisArg', async (test) => {
   const obj = {
@@ -408,29 +393,23 @@ metatests.test('AsyncIterator.includes must return false', async (test) => {
   test.end();
 });
 
-metatests.test(
-  'AsyncIterator.collectTo must collect to given Collection',
-  async (test) => {
-    const set = await asyncIter(array).collectTo(Set);
-    test.strictSame([...set.values()], array);
-    test.end();
-  },
-);
+metatests.test('AsyncIterator.collectTo to Collection', async (test) => {
+  const set = await asyncIter(array).collectTo(Set);
+  test.strictSame([...set.values()], array);
+  test.end();
+});
 
 metatests.test('AsyncIterator.toArray must convert to array', async (test) => {
   test.strictSame(await asyncIter(array).toArray(), array);
   test.end();
 });
 
-metatests.test(
-  'AsyncIterator.collectWith must collect to a provided object',
-  async (test) => {
-    const set = new Set();
-    await asyncIter(array).collectWith(set, (obj, item) => obj.add(item));
-    test.strictSame([...set.values()], array);
-    test.end();
-  },
-);
+metatests.test('AsyncIterator.collectWith to object', async (test) => {
+  const set = new Set();
+  await asyncIter(array).collectWith(set, (obj, item) => obj.add(item));
+  test.strictSame([...set.values()], array);
+  test.end();
+});
 
 metatests.test('AsyncIterator.throttle', async (test) => {
   const pathThrottleFile = path.join(__dirname, './throttle.js');

@@ -2,6 +2,7 @@
 
 const COUNT = 10000;
 const GETS = 300;
+const lastIndex = GETS - 1;
 
 const benchmark = require('./benchmark.js');
 const metasync = require('../../lib/poolify.js');
@@ -14,7 +15,7 @@ const poolifyArray = (done) => {
     pool((item) => {
       setImmediate(() => {
         pool([item]);
-        if (i === GETS - 1) done();
+        if (i === lastIndex) done();
       });
     });
   }

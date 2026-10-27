@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const PROCESS_DELAY_MS = 100;
+
 metatests.test('fifo / priority', (test) => {
   const expectedResult = [1, 2, 3, 8, 6, 4, 5, 7, 9];
   const result = [];
@@ -12,7 +14,7 @@ metatests.test('fifo / priority', (test) => {
     .priority()
     .process((item, cb) => {
       result.push(item.id);
-      setTimeout(cb, 100);
+      setTimeout(cb, PROCESS_DELAY_MS);
     });
 
   q.drain(() => {

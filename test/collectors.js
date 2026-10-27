@@ -231,17 +231,13 @@ metatests.test('collect then success', (test) => {
 });
 
 metatests.test('collect then fail', (test) => {
-  metasync
-    .collect(5)
-    .timeout(10)
-    .then(
-      (result) => {
-        test.error(result);
-        test.end();
-      },
-      (err) => {
-        test.assert(err);
-        test.end();
-      },
-    );
+  const onSuccess = (result) => {
+    test.error(result);
+    test.end();
+  };
+  const onFailure = (err) => {
+    test.assert(err);
+    test.end();
+  };
+  metasync.collect(5).timeout(10).then(onSuccess, onFailure);
 });

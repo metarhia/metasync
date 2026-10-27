@@ -12,9 +12,9 @@ const CollectFunctor = (done) => {
   setImmediate(() => dc.pick('uno', ++i * 2));
   setImmediate(() => dc.pick('due', ++i * 3));
   setImmediate(() => dc.pick('tre', ++i * 5));
-  setImmediate(() => dc.pick('4th', 'key' + ++i));
+  setImmediate(() => dc.pick('4th', `key${++i}`));
   setImmediate(() => dc.pick('5th', ++i === 5));
-  setImmediate(() => dc.pick('6th', 'key' + ++i * 2));
+  setImmediate(() => dc.pick('6th', `key${++i * 2}`));
 };
 
 benchmark.do(COUNT, [CollectFunctor]);

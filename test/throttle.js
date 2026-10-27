@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const INTERVAL_MS = 1;
+
 metatests.test('throttle', (test) => {
   let callCount = 0;
 
@@ -16,7 +18,7 @@ metatests.test('throttle', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
+  const throttledFn = metasync.throttle(INTERVAL_MS, fn, 'someVal', 4);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -38,7 +40,7 @@ metatests.test('throttle merge args', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn, 'someVal', 4);
+  const throttledFn = metasync.throttle(INTERVAL_MS, fn, 'someVal', 4);
 
   throttledFn('str');
   test.strictSame(callCount, 1);
@@ -58,7 +60,7 @@ metatests.test('throttle without arguments for function', (test) => {
     }
   };
 
-  const throttledFn = metasync.throttle(1, fn);
+  const throttledFn = metasync.throttle(INTERVAL_MS, fn);
 
   throttledFn();
   test.strictSame(callCount, 1);
@@ -78,7 +80,7 @@ metatests.test('debounce', (test) => {
     test.end();
   };
 
-  const debouncedFn = metasync.debounce(1, fn, 'someVal', 4);
+  const debouncedFn = metasync.debounce(INTERVAL_MS, fn, 'someVal', 4);
 
   debouncedFn();
   debouncedFn();
@@ -94,7 +96,7 @@ metatests.test('debounce without arguments for function', (test) => {
     test.end();
   };
 
-  const debouncedFn = metasync.debounce(1, fn);
+  const debouncedFn = metasync.debounce(INTERVAL_MS, fn);
 
   debouncedFn();
   debouncedFn();
