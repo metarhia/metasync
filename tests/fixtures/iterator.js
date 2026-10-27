@@ -133,7 +133,7 @@ metatests.test('AsyncIterator.reduce with no initialValue', async (test) => {
 metatests.test('AsyncIterator.reduce: no initialValue', async (test) => {
   const iterator = asyncIter(array);
   await test.rejects(
-    iterator.reduce(() => {}).then(() => iterator.reduce(sumReducer)),
+    iterator.reduce(() => undefined).then(() => iterator.reduce(sumReducer)),
     new TypeError('Reduce of consumed async iterator with no initial value'),
   );
 });
