@@ -19,6 +19,7 @@ const iter = asyncIter(arr)
   .map((number) => {
     doSmth(ITEM_TIME);
     sum += number;
+    return number;
   })
   .throttle(EXPECTED_PERCENT);
 
