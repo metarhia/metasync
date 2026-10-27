@@ -14,7 +14,7 @@ export interface Composition {
   data?: unknown;
   done?: Callback | null;
   context?: unknown;
-  timeout?: number;
+  timeoutMs?: number;
   timer?: NodeJS.Timeout | null;
   canceled?: boolean;
   paused?: boolean;

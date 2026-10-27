@@ -55,8 +55,8 @@
     "@types/node": "^25.0.3",
     "eslint": "^9.39.2",
     "eslint-config-metarhia": "^9.1.5",
-    "prettier": "^3.7.4",
     "metatests": "^0.9.3",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3"
   }
 }

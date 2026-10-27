@@ -3,17 +3,19 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const BUFFER_LENGTH = 128;
+
 metatests.test('poolify simple', (test) => {
-  const buffer = () => new Uint32Array(128);
+  const buffer = () => new Uint32Array(BUFFER_LENGTH);
 
   const pool = metasync.poolify(buffer, 10, 15, 20);
 
   pool((item1) => {
     test.strictSame(pool.items.length, 14);
-    test.strictSame(item1.length, 128);
+    test.strictSame(item1.length, BUFFER_LENGTH);
     pool((item2) => {
       test.strictSame(pool.items.length, 13);
-      test.strictSame(item2.length, 128);
+      test.strictSame(item2.length, BUFFER_LENGTH);
       pool([item1]);
       pool([item2]);
       test.strictSame(pool.items.length, 15);
@@ -23,7 +25,7 @@ metatests.test('poolify simple', (test) => {
 });
 
 metatests.test('poolify loop', (test) => {
-  const buffer = () => new Uint32Array(128);
+  const buffer = () => new Uint32Array(BUFFER_LENGTH);
 
   const pool = metasync.poolify(buffer, 10, 15, 20);
 
@@ -31,7 +33,7 @@ metatests.test('poolify loop', (test) => {
     pool((item) => {
       pool([item]);
       if (i === 14) {
-        test.strictSame(item.length, 128);
+        test.strictSame(item.length, BUFFER_LENGTH);
         test.end();
       }
     });
@@ -39,7 +41,7 @@ metatests.test('poolify loop', (test) => {
 });
 
 metatests.test('poolify max', (test) => {
-  const buffer = () => new Uint32Array(128);
+  const buffer = () => new Uint32Array(BUFFER_LENGTH);
 
   const pool = metasync.poolify(buffer, 5, 7, 10);
 
@@ -56,7 +58,7 @@ metatests.test('poolify max', (test) => {
 });
 
 metatests.test('poolify delayed order', (test) => {
-  const buffer = () => new Uint32Array(128);
+  const buffer = () => new Uint32Array(BUFFER_LENGTH);
 
   const pool = metasync.poolify(buffer, 0, 2, 2);
 

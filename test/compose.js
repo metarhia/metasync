@@ -36,7 +36,7 @@ metatests.test('async complex functions composition', (test) => {
 
   let i;
   for (i = 1; i < 6; i++) {
-    expectedDataInRes['data' + i] = 'data ' + i;
+    expectedDataInRes[`data${i}`] = `data ${i}`;
   }
 
   const fn1 = (data, cb) => {

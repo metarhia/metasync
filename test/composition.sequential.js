@@ -11,9 +11,10 @@ metatests.test('sequential functions', (test) => {
 
   const fc = metasync([f1, f2, f3, f4]);
 
+  const emptyContext = {};
   fc((err, context) => {
     test.error(err);
-    test.strictSame(context, {});
+    test.strictSame(context, emptyContext);
     test.end();
   });
 });

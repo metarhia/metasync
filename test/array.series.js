@@ -35,7 +35,8 @@ metatests.test('series with error', (test) => {
     (el, callback) => {
       elements.push(el);
       count++;
-      if (count === expectedElementsCount) {
+      const reachedExpectedCount = count === expectedElementsCount;
+      if (reachedExpectedCount) {
         callback(seriesError);
       } else {
         callback(null);

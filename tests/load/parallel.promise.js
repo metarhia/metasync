@@ -16,16 +16,18 @@ const PromiseAll = (done) => {
     setImmediate(() => resolve({ p3: ++i * 5 }));
   });
   const p4 = new Promise((resolve) => {
-    setImmediate(() => resolve({ p4: 'key ' + ++i }));
+    setImmediate(() => resolve({ p4: `key ${++i}` }));
   });
   const p5 = new Promise((resolve) => {
     setImmediate(() => resolve({ p5: ++i === 5 }));
   });
   const p6 = new Promise((resolve) => {
-    setImmediate(() => resolve({ p6: 'key' + ++i * 2 }));
+    setImmediate(() => resolve({ p6: `key${++i * 2}` }));
   });
 
-  Promise.all([p1, p2, p3, p4, p5, p6]).then((res) => done(null, res));
+  Promise.all([p1, p2, p3, p4, p5, p6]).then((res) => {
+    done(null, res);
+  });
 };
 
 benchmark.do(COUNT, [PromiseAll]);

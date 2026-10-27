@@ -59,7 +59,8 @@ metatests.test('each with error', (test) => {
       process.nextTick(() => {
         elementsSet.add(el);
         count++;
-        if (count === expectedElementsCount) {
+        const reachedExpectedCount = count === expectedElementsCount;
+        if (reachedExpectedCount) {
           callback(eachError);
         } else {
           callback(null);

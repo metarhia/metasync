@@ -3,8 +3,10 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const TIMEOUT_MS = 1;
+
 metatests.test('queue default FIFO', (test) => {
-  const queue = metasync.queue(3).timeout(1);
+  const queue = metasync.queue(3).timeout(TIMEOUT_MS);
   const res = [];
 
   queue.process((item, callback) => {
@@ -25,7 +27,7 @@ metatests.test('queue default FIFO', (test) => {
 });
 
 metatests.test('queue FIFO', (test) => {
-  const queue = metasync.queue(3).fifo().timeout(1);
+  const queue = metasync.queue(3).fifo().timeout(TIMEOUT_MS);
   const res = [];
 
   queue.process((item, callback) => {
@@ -46,7 +48,7 @@ metatests.test('queue FIFO', (test) => {
 });
 
 metatests.test('queue LIFO', (test) => {
-  const queue = metasync.queue(3).lifo().timeout(1);
+  const queue = metasync.queue(3).lifo().timeout(TIMEOUT_MS);
   const res = [];
 
   queue.process((item, callback) => {

@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const COMPOSE_CANCELED = 'Metasync: asynchronous composition canceled';
+
 // Emulate Asynchronous calls of function
 //   callback - function
 const wrapAsync = (callback) => {
@@ -31,7 +33,7 @@ metatests.test('async functions composition cancel in the middle', (test) => {
   fc = metasync([fn1, fn2, fn3, fn4]);
 
   fc([], (err, data) => {
-    test.isError(err, new Error('Metasync: asynchronous composition canceled'));
+    test.isError(err, new Error(COMPOSE_CANCELED));
     test.strictSame(data, undefined);
     test.end();
   });

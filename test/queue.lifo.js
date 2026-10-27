@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const PROCESS_DELAY_MS = 100;
+
 metatests.test('lifo / simple', (test) => {
   const expectedResult = [1, 2, 3, 9, 8, 7, 6, 5, 4];
   const result = [];
@@ -13,7 +15,7 @@ metatests.test('lifo / simple', (test) => {
     .lifo()
     .process((item, cb) => {
       result.push(item.id);
-      setTimeout(cb, 100);
+      setTimeout(cb, PROCESS_DELAY_MS);
     });
 
   q.drain(() => {

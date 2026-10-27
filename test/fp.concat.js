@@ -7,7 +7,7 @@ const asyncData = 'data';
 const asyncDataCb = (callback) =>
   process.nextTick(() => callback(null, asyncData));
 const asyncTwice = (str, callback) =>
-  process.nextTick(() => callback(null, str + str));
+  process.nextTick(() => callback(null, `${str}${str}`));
 const asyncError = new Error('Async error');
 const asyncErrorCb = (callback) => process.nextTick(() => callback(asyncError));
 const asyncTransformErrorCb = (str, callback) =>

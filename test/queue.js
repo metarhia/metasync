@@ -60,16 +60,18 @@ metatests.test('queue with no process function and no timeout', (test) => {
 
 metatests.test('queue with timeout event', (test) => {
   const timeoutErr = new Error('Metasync: Queue timed out');
+  const PROCESS_DELAY_MS = 1000;
+  const TIMEOUT_MS = 1;
 
   const queue = metasync.queue(3);
 
   queue.process((item, callback) => {
     setTimeout(() => {
       callback(null, item);
-    }, 1000);
+    }, PROCESS_DELAY_MS);
   });
 
-  queue.timeout(1, (err, res) => {
+  queue.timeout(TIMEOUT_MS, (err, res) => {
     test.strictSame(err, timeoutErr);
     test.strictSame(res, undefined);
     test.end();

@@ -6,7 +6,8 @@ const metatests = require('metatests');
 // Emulate Asynchronous calls of function
 //   callback - <Function>
 const wrapAsync = (callback) => {
-  setTimeout(callback, Math.floor(Math.random() * 500));
+  const delay = Math.floor(Math.random() * 500);
+  setTimeout(callback, delay);
 };
 
 metatests.test('simple chain/do', (test) => {
@@ -38,13 +39,13 @@ metatests.test('simple chain/do', (test) => {
     });
   });
 
-  const c1 = metasync
+  const chain = metasync
     .do(readConfig, 'myConfig')
     .do(selectFromDb, 'select * from cities')
     .do(getHttpPage, 'http://kpi.ua')
     .do(readFile, 'README.md');
 
-  c1((err, result) => {
+  chain((err, result) => {
     test.error(err);
     test.strictSame(result, 'file content');
     test.end();

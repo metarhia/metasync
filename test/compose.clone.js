@@ -22,12 +22,12 @@ metatests.test('async functions composition clone', (test) => {
   const fc1 = metasync([[fn1, fn2]]);
   const fc2 = fc1.clone();
 
-  fc1(data, (err, data) => {
+  fc1(data, (err, result1) => {
     test.error(err);
-    test.strictSame(data, expectedData);
-    fc2(data, (err, data) => {
+    test.strictSame(result1, expectedData);
+    fc2(result1, (err, result2) => {
       test.error(err);
-      test.strictSame(data, expectedData);
+      test.strictSame(result2, expectedData);
       test.end();
     });
   });

@@ -14,8 +14,8 @@ const asyncErrorCb = (callback) =>
     callback(asyncError);
   });
 const identity = (x) => x;
-const repeatStringTwice = (str) => str + str;
-const appendColon = (str) => str + ':';
+const repeatStringTwice = (str) => `${str}${str}`;
+const appendColon = (str) => `${str}:`;
 const twiceAndColon = (str) => appendColon(repeatStringTwice(str));
 
 metatests.test('Result transformation', (test) => {

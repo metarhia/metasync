@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const EXPECTED_RESULT = 1848;
+
 const asyncSum = (x, y, callback) =>
   process.nextTick(() => callback(null, x + y));
 const tripleFnInCb = (callback) =>
@@ -13,7 +15,7 @@ const asyncMultBy11 = (x, callback) =>
 metatests.test('asAsync all functions test', (test) => {
   const done = (err, res) => {
     test.error(err);
-    test.strictSame(res, 1848);
+    test.strictSame(res, EXPECTED_RESULT);
     test.end();
   };
   metasync

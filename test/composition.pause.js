@@ -23,10 +23,11 @@ const lookupCountry = (context, cb) => {
 };
 
 const prepareResult = (context, cb) => {
-  const result = Object.assign({}, context.person, {
+  const result = {
+    ...context.person,
     country: context.country,
     length: context.buffer.length,
-  });
+  };
   cb(null, { result });
 };
 

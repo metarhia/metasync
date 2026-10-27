@@ -3,6 +3,8 @@
 const metasync = require('..');
 const metatests = require('metatests');
 
+const PROCESS_DELAY_MS = 100;
+
 metatests.test('roundRobin', (test) => {
   const expectedResult = [
     1, 2, 3, 4, 5, 6, 7, 8, 20, 9, 21, 10, 22, 11, 23, 12, 13, 14, 15, 16, 17,
@@ -15,7 +17,7 @@ metatests.test('roundRobin', (test) => {
     .roundRobin()
     .process((item, cb) => {
       result.push(item.id);
-      setTimeout(cb, 100);
+      setTimeout(cb, PROCESS_DELAY_MS);
     });
 
   q.drain(() => {
